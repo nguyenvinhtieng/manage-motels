@@ -1,0 +1,75 @@
+    {{> header}}
+<div class="container-manager">
+    <div class="header__manager">
+        <h2>Request repair devices</h2>
+    </div>
+<style>
+        .container{
+            margin: 0 80px;
+        }
+        .red{
+            color: #EA5456
+        }
+        .mt40{
+            margin-top: 40px;;
+        }
+        .mb40{
+            margin-bottom: 40px;
+        }
+        li{
+            padding: 8px 0;
+        }
+        .modal__add-customer{
+            width: 500px;
+            margin: 0 auto;
+        }
+        textarea{
+            padding: 16px;
+            margin: 8px 0;
+        }
+    </style>
+    <h2 class="mt40"></h2>
+    <div class="container">
+       <ul>
+           {{#each requests}}
+            <li>
+               <div> <b>{{this.room}}</b>  {{this.content}}</div>
+               {{{statusrequestad this.status this._id}}}
+               <hr>
+           </li>
+           {{/each}}
+           
+       </ul>
+    </div>
+
+<style>
+    
+    .form_add-customer form{
+        display: block;
+    }
+    .left{
+        width: 100%;
+    }
+</style>
+
+    {{!-- view modal --}}
+    <div class="modal-view-receipt">
+        View Receipt
+    </div>
+    <style>
+        .modal-view-receipt{
+            display: none;
+            position: fixed;
+            top: 50px;
+            bottom: 50px;
+            left: 50px;
+            right: 50px;
+            background-color: #fff;
+            padding: 24px;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        }
+    </style>
+<script>
+    document.querySelectorAll('.header__items ul li')[5].classList.add('active-item')
+    
+</script>

@@ -1,0 +1,130 @@
+    {{> header}}
+<div class="container-manager">
+    <div class="header__manager">
+        <h2>Manage Rooms</h2>
+        <label for="modal__add-room" class="add">
+            <i class="fas fa-plus"></i> Add
+        </label>
+    </div>
+    <div class="content__manager">
+        <table>
+            <thead>
+                <th></th>
+                <th>Number</th>
+                <th>Renter</th>
+                <th>Maximum</th>
+                <th>Number People</th>
+                <th>Area</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Status</th>
+            </thead>
+            <tbody id="rooms">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal add room -->
+<input type="checkbox" id="modal__add-room" hidden>
+<label for="modal__add-room" class="layer-hidden">
+</label>
+<div class="modal__add-room">
+    <label for="modal__add-room" class="close-modal">
+        <i class="fas fa-times"></i>
+    </label>
+    <div class="form_add-room">
+        <form action="">
+            <h3>Add Room <span>(Please fill out the form below)</span></h3>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name">
+            </div>
+            <div class="form-group">
+                <label for="maximum">Maximum People</label>
+                <input type="number" min="1" max="" id="maximum">
+            </div>
+            <div class="form-group">
+                <label for="area">Area</label>
+                <input type="number" min="0" max="" id="area">
+            </div>
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input type="number" min="0" id="price">
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" id="description">
+            </div>
+            <div class="form-group group-btn">
+                <button id="btn-create-room">Create</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div id="hidden-layer" class="layer-hidden"></div>
+<!-- Modal edit room -->
+<div class="modal__edit-room">
+    <div class="close-modal close-edit-room-modal">
+        <i class="fas fa-times"></i>
+    </div>
+    <div class="form_edit-room">
+        <form action="">
+            <h3>Edit Room</h3>
+            <input type="text" id="id-edit" hidden>
+            <div class="form-group">
+                <label for="name-edit">Name</label>
+                <input type="text" id="name-edit">
+            </div>
+            <div class="form-group">
+                <label for="maximum-edit">Maximum People</label>
+                <input type="number" min="1" max="" id="maximum-edit">
+            </div>
+            <div class="form-group">
+                <label for="area-edit">Area</label>
+                <input type="number" min="0" max="" id="area-edit">
+            </div>
+            <div class="form-group">
+                <label for="price-edit">Price</label>
+                <input type="number" min="0" id="price-edit">
+            </div>
+            <div class="form-group">
+                <label>Device</label>
+                <div class="list-device-choose">
+                    
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="description-edit">Description</label>
+                <input type="text" id="description-edit">
+            </div>
+            <div class="form-group group-btn">
+                <button id="btn-save">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="hidden-edit-modal" class="layer-hidden"> </div>
+<!-- Confirm delete modal -->
+<div class="modal__confirm-delete">
+    <div class="close-modal close-modal-delete">
+        <i class="fas fa-times"></i>
+    </div>
+    <div class="form-delete">
+        <h3>Warning!</h3>
+        <input type="text" id="id-room-delete" hidden>
+        <div class="text-modal text-delete-modal">
+            Are you sure want to delete this Room
+        </div>
+        <div class="form-group group-btn">
+            <button class="btn-danger btn-delete-room">Delete</button>
+            <button class="btn-nomal cancel-modal-delete">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+<script src="/script/admin/room.js"></script>

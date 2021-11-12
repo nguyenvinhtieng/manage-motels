@@ -1,0 +1,55 @@
+    {{> header}}
+    <div class="container-notification">
+        <div class="head">
+            <h3>List of notifications </h3><label for="modal-create-notification"class="create">Create <i class="fas fa-plus-circle"></i></label>
+        </div>
+        <input type="checkbox" id="modal-create-notification" hidden>
+        <label for="modal-create-notification" class="hidden-layer"></label>
+        <div class="modal-create-notification">
+            <label for="modal-create-notification" class="close">
+                <i class="fas fa-times"></i>
+            </label>
+            <h2>Create new notification</h2>
+            
+            <form action="">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id='title'>
+                </div>
+                <div class="form-group">
+                    <label for="text">Content</label>
+                    <textarea name="" id="text"></textarea>
+                </div>
+                <div class="form-group">
+                    <button class="btn-create">Create</button>
+                </div>
+            </form>
+        </div> 
+        <div class="content-notification">
+            <ul id="list-item" class="">
+                
+            </ul>
+        </div>
+        
+    </div>
+
+<div class="hidden-layer layer-close"></div>
+<div class="modal__confirm-delete">
+    <div class="close-modal close-delete-modal">
+        <i class="fas fa-times"></i>
+    </div>
+    <div class="form-delete">
+        <h3>Warning!</h3>
+        <input type="text" id='id-delete-notification' hidden>
+        <div class="text-modal delete-notification-message">
+            Are you sure want to delete this notification
+        </div>
+        <div class="form-group group-btn">
+            <button id="btn-delete" class="btn-danger">Delete</button>
+            <button class="btn-nomal cancel-delete-modal">Cancel</button>
+        </div>
+    </div>
+</div>
+    <script src="/script/admin/notification.js"></script>
+
+    

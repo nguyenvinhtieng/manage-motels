@@ -1,0 +1,274 @@
+    {{> header}}
+<div class="container-manager">
+    <div class="header__manager">
+        <h2>Manage Staffs</h2>
+        <label for="modal__add-customer" class="add">
+            <i class="fas fa-plus"></i> Add
+        </label>
+    </div>
+    <div class="content__manager">
+        <table>
+            <thead>
+                <th></th>
+                <th>username</th>
+                <th>Name</th>
+                <th>Identity card </th>
+                <th>Phone number</th>
+                <th>Day of birth</th>
+                <th>email</th>
+                <th>Status</th>
+            </thead>
+            <tbody id="customers">
+                {{#each staffs}}
+                    <tr>
+                        <td>
+                            <div class="operations">
+                            <div data-id="{{this._id}}" class="edit edit-device edit-staff">
+                                <i class="fas fa-pen" data-id="{{this._id}}" ></i>
+                            </div>
+                        </div>
+                        </td>
+                         <td>{{this.username}}</td>
+                        <td>{{this.name}}</td>
+                        <td>{{this.identity}}</td>
+                        <td>{{this.phone}}</td>
+                        <td>{{this.dateofbirth}}</td>
+                        <td>{{this.email}}</td>
+                        <td>
+                        {{#if this.status}}
+                            <div class="around around-red">not working </div>
+                        {{else}}
+                            <div class="around around-blue">working </div>
+                        {{/if}}
+                        </td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<!-- Add modal -->
+<input type="checkbox" id="modal__add-customer" hidden>
+<label for="modal__add-customer" class="layer-hidden">
+</label>
+<div class="modal__add-customer">
+    <label for="modal__add-customer" class="close-modal">
+        <i class="fas fa-times"></i>
+    </label>
+    <div class="form_add-customer">
+        <h2>Add Staff</h2>
+        <form action="" method="post" id="form-add-staff">
+            <div class="left">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username">
+                </div>
+                <div class="form-group">
+                    <label for="fullname">Full name</label>
+                    <input type="text" name="name" id="fullname">
+                </div>
+                <div class="form-group">
+                    <label for="identity">Identity card number</label>
+                    <input type="text" name="identity" id="identity">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone number</label>
+                    <input type="text" id="phone" name="phone">
+                </div>
+                <div class="form-group">
+                    <label for="dayofbirtd">Day of birth</label>
+                    <input type="date" id="dayofbirtd" name="dateofbirth">
+                </div>
+                <div class="form-group">
+                    <label for="sex">Sex</label>
+                    <select name="sex" id="sex">
+                        <option value="">-- Choose --</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="text" name="email" id="email">
+                </div>
+            </div>
+            
+            <div >
+                <button class="btn-primary btn-add-customer">CREATE</button> 
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    
+    .form_add-customer form{
+        display: block;
+    }
+    .left{
+        width: 100%;
+    }
+</style>
+
+    {{!-- edit modal --}}
+
+<div class="layer-hidden hidden-modal-edit"> </div>
+<div class="modal__edit-customer">
+    <div class="close-modal close-edit-modal">
+        <i class="fas fa-times"></i>
+    </div>
+    <div class="form_add-customer">
+        <h2>Edit Staff</h2> 
+        <form action="/admin/update-staff" method="post" id="edit-form">
+            <div class="left">
+                <input type="text" id="id-edit" name="_id" hidden>
+                <input type="text" id="username-edit" name="username" hidden>
+                <div class="form-group">
+                    <label for="name-edit">Full name</label>
+                    <input type="text" id="name-edit" name="name">
+                </div>
+                <div class="form-group">
+                    <label for="identity-edit">Identity card number</label>
+                    <input type="text" id="identity-edit" name="identity">
+                </div>
+                <div class="form-group">
+                    <label for="phone-edit">Phone number</label>
+                    <input type="text" id="phone-edit" name='phone'>
+                </div>
+                <div class="form-group">
+                    <label for="dateofbirtd-edit">Day of birth</label>
+                    <input type="date" id="dateofbirtd-edit" name="dateofbirth">
+                </div>
+                <div class="form-group">
+                    <label for="sex-edit">Sex</label>
+                    <select name="sex" id="sex-edit">
+                        <option class="first-item-sex"></option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="email-edit">Email</label>
+                    <input type="text" id="email-edit" name="email">
+                </div>
+                <div class="form-group">
+                    <label for="status-edit">Status</label>
+                    <select name="status" id="status-edit">
+                        <option class="first-item-status"></option>
+                        <option value="">Working</option>
+                        <option value="not working">Not Working</option>
+                    </select>
+                </div>
+            </div>
+            <div></div>
+            <div >
+                <button type="submit" class="btn-primary btn-save">SAVE</button> 
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    document.querySelectorAll('.header__items ul li')[7].classList.add('active-item')
+    let btnEditStaff = document.querySelectorAll('.edit-staff')
+    btnEditStaff.forEach(function(staff){
+        staff.onclick =(e)=>{
+            let id = e.target.getAttribute('data-id');
+            getDataStaff(id)
+            statusModalEdit(true)
+        }
+    })
+    function getDataStaff(id){
+        $.ajax({
+            url: '/admin/getDataStaff',
+            type: 'POST',
+            data: {id},
+            success: (response)=>{
+                if(response.success){
+                    renderDataStaff(response.staff)
+                }
+            }
+        })
+    }
+    function renderDataStaff(data){
+        document.querySelector('#username-edit').value = data.username;
+        document.querySelector('#id-edit').value = data._id;
+        document.querySelector('#name-edit').value = data.name;
+        document.querySelector('#identity-edit').value = data.identity;
+        document.querySelector('#phone-edit').value = data.phone;
+        const date = new Date(data.dateofbirth)
+        document.querySelector('#dateofbirtd-edit').value = date.toISOString().substring(0,10);;
+        document.querySelector('.first-item-sex').value = data.sex;
+        document.querySelector('#email-edit').value = data.email;
+        document.querySelector('.first-item-sex').innerHTML = data.sex;
+        if(!data.status){
+            document.querySelector('.first-item-status').innerHTML = 'working';   
+        } else{
+            document.querySelector('.first-item-status').innerHTML = 'not working';
+            document.querySelector('.first-item-status').value = 'not working';
+        }
+    }
+    function statusModalEdit(status){
+        if(status){
+            document.querySelector('.modal__edit-customer').style.display = 'block'
+        } else{
+            document.querySelector('.modal__edit-customer').style.display = 'none'
+        }
+    }
+    document.querySelector('.close-edit-modal').onclick = (e) =>{
+        statusModalEdit(false)
+    }
+
+    let formAdd = document.querySelector('#form-add-staff')
+    formAdd.onsubmit = function(e){
+        e.preventDefault();
+         dateofbirth = document.querySelector('#dayofbirtd').value;
+          var today = new Date();
+        let toYear = today.getFullYear()
+        let dob = new Date(dateofbirth)
+        if(document.querySelector('#username').value.trim() == ''){
+            showErrorToast('Username can not be empty')
+        } else if(document.querySelector('#fullname').value.trim() == ''){
+            showErrorToast('Full name can not be empty')
+        } else if(document.querySelector('#identity').value.trim() == ''){
+            showErrorToast('Identity card number can not be empty')
+        } else if(document.querySelector('#phone').value.trim() == ''){
+            showErrorToast('Phone number can not be empty')
+        } else if(dateofbirth == '' || dob > today){
+            showErrorToast('Date of birth not valid')
+        } else if(document.querySelector('#sex').value.trim() == ''){
+            showErrorToast('Sex can not be empty')
+        } else if(document.querySelector('#email').value.trim() == ''){
+            showErrorToast('Email can not be empty')
+        } else{
+            formAdd.submit()
+        }
+    }
+
+    let formEdit = document.querySelector('#edit-form')
+    formEdit.onsubmit = (e)=>{
+        e.preventDefault()
+        let dateofbirth = document.querySelector('#dateofbirtd-edit').value;
+          let today = new Date();
+        let toYear = today.getFullYear()
+        let dob = new Date(dateofbirth)
+        if(document.querySelector('#name-edit').value.trim() == ''){
+            showErrorToast('Full name can not be empty')
+        } else if(document.querySelector('#identity-edit').value.trim() == ''){
+            showErrorToast('Identity card number can not be empty')
+        } else if(document.querySelector('#phone-edit').value.trim() == ''){
+            showErrorToast('Phone number can not be empty')
+        } else if(dateofbirth == '' || dob > today){
+            showErrorToast('Date of birth not valid')
+        } else if(document.querySelector('#email-edit').value.trim() == ''){
+            showErrorToast('Email can not be empty')
+        } else{
+            formEdit.submit()
+        }
+
+    }
+</script>

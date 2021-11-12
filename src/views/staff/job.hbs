@@ -1,0 +1,65 @@
+    {{> headerstaff}}
+
+        
+<div class="container-manager">
+    <div class="header__manager">
+        <h2>Jobs</h2>
+        
+    </div>
+    <div class="content__manager">
+        <table>
+            <thead>
+                <th>Room</th>
+                <th>Description</th>
+                <th>Start day</th>
+                <th>End day</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th></th>
+            </thead>
+            <tbody id="accounts">
+                {{#each jobs}}
+                    <tr>
+                        <td>{{this.room}}</td>
+                        <td>{{this.description}}</td>
+                        <td>{{this.startday}}</td>
+                        <td>{{this.endday}}</td>
+                        <td>{{this.price}}</td>
+                        <td>{{this.status}}</td>
+                        <td data-id="{{this._id}}"> 
+                            <label for="modal-pick-task" class="operations">
+                                <div data-id="{{this._id}}" class="edit edit-device pick-task">
+                                    <i data-id="{{this._id}}" class="fas fa-crosshairs"></i>
+                                </div>
+                            </label>
+                        </td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<form action="/staff/pick-task" method="post">
+    <input type="checkbox" id="modal-pick-task" hidden>
+    <input type="text" id="id-task" name="id" hidden >
+    <label for="modal-pick-task" class="layer-hidden-modal-pick-task"></label>
+<div class="modal-picktask">
+    <h2>Are you sure you want to pick this task?</h2>
+    <h5>you cannot cancel after receiving the task </h5>
+    <div>
+    <label for="modal-pick-task" class="btn-cancel">Cancel</label>
+    <button class="btn btn-primary">Receive</button>
+    </div>
+</div>
+</form>
+
+<script>
+    let picks = document.querySelectorAll('.pick-task')
+    picks.forEach(function(task){
+        task.onclick = (e)=>{
+            let id = e.target.getAttribute('data-id');
+            document.querySelector('#id-task').value = id
+        }
+    })
+</script>

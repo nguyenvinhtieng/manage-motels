@@ -1,0 +1,107 @@
+    {{> headercustomer}}
+    
+<div class="container-manager">
+    <div class="header__manager">
+        <h2>Manage Jobs</h2>
+        <label for="modal-create-job" class="add">
+            <i class="fas fa-plus"></i> Add
+        </label>
+    </div>
+    <div class="content__manager">
+        <table>
+            <thead>
+                <th>Room</th>
+                <th>Description</th>
+                <th>Start day</th>
+                <th>End day</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Approved</th>
+            </thead>
+            <tbody id="accounts">
+                {{#each jobs}}
+                    <tr>
+                        <td>{{this.room}}</td>
+                        <td>{{this.description}}</td>
+                        <td>{{this.startday}}</td>
+                        <td>{{this.endday}}</td>
+                        <td>{{this.price}}</td>
+                        <td>{{this.status}}</td>
+                        <td>
+                        {{#if this.delete}}
+                            <div class="around around-red">reject </div>
+                        {{else if this.approved}}
+                            <div class="around around-blue">approved </div>
+                        {{else}}
+                            <div class="around around-green">wait... </div>
+                        {{/if}}
+                        </td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<form action="/me/jobs" method="post">
+<input type="checkbox" id="modal-create-job" hidden>
+<label for="modal-create-job" class="layer-hidden-create-job"></label>
+<div class="modal-create-job">
+    <label for="modal-create-job" class="close-modal-create-job">&times</label>
+    <div class="modal-create-job-header">
+        <b>  Create Job</b>    
+    </div>
+    <div class="modal-create-job-content">
+        <div class="form-group">
+             <label for="">Description</label>
+            <input type="text" name="description" id="description">
+        </div>
+        <div class="form-group">
+             <label for="">Start day</label>
+            <input type="date" name="startday">
+        </div>
+        <div class="form-group">
+             <label for="">End day</label>
+            <input type="date" name="endday">
+        </div>
+        <div class="form-group">
+             <label for="">Price</label>
+            <input type="number" min='0' name="price">
+        </div>
+
+        <div class="form-group">
+            <button type="submit">Add</button>
+        </div>
+    </div>
+</div>
+</form>
+
+<div class="layer-close-modal-delete-job"></div>
+<form action="/admin/deletejob" method="post">
+    <div class="modal-confirm-delete">
+        <input type="text" id="id-job" name="id" hidden>
+        <h3>Are you sure want to delete this job?</h3>
+        <span class="btn-gray btn-cancel-dlt-job">Cancel</span>
+        <button type="submit" class="btn-red">Delete</button>
+    </divutton>
+</form>
+
+<script>
+    document.querySelectorAll('.header__items ul li')[6].classList.add('active-item')
+    let jobsDelete = document.querySelectorAll('.btn-delete-job')
+    jobsDelete.forEach(j=>{
+        j.onclick = (e)=>{
+            document.querySelector('#id-job').value = e.target.getAttribute('data-id')
+            document.querySelector('.modal-confirm-delete').style.display = 'block'
+            document.querySelector('.layer-close-modal-delete-job').style.display = 'block'
+        }
+    })
+    document.querySelector('.layer-close-modal-delete-job').onclick =()=>{
+        document.querySelector('.modal-confirm-delete').style.display = 'none'
+            document.querySelector('.layer-close-modal-delete-job').style.display = 'none'
+    }
+    document.querySelector('.btn-cancel-dlt-job').onclick = ()=>{
+        document.querySelector('.modal-confirm-delete').style.display = 'none'
+        document.querySelector('.layer-close-modal-delete-job').style.display = 'none'
+    }
+</script>

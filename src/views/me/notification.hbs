@@ -1,0 +1,29 @@
+    {{> headercustomer}}
+    <div class="container-notification">
+        <div class="head">
+            <h3>List of notifications </h3>
+        </div>
+        <div class="content-notification">
+            <ul id="list-item" class="">
+                {{#each data}}
+                <li class="item-notification">
+                    <div class="content">
+                        <div class="text">
+                            {{this.title}}
+                            <span class="time">
+                                ( {{this.createdAt}} )
+                            </span>
+                        </div>
+                        <a href="/me/notification/{{this._id}}">Details...</a>
+                    </div>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+        
+    </div>
+
+
+<script>
+    document.querySelectorAll('.header__items ul li')[3].classList.add('active-item')
+</script>

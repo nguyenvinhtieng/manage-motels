@@ -1,0 +1,221 @@
+    {{> header}}
+<div class="container-manager">
+    <div class="header__manager">
+        <h2>Receipt</h2>
+        <label for="modal__add-customer" class="add">
+            <i class="fas fa-plus"></i> Add
+        </label>
+    </div>
+<style>
+        .container{
+            margin: 0 80px;
+        }
+        .red{
+            color: #EA5456
+        }
+        .mt40{
+            margin-top: 40px;;
+        }
+        .mb40{
+            margin-bottom: 40px;
+        }
+    </style>
+    <h2 class="mt40"></h2>
+    <div class="container">
+        {{#each receipts}}
+           
+        <table class="mb40">
+            Receipt {{this.month}}/{{this.year}}
+            {{{status this._id this.status}}}
+            <tr>
+                <th>Room Number</th>
+                <td>{{this.roomnumber}}</td>
+            </tr>
+            <tr>
+                <th>Electric</th>
+                <td>{{this.electric}}</td>
+            </tr>
+            <tr>
+                <th>Water</th>
+                <td>{{this.water}}</td>
+            </tr>
+            <tr>
+                <th>Service</th>
+                <td>{{this.service}}</td>
+            </tr>
+            <tr>
+                <th>Room & Devices</th>
+                <td>{{this.roomprice}}</td>
+            </tr>
+            <tr>
+                <th>Total</th>
+                <th class="red">{{this.total}}</th>
+            </tr>
+        </table>
+        <hr>
+        {{/each}}
+    </div>
+
+
+
+<!-- Add modal -->
+<input type="checkbox" id="modal__add-customer" hidden>
+<label for="modal__add-customer" class="layer-hidden">
+</label>
+<div class="modal__add-customer">
+    <label for="modal__add-customer" class="close-modal">
+        <i class="fas fa-times"></i>
+    </label>
+    <div class="form_add-customer">
+        <h2>Add Receipt</h2>
+        <form action="/admin/create-receipt-room" method="post" id="form-create-receipt">
+            <div class="left">
+                <div class="form-group">
+                    <label for="name">Room</label>
+                    <select name="roomnumber" id="room-number">
+                        <option value=''>-- Choose --</option>
+                        {{#each rooms}}
+                            <option value="{{this.number}}">{{this.number}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="electric">Electric</label>
+                    <input type="number" min="0" name="electric" id="electric">
+                </div>
+                <div class="form-group">
+                    <label for="water">Water</label>
+                    <input type="number" min="0" name="water" id="water">
+                </div>
+                <div class="form-group">
+                    <label for="month">Month</label>
+                    <input type="number" min="1" max="12" id="month" name="month">
+                </div>
+                <div class="form-group">
+                    <label for="year">Year</label>
+                    <input type="number" min="2000" max="2100" id="year" name="year">
+                </div>
+            </div>
+            <div >
+                <button class="btn-primary btn-add-customer">CREATE</button> 
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    
+    .form_add-customer form{
+        display: block;
+    }
+    .left{
+        width: 100%;
+    }
+</style>
+
+    {{!-- view modal --}}
+    <div class="modal-view-receipt">
+        View Receipt
+    </div>
+    <style>
+        .modal-view-receipt{
+            display: none;
+            position: fixed;
+            top: 50px;
+            bottom: 50px;
+            left: 50px;
+            right: 50px;
+            background-color: #fff;
+            padding: 24px;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        }
+    </style>
+<script>
+    
+function toast({ title = "", message = "", type = "info", duration = 3000 }) {
+    const main = document.getElementById("toast");
+    if (main) {
+      const toast = document.createElement("div");
+      // Auto remove toast
+      const autoRemoveId = setTimeout(function () {
+        main.removeChild(toast);
+      }, duration + 1000);
+      // Remove toast when clicked
+      toast.onclick = function (e) {
+        if (e.target.closest(".toast__close")) {
+          main.removeChild(toast);
+          clearTimeout(autoRemoveId);
+        }
+      };
+  
+      const icons = {
+        success: "fas fa-check-circle",
+        info: "fas fa-info-circle",
+        warning: "fas fa-exclamation-circle",
+        error: "fas fa-exclamation-circle"
+      };
+      const icon = icons[type];
+      const delay = (duration / 1000).toFixed(2);
+  
+      toast.classList.add("toast", `toast--${type}`);
+      toast.style.animation = `slideInLeft ease .3s, fadeOut linear 1s ${delay}s forwards`;
+  
+      toast.innerHTML = `
+                      <div class="toast__icon">
+                          <i class="${icon}"></i>
+                      </div>
+                      <div class="toast__body">
+                          <h3 class="toast__title">${title}</h3>
+                          <p class="toast__msg">${message}</p>
+                      </div>
+                      <div class="toast__close">
+                          <i class="fas fa-times"></i>
+                      </div>
+                  `;
+      main.appendChild(toast);
+    }
+}
+
+
+
+
+
+function showSuccessToast(message) {
+  toast({
+      title: "Successfully",
+      message: message,
+      type: 'success',
+      duration: 3000
+  })
+}
+
+function showErrorToast(message) {
+  toast({
+      title: "Error",
+      message: message,
+      type: 'error',
+      duration: 3000
+  })
+}
+
+
+    document.querySelectorAll('.header__items ul li')[8].classList.add('active-item')
+    let form = document.getElementById('form-create-receipt')
+    form.onsubmit = function(e){
+        e.preventDefault();
+        if(document.querySelector('#room-number').value.trim() === ''){
+            showErrorToast('Room name is required')
+        } else if(document.querySelector('#electric').value <= 0){
+            showErrorToast('Electric price is not valid')
+        } else if(document.querySelector('#water').value <= 0){
+            showErrorToast('Waterr price is not valid')
+        } else if(document.querySelector('#month').value <= 0){
+            showErrorToast('Month is not valid')
+        } else if(document.querySelector('#year').value <= 2000 || document.querySelector('#year').value > 2030){
+            showErrorToast('Year is not valid')
+        } else{
+            form.submit();
+        }
+        ///alert('abc')
+    }
+</script>

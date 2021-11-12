@@ -1,0 +1,113 @@
+    {{> headercustomer}}
+<div class="container-manager">
+    <div class="header__manager">
+        <h2>Request repair devices</h2>
+        <label for="modal__add-customer" class="add">
+            <i class="fas fa-plus"></i> Add
+        </label>
+    </div>
+<style>
+        .container{
+            margin: 0 80px;
+        }
+        .red{
+            color: #EA5456
+        }
+        .mt40{
+            margin-top: 40px;;
+        }
+        .mb40{
+            margin-bottom: 40px;
+        }
+        li{
+            padding: 8px 0;
+        }
+        .modal__add-customer{
+            width: 500px;
+            margin: 0 auto;
+        }
+        textarea{
+            padding: 16px;
+            margin: 8px 0;
+        }
+    </style>
+    <h2 class="mt40"></h2>
+    <div class="container">
+       <ul>
+           {{#each requests}}
+            <li>
+               <div>{{this.content}}</div>
+               {{{statusrequestcus this.status}}}
+               <hr>
+           </li>
+           {{/each}}
+           
+       </ul>
+    </div>
+
+
+
+<!-- Add modal -->
+<input type="checkbox" id="modal__add-customer" hidden>
+<label for="modal__add-customer" class="layer-hidden">
+</label>
+<div class="modal__add-customer">
+    <label for="modal__add-customer" class="close-modal">
+        <i class="fas fa-times"></i>
+    </label>
+    <div class="form_add-customer">
+        <h2>Add Request</h2>
+        <form action="/me/request-repair" method="post" id="add-request" >
+            <div class="left">
+                <div class="form-group">
+                    <label for="dayofbirtd">Description request</label>
+                    <textarea class="form-control" rows="15" name="content" id="content"></textarea>
+                </div>
+            </div>
+            <div >
+                <button class="btn-primary btn-add-customer">CREATE</button> 
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    
+    .form_add-customer form{
+        display: block;
+    }
+    .left{
+        width: 100%;
+    }
+</style>
+
+    {{!-- view modal --}}
+    <div class="modal-view-receipt">
+        View Receipt
+    </div>
+    <style>
+        .modal-view-receipt{
+            display: none;
+            position: fixed;
+            top: 50px;
+            bottom: 50px;
+            left: 50px;
+            right: 50px;
+            background-color: #fff;
+            padding: 24px;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        }
+    </style>
+<script>
+    document.querySelectorAll('.header__items ul li')[5].classList.add('active-item')
+    let formAdd = document.querySelector('#add-request')
+    formAdd.onsubmit = (e)=>{
+        e.preventDefault();
+        if(document.querySelector('#content').value.length < 20){
+            console.log(document.querySelector('#content').value.length)
+            showErrorToast('Descripton should more than 20 characters')
+        } else{
+            formAdd.submit()
+        }
+    }
+</script>

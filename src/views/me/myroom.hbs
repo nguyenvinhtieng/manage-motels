@@ -1,0 +1,41 @@
+    {{> headercustomer}}
+<div class="container-manager">
+    <div class="header__manager">
+        <h2>Information of my room</h2>
+    </div>
+    <div class="content__manager">
+        <u>
+        About My room</u>
+        <ul>
+            <li>Number: {{data.number}}</li>
+            <li>Renter: {{data.renter}}</li>
+            <li>Number people: {{data.numberpeople}}</li>
+            <li>Maximum: {{data.maximum}}</li>
+            <li>Area: {{data.area}}</li>
+            <li>Price: <span id="price-room">{{data.price}}</span> </li>
+            <li>Description: {{data.description}}</li>
+        </ul>
+        <br><u>
+        List of devices</u>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Indemnify</th>
+                <th>description</th>
+            </tr>
+            <tbody id="devices">
+
+            </tbody>
+        </table>
+        <br>
+        <b>
+
+        <div class="total">
+            Total: 20213151 
+        </div>
+        </b>
+    </div>
+</div>
+
+<script src='/script/me/room.js'></script>

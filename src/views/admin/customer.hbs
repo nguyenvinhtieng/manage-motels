@@ -1,0 +1,308 @@
+    {{> header}}
+<div class="container-manager">
+    <div class="header__manager">
+        <h2>Manage Customers</h2>
+        <label for="modal__add-customer" class="add">
+            <i class="fas fa-plus"></i> Add
+        </label>
+    </div>
+    <div class="content__manager">
+        <table>
+            <thead>
+                <th></th>
+                <th>Name</th>
+                <th>Sex</th>
+                <th>Identity card </th>
+                <th>Room</th>
+                <th>Phone number</th>
+                <th>Start day</th>
+                <th>Leave day</th>
+                <th>Note</th>
+                <th>Status</th>
+            </thead>
+            <tbody id="customers">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<!-- Add modal -->
+<input type="checkbox" id="modal__add-customer" hidden>
+<label for="modal__add-customer" class="layer-hidden">
+</label>
+<div class="modal__add-customer">
+    <label for="modal__add-customer" class="close-modal">
+        <i class="fas fa-times"></i>
+    </label>
+    <div class="form_add-customer">
+        <h2>Add Customer</h2>
+        <form action="">
+            <div class="left">
+                <h4>Personal information </h4>
+                <div class="form-group">
+                    <label for="name">Full name</label>
+                    <input type="text" id="name">
+                </div>
+                <div class="form-group">
+                    <label for="identity">Identity card number</label>
+                    <input type="text" id="identity">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone number</label>
+                    <input type="text" id="phone">
+                </div>
+                <div class="form-group">
+                    <label for="dayofbirtd">Day of birth</label>
+                    <input type="date" id="dayofbirtd">
+                </div>
+                <div class="form-group">
+                    <label for="sex">Sex</label>
+                    <select name="" id="sex">
+                        <option value="">-- Choose --</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="job">Job</label>
+                    <input type="text" id="job">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="text" id="email">
+                </div>
+                <div class="form-group">
+                    <label for="note">Note</label>
+                    <input type="text" id="note">
+                </div>
+            </div>
+            <div class="right">
+                <div class="motel-information">
+                    <h4>Motel information</h4>
+                    <div class="form-group">
+                        <label for="room">Room</label>
+                        <select id="room" class="rooms">
+                            <option value="">-- Choose room --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="startday">Start day</label>
+                        <input type="date" id="startday">
+                    </div>
+                </div>
+                <div class="identity-information" style="display:none">
+                    <h4>Photos of identity card</h4><p style="color: red; font-size: 14px">This function not working now, Please skipping this action</p>
+                    <div class="form-group">
+                        <label for="front-identity">Front </label>
+                        <input type="file" id="front-identity">
+                    </div> 
+                    <div class="form-group">
+                        <label for="back-identity">Back </label>
+                        <input type="file" id="back-identity">
+                    </div>  
+                </div>
+            </div>
+            <div >
+                <button class="btn-primary btn-add-customer">CREATE</button> 
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<div class="layer-hidden hidden-modal-view"> </div>
+ {{!-- view modal --}}
+<div class="modal__view-customer">
+    <div class="close-modal close-view-modal">
+        <i class="fas fa-times"></i>
+    </div>
+    <div class="view-customer">
+        <h2>View Customer</h2>
+        <form action="">
+            <div class="left">
+                <h4>Personal information </h4>
+                <div class="form-group not-edit">
+                    <label for="name-view">Full name</label>
+                    <input type="text" id="name-view" disabled>
+                </div>
+                <div class="form-group not-edit">
+                    <label for="identity-view">Identity</label>
+                    <input type="text" id="identity-view" disabled>
+                </div>
+                <div class="form-group not-edit">
+                    <label for="phone-view">Phone number</label>
+                    <input type="text" id="phone-view" disabled>
+                </div>
+                <div class="form-group not-edit">
+                    <label for="dateofbirtd-view">Day of birth</label>
+                    <input type="text" id="dateofbirtd-view" disabled>
+                </div>
+                <div class="form-group not-edit">
+                    <label for="sex-view">Sex</label>
+                    <input type="text" id="sex-view" disabled>
+                </div>
+                <div class="form-group not-edit">
+                    <label for="job-view">Job</label>
+                    <input type="text" id="job-view" disabled>
+                </div>
+                <div class="form-group not-edit">
+                    <label for="email-view">Email</label>
+                    <input type="text" id="email-view" disabled>
+                </div>
+                <div class="form-group not-edit">
+                    <label for="note-view">Note</label>
+                    <input type="text" id="note-view" disabled>
+                </div>
+            </div>
+            <div class="right">
+                <div class="motel-information">
+                    <h4>Motel information</h4>
+                    <div class="form-group not-edit">
+                        <label for="room-view">Room</label>
+                        <input type="text" id="room-view" disabled>
+                    </div>
+                    <div class="form-group not-edit">
+                        <label for="startday-view">Start day</label>
+                        <input type="text" id="startday-view" disabled>
+                    </div>
+                    <div class="form-group not-edit">
+                        <label for="leaveday-view">Leave day</label>
+                        <input type="text" id="leaveday-view" disabled>
+                    </div>
+                </div>
+                <div class="identity-information" style="display:none">
+                    <h4>Photos of identity card</h4><p style="color: red; font-size: 14px">Images are for illustrative purposes only </p>
+                    <div class="image-all-card">
+                        <div class="form-group">
+                            <label for="front-identity">Front </label>
+                            <div class="image-card">
+                                <img src="/images/identity/motel.jpg" alt="">
+                            </div>
+                        </div> 
+                        <div class="form-group">
+                            <label for="back-identity">Back </label>
+                            <div class="image-card">
+                                <img src="/images/identity/motel.jpg" alt="">
+                            </div>
+                        </div> 
+                    </div>
+                     
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+    {{!-- edit modal --}}
+
+<div class="layer-hidden hidden-modal-edit"> </div>
+<div class="modal__edit-customer">
+    
+    <div class="close-modal close-edit-modal">
+        <i class="fas fa-times"></i>
+    </div>
+    <div class="form_add-customer">
+        <h2>Edit Customer</h2> 
+        <form action="">
+            <div class="left">
+                <h4>Personal information </h4>
+                <input type="text" id="id-edit" hidden>
+                <div class="form-group">
+                    <label for="name-edit">Full name</label>
+                    <input type="text" id="name-edit">
+                </div>
+                <div class="form-group">
+                    <label for="identity-edit">Identity card number</label>
+                    <input type="text" id="identity-edit">
+                </div>
+                <div class="form-group">
+                    <label for="phone-edit">Phone number</label>
+                    <input type="text" id="phone-edit">
+                </div>
+                <div class="form-group">
+                    <label for="dateofbirtd-edit">Day of birth</label>
+                    <input type="date" id="dateofbirtd-edit">
+                </div>
+                <div class="form-group">
+                    <label for="sex-edit">Sex</label>
+                    <select name="" id="sex-edit">
+                        <option class="first-item-sex"></option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="job-edit">Job</label>
+                    <input type="text" id="job-edit">
+                </div>
+                <div class="form-group">
+                    <label for="email-edit">Email</label>
+                    <input type="text" id="email-edit">
+                </div>
+                <div class="form-group">
+                    <label for="note-edit">Note</label>
+                    <input type="text" id="note-edit">
+                </div>
+            </div>
+            <div class="right">
+                <div class="motel-information">
+                    <h4>Motel information</h4>
+                    <div class="form-group">
+                        <label for="room-edit">Room</label>
+                        <select id="room-edit" class="list-room-edit">
+                            <option class="first-item-room" value="">-- Choose room --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="startday-edit">Start day</label>
+                        <input type="date" id="startday-edit">
+                    </div>
+                    <div class="form-group">
+                        <label for="leaveday-edit">
+                            Leave day
+                            <span class="leave-day"></span>
+                        </label>
+                        <input type="date" id="leaveday-edit">
+                    </div>
+                </div>
+                <div class="identity-information"  style="display:none">
+                    <h4>Photos of identity card</h4>
+                    <p style="color: red; font-size: 14px">this function not working now, Please skipping this action</p>
+                    <div class="image-all-card">
+                        
+                    <div class="form-group">
+                        <label for="front-identity-edit">Front </label>
+                        <label for="front-identity-edit">
+                            <div class="image-card">
+                                <img src="/images/identity/motel.jpg" alt="">
+                            </div>
+                        </label>
+                        <input type="file" id="front-identity-edit" hidden>
+                    </div> 
+                    <div class="form-group">
+                        <label for="back-identity-edit">Back </label>
+                        <label for="back-identity-edit">
+                            <div class="image-card">
+                                <img src="/images/identity/motel.jpg" alt="">
+                            </div>
+                        </label>
+                        <input type="file" id="back-identity-edit" hidden>
+                    </div>  
+                    </div>
+                </div>
+            </div>
+
+            <div >
+                <button class="btn-primary btn-save">SAVE</button> 
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+<script src="/script/admin/customer.js"></script>

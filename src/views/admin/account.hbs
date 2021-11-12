@@ -1,0 +1,110 @@
+    {{> header}}
+
+<div class="container-manager">
+    <div class="header__manager">
+        <h2>Manage Accounts</h2>
+        <label for="modal__add-account" class="add">
+            <i class="fas fa-plus"></i> Add
+        </label>
+    </div>
+    <div class="content__manager">
+        <table>
+            <thead>
+                <th></th>
+                <th>Username</th>
+                <th>Room</th>
+                <th>Email</th>
+                <th>Active</th>
+            </thead>
+            <tbody id="accounts">
+                
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!-- Modal add account -->
+<input type="checkbox" id="modal__add-account" hidden>
+<label for="modal__add-account" class="layer-hidden">
+</label>
+<div class="modal__add-account">
+    <label for="modal__add-account" class="close-modal">
+        <i class="fas fa-times"></i>
+    </label>
+    <div class="form_add-account">
+        <form action="">
+            <h3>Add Account <span>(Please fill out the form below)</span></h3>
+            <div class="form-group">
+                <label for="username">UserName</label>
+                <input type="text" id="username">
+            </div>
+            <div class="form-group">
+                <label for="list-room">Room</label>
+                <select name="" id="list-room">
+                    <option value="">-- Choose room --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" id="email">
+            </div>
+            <div class="form-group group-btn">
+                <button id="btn-create-account">Create</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<div class="layer-hidden layer-hidden-modal"> </div>
+<!-- Modal edit account -->
+<div class="modal__edit-account">
+    <div class="close-modal close-edit-modal">
+        <i class="fas fa-times"></i>
+    </div>
+    <div class="form_edit-account">
+        <form action="">
+            <h3>Edit Account</h3>
+            <div class="form-group">
+                <label for="usernam-edit">UserName</label>
+                <input type="text" disabled id="username-edit">
+            </div>
+            <div class="form-group">
+                <label for="">Room</label>
+                <select name="" id="room-edit">
+                    <option value="" id="first-item">-- Choose room --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="email-edit">Email</label>
+                <input type="text" id="email-edit">
+            </div>
+            <div class="form-group group-btn">
+                <button id="btn-update">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Confirm Delete Account -->
+<div class="modal__confirm-delete">
+    <div class="close-modal close-delete-modal">
+        <i class="fas fa-times"></i>
+    </div>
+    <div class="form-delete">
+        <h3>Warning!</h3>
+        <input type="text" id="username-delete" hidden>
+        <div class="text-modal">
+            Are you sure you want to delete this account
+        </div>
+        <div class="form-group group-btn">
+            <button class="btn-danger btn-delete">Delete</button>
+            <button class="btn-nomal btn-cancel">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+<script src="/script/admin/account.js"></script>

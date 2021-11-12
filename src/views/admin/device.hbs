@@ -1,0 +1,138 @@
+    {{> header}}
+
+<div class="container-manager">
+    <div class="header__manager">
+        <h2>Manage Devices</h2>
+        <label for="modal__add-device" id="add-device" class="add">
+            <i class="fas fa-plus"></i> Add
+        </label>
+    </div>
+    <div class="content__manager">
+        <table>
+            <thead>
+                <th></th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Indemnify</th>
+                <th>Description</th>
+            </thead>
+            <tbody id="devices">
+                {{#if data}}
+                {{#each data}}
+                <tr>
+                    <td>
+                        <div class="operations">
+                            <div data-id="{{this._id}}" class="edit edit-device">
+                                <i class="fas fa-pen"></i>
+                            </div>
+                            <div data-id="{{this._id}}" data-name="{{this.name}}" class="delete delete-device">
+                                <i class="fas fa-trash-alt"></i>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{this.name}}</td>
+                    <td>{{this.price}}$</td>
+                    <td>{{this.indemnify}}$</td>
+                    <td>{{this.description}}</td>
+                </tr>
+                {{/each}}
+                {{else}}
+                    
+                {{/if}}
+            </tbody>
+            
+        </table>
+        
+    </div>
+</div>
+
+
+<!-- Add modal -->
+<input type="checkbox" id="modal__add-device" hidden>
+<label for="modal__add-device" class="layer-hidden">
+</label>
+<div class="modal__add-device">
+    <label for="modal__add-device" class="close-modal">
+        <i class="fas fa-times"></i>
+    </label>
+    <div class="form_add-device">
+        <form action="">
+            <h3>Add Device <span>(Please fill out the form below)</span></h3>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name">
+            </div>
+            <div class="form-group">
+                <label for="">Price ($)</label>
+                <input type="number" min="0" id="price">
+            </div>
+            <div class="form-group">
+                <label for="">Indemnify ($)</label>
+                <input type="number" min="0" id="indemnify">
+            </div>
+            <div class="form-group">
+                <label for="">Description</label>
+                <input type="text" id="description">
+            </div>
+            <div class="form-group group-btn">
+                <button id="btn-add-device">Add</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div id="hidden-modal" class="layer-hidden"> </div>
+<!-- Edit Modal -->
+<div class="modal__edit-device">
+    <div class="close-modal close-edit-modal">
+        <i class="fas fa-times"></i>
+    </div>
+    <div class="form_edit-device">
+        <form action="">
+            <h3>Edit Device </h3>
+            <input type="text" id="id-edit" hidden>
+            <div class="form-group">
+                <label for="name-edit">Name</label>
+                <input type="text" id="name-edit">
+            </div>
+            <div class="form-group">
+                <label for="price-edit">Price ($)</label>
+                <input type="number" min="0" id="price-edit">
+            </div>
+            <div class="form-group">
+                <label for="indemnify-edit">Indemnify ($)</label>
+                <input type="text" id="indemnify-edit">
+            </div>
+            <div class="form-group">
+                <label for="description-edit">Description</label>
+                <input type="text" id="description-edit">
+            </div>
+            <div class="form-group group-btn">
+                <button id="btn-save">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Confirm delete modal -->
+<div class="modal__confirm-delete">
+    <div class="close-modal close-delete-modal">
+        <i class="fas fa-times"></i>
+    </div>
+    <div class="form-delete">
+        <h3>Warning!</h3>
+        <input type="text" id='id-delete-device' hidden>
+        <div class="text-modal delete-device-message">
+            Are you sure want to delete this device
+        </div>
+        <div class="form-group group-btn">
+            <button id="btn-delete" class="btn-danger">Delete</button>
+            <button class="btn-nomal cancel-delete-modal">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="/script/admin/device.js"></script>

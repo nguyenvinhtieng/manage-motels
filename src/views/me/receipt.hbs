@@ -1,0 +1,53 @@
+    {{> headercustomer}}
+    <style>
+        .container{
+            margin: 0 80px;
+        }
+        .red{
+            color: #EA5456
+        }
+        .mt40{
+            margin-top: 40px;;
+        }
+        .mb40{
+            margin-bottom: 40px;
+        }
+    </style>
+    <h2 class="mt40"></h2>
+    <div class="container">
+        {{#each receipts}}
+        <table class="mb40">
+            Receipt {{this.month}}/{{this.year}}
+            {{{statuscustomer this.status this.roomnumber this.month this.year}}}
+            <tr>
+                <th>Room Number</th>
+                <td>{{this.roomnumber}}</td>
+            </tr>
+            <tr>
+                <th>Electric</th>
+                <td>{{this.electric}}</td>
+            </tr>
+            <tr>
+                <th>Water</th>
+                <td>{{this.water}}</td>
+            </tr>
+            <tr>
+                <th>Service</th>
+                <td>{{this.service}}</td>
+            </tr>
+            <tr>
+                <th>Room & Devices</th>
+                <td>{{this.roomprice}}</td>
+            </tr>
+            <tr>
+                <th>Total</th>
+                <th class="red">{{this.total}}</th>
+            </tr>
+        </table>
+        <hr>
+        {{/each}}
+    </div>
+<script>
+    document.querySelectorAll('.header__items ul li')[4].classList.add('active-item')
+
+</script>
