@@ -177,7 +177,7 @@ class AdminController {
         let data = []
         for (let i = 1; i <= 12; i++) {
             //let datamonth = {}
-            const month = await Receipt.find({ month: i })
+            const month = await Receipt.find({ $and: [{ month: i }, { year: year }] })
             let prm = 0;
             month.forEach(m => {
                 prm += m.total;
