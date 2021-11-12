@@ -40,22 +40,21 @@ function getDataMonth(year, month) {
     })
 }
 function renderChartYear(dataYear) {
-    let month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    let main = document.querySelector('.revenue')
-    main.innerHTML = ''
-    dataYear.forEach((pr, index) => {
-        let div = document.createElement('div')
-        div.innerHTML = `Month ${month[index]} : ${pr}$`
-        main.appendChild(div)
-    })
+    // let month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    // let main = document.querySelector('.revenue')
+    // main.innerHTML = ''
+    // dataYear.forEach((pr, index) => {
+    //     let div = document.createElement('div')
+    //     div.innerHTML = `Month ${month[index]} : ${pr}$`
+    //     main.appendChild(div)
+    // })
+    drawChart(dataYear)
 }
 
 function renderDataMonth(data, year, month) {
     let main = document.querySelector('.revenue')
     main.innerHTML = `Revenue month ${month}/${year} : ${data}$`
 }
-
-// function drawChartMonth(labelmonth, datamonth) {
 
 //     var ctx = document.getElementById('month').getContext('2d');
 //     var myChart = new Chart(ctx, {
@@ -85,22 +84,6 @@ function renderDataMonth(data, year, month) {
 //     });
 // }
 
-// var xmlhttp = new XMLHttpRequest();
-// var url = '/api/year.json'
-// xmlhttp.open("GET", url, true);
-// xmlhttp.send(null);
-// let datayear = [];
-// let labelyear = [];
-// xmlhttp.onreadystatechange = function (data) {
-//     if (this.readyState == 4 && this.status == 200) {
-//         var dt = JSON.parse(this.responseText);
-//         dt.ven.forEach(function (item) {
-//             labelyear.push(item.Year)
-//             datayear.push(item.v)
-//         })
-//         drawChartYear(labelyear, datayear)
-//     }
-// }
 
 if (document.getElementById('btn-change')) {
     let btnChange = document.getElementById('btn-change')
@@ -153,4 +136,42 @@ function validDate(oldP, newP, repeatP) {
     }
     return true
 
+}
+function drawChart(data) {
+    let month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const ctx = document.getElementById('chart-year').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: month,
+            datasets: [{
+                label: 'revenue',
+                data: data,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
 }
