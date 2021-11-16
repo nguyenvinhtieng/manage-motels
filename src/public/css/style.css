@@ -1048,3 +1048,11 @@ a:hover {
 .fz-12 {
     font-size: 12px;
 }
+.change-pass-block {
+    padding: 4px 8px;
+    cursor: pointer;
+}
+.change-pass-block > label {
+    margin: 0;
+    cursor: pointer;
+}
