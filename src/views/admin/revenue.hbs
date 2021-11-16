@@ -1,0 +1,154 @@
+{{> header}}
+
+
+<div class="home-admin">
+    <h1>View revenue</h1>
+    <form>
+        <input type="number" placeholder="Year" id="year" />
+        <select id="month">
+            <option value="">----</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+        </select>
+        <button id="btn-view">View</button>
+    </form>
+    <div class="revenue">
+
+    </div>
+    <div id="chart">
+        <canvas id="chart-year" width="600" height="400"></canvas>
+    </div>
+</div>
+
+<script src="/assets/chart/index.js"></script>
+<script>
+    document.querySelectorAll('.header__items ul li')[10].classList.add('active-item')
+
+    let btnView = document.querySelector('#btn-view')
+
+    btnView.onclick = (e) => {
+        e.preventDefault();
+        let year = document.querySelector('#year').value
+        if (year == '' || year < 2000) {
+            showErrorToast("Year a not valid")
+        } else {
+            let month = document.querySelector('#month').value
+            // getData(year, month)
+            if (month == '') {
+                getDataYear(year)
+            } else {
+                getDataMonth(year, month)
+            }
+        }
+
+    }
+    function getDataYear(year) {
+        $.ajax({
+            url: '/admin/getrevenue-year',
+            type: 'POST',
+            data: { year },
+            success: function (data) {
+                const dataYear = data.data;
+                renderChartYear(dataYear, year)
+            }
+        })
+    }
+    function getDataMonth(year, month) {
+        $.ajax({
+            url: '/admin/getrevenue-month',
+            type: 'POST',
+            data: { year, month },
+            success: function (data) {
+                renderDataMonth(data.data, year, month)
+            }
+        })
+    }
+    function renderChartYear(dataYear, year) {
+        let total = 0;
+        dataYear.forEach(function (m) {
+            total += m;
+        })
+        document.querySelector('.revenue').innerHTML = "Revenue " + year + ": $" + total
+        drawChart(dataYear)
+    }
+
+    function renderDataMonth(data, year, month) {
+        let main = document.querySelector('.revenue')
+        main.innerHTML = `Revenue month ${month}/${year} : ${data}$`
+    }
+
+    function hiddenModal() {
+        document.getElementById('modal-change-password').checked = false
+    }
+    function validDate(oldP, newP, repeatP) {
+        if (oldP === '') {
+            showErrorToast('Current password can not be empty')
+            return false
+        }
+        if (newP === '') {
+            showErrorToast('New password can not be empty')
+            return false
+        }
+        if (newP.length < 8) {
+            showErrorToast('New password need more than 8 characters')
+            return false
+        }
+        if (newP !== repeatP) {
+            showErrorToast('Repeat password not match')
+            return false
+        }
+        return true
+
+    }
+    const ctx = document.getElementById('chart-year').getContext('2d');
+    function drawChart(data) {
+        //document.getElementById('#chart').innerHTML = ''
+        //document.getElementById('#chart').innerHTML = `<canvas id="chart-year" width="600" height="400"></canvas>`
+        let month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: month,
+                datasets: [{
+                    label: 'revenue',
+                    data: data,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+</script>
