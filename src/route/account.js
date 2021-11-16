@@ -14,7 +14,7 @@ router.put('/update', MainController.isLogin, MainController.isAdmin, AccountCon
 
 router.post('/updatePass', MainController.isLogin, AccountController.currentPassIsCorrect, AccountController.updatePassword);
 
-router.post('/create', MainController.isLogin, MainController.isAdmin, AccountController.isHasAccount, AccountController.create);
+router.post('/create', MainController.isLogin, MainController.isAdmin, AccountController.isHasAccount, AccountController.isHasRoomAccount, AccountController.create);
 router.post('/create-account-staff', MainController.isLogin, MainController.isAdmin, AccountController.isHasAccount, AccountController.createAccountStaff);
 
 module.exports = router;
