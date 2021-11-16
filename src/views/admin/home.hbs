@@ -1,15 +1,14 @@
-    {{> header}}
-    <label for="modal-change-password" class="change-password"> Change password <i class="fas fa-sync-alt"></i>
+{{> header}}
+
+<input type="checkbox" id="modal-change-password" hidden>
+<label for="modal-change-password" class="hidden-layer"></label>
+<div class="form-changepass">
+    <label for="modal-change-password" class="close">
+        <i class="fas fa-times"></i>
     </label>
-    <input type="checkbox" id="modal-change-password" hidden>
-    <label for="modal-change-password" class="hidden-layer"></label>
-    <div class="form-changepass">
-        <label for="modal-change-password" class="close">
-            <i class="fas fa-times"></i>
-        </label>
-        <h3>Change password</h3>
-        <form action="">
-<div class="form-group">
+    <h3>Change password</h3>
+    <form action="">
+        <div class="form-group">
             <label for="old-pass">Current password</label>
             <input type="password" id="old-password" autocomplete="off">
         </div>
@@ -22,39 +21,13 @@
             <input type="password" id="repeat-password" autocomplete="off">
         </div>
         <div class="form-group">
-           <button id="btn-change">Change</button>
+            <button id="btn-change">Change</button>
         </div>
-        </form>
-    </div>
-    <div class="home-admin">
-        
-        <h1>View revenue</h1>
-        <form>
-            <input type="number" placeholder="Year" id="year"/>
-            <select id="month">
-                <option value="">----</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-            </select>
-            <button id="btn-view">View</button>
-        </form>
-        <div class="revenue">
-            
-        </div>
-        <div id="chart">
-            <canvas id="chart-year" width="600" height="400"></canvas>
-        </div>
-    </div>
+    </form>
+</div>
+<div>
+    Home page admin
+</div>
 
 <script src="/assets/chart/index.js"></script>
 <script src='/script/admin/homeadmin.js'></script>
