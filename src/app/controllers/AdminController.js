@@ -42,6 +42,11 @@ class AdminController {
     renderCustomers(req, res, next) {
         res.render('./admin/customer')
     }
+
+    renderRevenue(req, res, next) {
+        res.render('./admin/revenue')
+    }
+
     async renderStaff(req, res, next) {
         let staffs = await Staff.find({}).lean()
         res.render('./admin/staff', { staffs })
@@ -127,7 +132,7 @@ class AdminController {
     async renderReceiptRoom(req, res, next) {
         let r = req.params.roomnumber
         const receipts = await Receipt.find({ roomnumber: r }).lean()
-        res.render('./admin/detailReceipt', { receipts })
+        res.render('./admin/roomReceipt', { receipts, r })
     }
 
     async createReceiptRoom(req, res, next) {
