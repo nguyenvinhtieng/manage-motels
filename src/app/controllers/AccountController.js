@@ -34,6 +34,16 @@ class AccountController {
             })
     }
 
+    async isHasRoomAccount(req, res, next) {
+        let acc = await Account.findOne({ roomnumber: req.body.roomnumber })
+        if (acc) {
+            return res.json({ status: false, message: "Has account for room " + req.body.roomnumber })
+        } else {
+            next()
+        }
+
+    }
+
     async create(req, res, next) {
         let pass = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10);
         let defaultData = {
