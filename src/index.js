@@ -55,7 +55,7 @@ app.engine('hbs', handlebars({
         <div class="fz-12">
         Billing Information <br>
         Account number: 123456789 <br>
-        Account name: ESDC <br>
+        Account name: Admin <br>
         Content: payment for room in ${month} / ${year} . Room  ${room}
         </div>
         
