@@ -9,6 +9,7 @@ router.get('/rooms', MainController.isLogin, MainController.isAdmin, AdminContro
 router.get('/devices', MainController.isLogin, MainController.isAdmin, AdminController.renderDevice);
 router.get('/accounts', MainController.isLogin, MainController.isAdmin, AdminController.renderAccount);
 router.get('/customers', MainController.isLogin, MainController.isAdmin, AdminController.renderCustomers);
+router.get('/revenue', MainController.isLogin, MainController.isAdmin, AdminController.renderRevenue);
 
 router.get('/staff', MainController.isLogin, MainController.isAdmin, AdminController.renderStaff);
 router.post('/getDataStaff', MainController.isLogin, MainController.isAdmin, AdminController.getDataStaff);
