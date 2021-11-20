@@ -10,7 +10,7 @@ router.post('/getaccount', MainController.isLogin, MainController.isAdmin, Accou
 
 router.delete('/delete', MainController.isLogin, MainController.isAdmin, AccountController.deleteAccount);
 
-router.put('/update', MainController.isLogin, MainController.isAdmin, AccountController.updateAccount);
+router.put('/update', MainController.isLogin, MainController.isAdmin, AccountController.checkUpdate, AccountController.updateAccount);
 
 router.post('/updatePass', MainController.isLogin, AccountController.currentPassIsCorrect, AccountController.updatePassword);
 
