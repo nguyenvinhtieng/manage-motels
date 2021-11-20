@@ -113,6 +113,20 @@ class AccountController {
             })
     }
 
+    checkUpdate(req, res, next) {
+        Account.findOne({ $and: [{ $ne: { username: req.body.username } }, { roomnumber: req.body.roomnumber }] })
+            .then(account => {
+                if (account) {
+                    return res.json({ status: false, message: "Room number is not valid!, Please choose another room." })
+                } else {
+                    next()
+                }
+            })
+            .catch(err => {
+                return res.json({ status: false, message: "Has err please try again later" })
+            })
+    }
+
     // PUT /account/update
     updateAccount(req, res, next) {
         Account.updateOne({ username: req.body.username }, req.body)
