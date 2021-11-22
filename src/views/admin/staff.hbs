@@ -1,4 +1,4 @@
-    {{> header}}
+{{> header}}
 <div class="container-manager">
     <div class="header__manager">
         <h2>Manage Staffs</h2>
@@ -20,28 +20,31 @@
             </thead>
             <tbody id="customers">
                 {{#each staffs}}
-                    <tr>
-                        <td>
-                            <div class="operations">
+                <tr>
+                    <td>
+                        <div class="operations">
+                            <div data-id="{{this._id}}" class="edit view-device view-staff">
+                                <i class="fas fa-eye" data-id="{{this._id}}"></i>
+                            </div>
                             <div data-id="{{this._id}}" class="edit edit-device edit-staff">
-                                <i class="fas fa-pen" data-id="{{this._id}}" ></i>
+                                <i class="fas fa-pen" data-id="{{this._id}}"></i>
                             </div>
                         </div>
-                        </td>
-                         <td>{{this.username}}</td>
-                        <td>{{this.name}}</td>
-                        <td>{{this.identity}}</td>
-                        <td>{{this.phone}}</td>
-                        <td>{{this.dateofbirth}}</td>
-                        <td>{{this.email}}</td>
-                        <td>
+                    </td>
+                    <td>{{this.username}}</td>
+                    <td>{{this.name}}</td>
+                    <td>{{this.identity}}</td>
+                    <td>{{this.phone}}</td>
+                    <td>{{this.dateofbirth}}</td>
+                    <td>{{this.email}}</td>
+                    <td>
                         {{#if this.status}}
-                            <div class="around around-red">not working </div>
+                        <div class="around around-red">not working </div>
                         {{else}}
-                            <div class="around around-blue">working </div>
+                        <div class="around around-blue">working </div>
                         {{/if}}
-                        </td>
-                    </tr>
+                    </td>
+                </tr>
                 {{/each}}
             </tbody>
         </table>
@@ -95,25 +98,25 @@
                     <input type="text" name="email" id="email">
                 </div>
             </div>
-            
-            <div >
-                <button class="btn-primary btn-add-customer">CREATE</button> 
+
+            <div>
+                <button class="btn-primary btn-add-customer">CREATE</button>
             </div>
         </form>
     </div>
 </div>
 
 <style>
-    
-    .form_add-customer form{
+    .form_add-customer form {
         display: block;
     }
-    .left{
+
+    .left {
         width: 100%;
     }
 </style>
 
-    {{!-- edit modal --}}
+{{!-- edit modal --}}
 
 <div class="layer-hidden hidden-modal-edit"> </div>
 <div class="modal__edit-customer">
@@ -121,7 +124,7 @@
         <i class="fas fa-times"></i>
     </div>
     <div class="form_add-customer">
-        <h2>Edit Staff</h2> 
+        <h2>Edit Staff</h2>
         <form action="/admin/update-staff" method="post" id="edit-form">
             <div class="left">
                 <input type="text" id="id-edit" name="_id" hidden>
@@ -164,9 +167,58 @@
                 </div>
             </div>
             <div></div>
-            <div >
-                <button type="submit" class="btn-primary btn-save">SAVE</button> 
+            <div>
+                <button type="submit" class="btn-primary btn-save">SAVE</button>
             </div>
+        </form>
+    </div>
+</div>
+
+{{!-- view --}}
+
+<div class="layer-hidden hidden-modal-edit"></div>
+<div class="modal__view-customer">
+    <div class="close-modal close-view-modal">
+        <i class="fas fa-times"></i>
+    </div>
+    <div class="form_add-customer">
+        <h2>View Staff</h2>
+        <form action="/admin/update-staff" method="post" id="edit-form">
+            <div class="left">
+                <input type="text" id="id-view" name="_id" hidden>
+                <input type="text" id="username-view" name="username" hidden>
+                <div class="form-group">
+                    <label for="name-view">Full name</label>
+                    <input type="text" id="name-view" name="name">
+                </div>
+                <div class="form-group">
+                    <label for="identity-view">Identity card number</label>
+                    <input type="text" id="identity-view" name="identity">
+                </div>
+                <div class="form-group">
+                    <label for="phone-view">Phone number</label>
+                    <input type="text" id="phone-view" name='phone'>
+                </div>
+                <div class="form-group">
+                    <label for="dateofbirtd-view">Day of birth</label>
+                    <input type="text" id="dateofbirtd-view" name="dateofbirth">
+                </div>
+                <div class="form-group">
+                    <label for="sex-view">Sex</label>
+                    <input type="text" id="sex-view" name="dateofbirth">
+
+                </div>
+                <div class="form-group">
+                    <label for="email-view">Email</label>
+                    <input type="text" id="email-view" name="email">
+                </div>
+                <div class="form-group">
+                    <label for="status-view">Status</label>
+
+                    <input type="text" id="status-view" name="dateofbirth">
+                </div>
+            </div>
+            <div></div>
         </form>
     </div>
 </div>
@@ -175,98 +227,146 @@
 <script>
     document.querySelectorAll('.header__items ul li')[7].classList.add('active-item')
     let btnEditStaff = document.querySelectorAll('.edit-staff')
-    btnEditStaff.forEach(function(staff){
-        staff.onclick =(e)=>{
+
+    let views = document.querySelectorAll('.view-device')
+    views.forEach(item => {
+        item.onclick = (e) => {
+            let id = item.getAttribute('data-id');
+            statusModalView(true);
+            getDataView(id)
+        }
+    })
+    function statusModalView(status) {
+        if (status) {
+            document.querySelector('.modal__view-customer').style.display = 'block'
+        } else {
+            document.querySelector('.modal__view-customer').style.display = 'none'
+        }
+    }
+    btnEditStaff.forEach(function (staff) {
+        staff.onclick = (e) => {
             let id = e.target.getAttribute('data-id');
             getDataStaff(id)
             statusModalEdit(true)
         }
     })
-    function getDataStaff(id){
+    function getDataView(id) {
         $.ajax({
             url: '/admin/getDataStaff',
             type: 'POST',
-            data: {id},
-            success: (response)=>{
-                if(response.success){
+            data: { id },
+            success: (response) => {
+                if (response.success) {
+                    renderStaffView(response.staff)
+                }
+            }
+        })
+    }
+    function getDataStaff(id) {
+        $.ajax({
+            url: '/admin/getDataStaff',
+            type: 'POST',
+            data: { id },
+            success: (response) => {
+                if (response.success) {
                     renderDataStaff(response.staff)
                 }
             }
         })
     }
-    function renderDataStaff(data){
-        document.querySelector('#username-edit').value = data.username;
+    function renderStaffView(data) {
+        document.querySelector('#username-view').value = data.username;
+        document.querySelector('#id-view').value = data._id;
+        document.querySelector('#name-view').value = data.name;
+        document.querySelector('#identity-view').value = data.identity;
+        document.querySelector('#phone-view').value = data.phone;
+        document.querySelector('#dateofbirtd-view').value = data.dateofbirth
+        document.querySelector('#email-view').value = data.email;
+        document.querySelector('#sex-view').value = data.sex;
+        if (data.status == "not working") {
+            document.querySelector('#status-view').value = "not working";
+        } else {
+            document.querySelector('#status-view').value = "Working";
+
+        }
+    }
+    document.querySelector('.close-view-modal').onclick = (e) => {
+        statusModalView(false)
+    }
+    function renderDataStaff(data) {
+        document.querySelector('#username-view').value = data.username;
         document.querySelector('#id-edit').value = data._id;
         document.querySelector('#name-edit').value = data.name;
         document.querySelector('#identity-edit').value = data.identity;
         document.querySelector('#phone-edit').value = data.phone;
         const date = new Date(data.dateofbirth)
-        document.querySelector('#dateofbirtd-edit').value = date.toISOString().substring(0,10);;
+        document.querySelector('#dateofbirtd-edit').value = date.toISOString().substring(0, 10);;
         document.querySelector('.first-item-sex').value = data.sex;
         document.querySelector('#email-edit').value = data.email;
         document.querySelector('.first-item-sex').innerHTML = data.sex;
-        if(!data.status){
-            document.querySelector('.first-item-status').innerHTML = 'working';   
-        } else{
+        if (!data.status) {
+            document.querySelector('.first-item-status').innerHTML = 'working';
+        } else {
             document.querySelector('.first-item-status').innerHTML = 'not working';
             document.querySelector('.first-item-status').value = 'not working';
         }
     }
-    function statusModalEdit(status){
-        if(status){
+    function statusModalEdit(status) {
+        if (status) {
             document.querySelector('.modal__edit-customer').style.display = 'block'
-        } else{
+        } else {
             document.querySelector('.modal__edit-customer').style.display = 'none'
         }
     }
-    document.querySelector('.close-edit-modal').onclick = (e) =>{
+    document.querySelector('.close-edit-modal').onclick = (e) => {
         statusModalEdit(false)
+        statusModalView(false)
     }
 
     let formAdd = document.querySelector('#form-add-staff')
-    formAdd.onsubmit = function(e){
+    formAdd.onsubmit = function (e) {
         e.preventDefault();
-         dateofbirth = document.querySelector('#dayofbirtd').value;
-          var today = new Date();
+        dateofbirth = document.querySelector('#dayofbirtd').value;
+        var today = new Date();
         let toYear = today.getFullYear()
         let dob = new Date(dateofbirth)
-        if(document.querySelector('#username').value.trim() == ''){
+        if (document.querySelector('#username').value.trim() == '') {
             showErrorToast('Username can not be empty')
-        } else if(document.querySelector('#fullname').value.trim() == ''){
+        } else if (document.querySelector('#fullname').value.trim() == '') {
             showErrorToast('Full name can not be empty')
-        } else if(document.querySelector('#identity').value.trim() == ''){
+        } else if (document.querySelector('#identity').value.trim() == '') {
             showErrorToast('Identity card number can not be empty')
-        } else if(document.querySelector('#phone').value.trim() == ''){
+        } else if (document.querySelector('#phone').value.trim() == '') {
             showErrorToast('Phone number can not be empty')
-        } else if(dateofbirth == '' || dob > today){
+        } else if (dateofbirth == '' || dob > today) {
             showErrorToast('Date of birth not valid')
-        } else if(document.querySelector('#sex').value.trim() == ''){
+        } else if (document.querySelector('#sex').value.trim() == '') {
             showErrorToast('Sex can not be empty')
-        } else if(document.querySelector('#email').value.trim() == ''){
+        } else if (document.querySelector('#email').value.trim() == '') {
             showErrorToast('Email can not be empty')
-        } else{
+        } else {
             formAdd.submit()
         }
     }
 
     let formEdit = document.querySelector('#edit-form')
-    formEdit.onsubmit = (e)=>{
+    formEdit.onsubmit = (e) => {
         e.preventDefault()
         let dateofbirth = document.querySelector('#dateofbirtd-edit').value;
-          let today = new Date();
+        let today = new Date();
         let toYear = today.getFullYear()
         let dob = new Date(dateofbirth)
-        if(document.querySelector('#name-edit').value.trim() == ''){
+        if (document.querySelector('#name-edit').value.trim() == '') {
             showErrorToast('Full name can not be empty')
-        } else if(document.querySelector('#identity-edit').value.trim() == ''){
+        } else if (document.querySelector('#identity-edit').value.trim() == '') {
             showErrorToast('Identity card number can not be empty')
-        } else if(document.querySelector('#phone-edit').value.trim() == ''){
+        } else if (document.querySelector('#phone-edit').value.trim() == '') {
             showErrorToast('Phone number can not be empty')
-        } else if(dateofbirth == '' || dob > today){
+        } else if (dateofbirth == '' || dob > today) {
             showErrorToast('Date of birth not valid')
-        } else if(document.querySelector('#email-edit').value.trim() == ''){
+        } else if (document.querySelector('#email-edit').value.trim() == '') {
             showErrorToast('Email can not be empty')
-        } else{
+        } else {
             formEdit.submit()
         }
 
