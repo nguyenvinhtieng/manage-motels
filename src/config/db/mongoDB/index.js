@@ -1,9 +1,6 @@
 const mongoose = require('mongoose');
-// mongodb+srv://vinhtieng:<password>@cluster0.wru1l.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-//let url = 'mongodb+srv://vinhtieng:vinhtieng@cluster0.wru1l.mongodb.net/manage-motels?retryWrites=true&w=majority'
-//let url = 'mongodb+srv://dbUser:101060@clustersocialnetwork.r5gqi.mongodb.net/social?retryWrites=true&w=majority'
-
 let url = 'mongodb+srv://vinhtieng:vinhtieng@cluster0.ugswm.mongodb.net/test'
+url = "mongodb://localhost:27017/esdc"
 async function connect() {
     try {
         await mongoose.connect(url, {

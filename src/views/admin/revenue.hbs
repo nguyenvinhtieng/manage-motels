@@ -58,8 +58,7 @@
             type: 'POST',
             data: { year },
             success: function (data) {
-                const dataYear = data.data;
-                renderChartYear(dataYear, year)
+                renderChartYear(data, year)
             }
         })
     }
@@ -69,22 +68,30 @@
             type: 'POST',
             data: { year, month },
             success: function (data) {
-                renderDataMonth(data.data, year, month)
+                renderDataMonth(data, year, month)
             }
         })
     }
-    function renderChartYear(dataYear, year) {
+    function renderChartYear(data, year) {
+        let revenue = data.thu
+        let chi = data.data1
         let total = 0;
-        dataYear.forEach(function (m) {
+        console.log(data)
+        revenue.forEach(function (m) {
             total += m;
         })
-        document.querySelector('.revenue').innerHTML = "Revenue " + year + ": $" + total
-        drawChart(dataYear)
+        let totalChi = 0;
+        chi.forEach(function (m) {
+            totalChi += m;
+        })
+        document.querySelector('.revenue').innerHTML = "Revenue " + year + ": $" + total + "<br> Expenditure " + year + ": $" + totalChi;
+        drawChart(revenue, chi)
     }
 
     function renderDataMonth(data, year, month) {
+        console.log(data)
         let main = document.querySelector('.revenue')
-        main.innerHTML = `Revenue month ${month}/${year} : ${data}$`
+        main.innerHTML = `Revenue month ${month}/${year} : ${data.data}$ <br> Expenditure month ${month}/${year} : ${data.chi}$`
     }
 
     function hiddenModal() {
@@ -111,33 +118,26 @@
 
     }
     const ctx = document.getElementById('chart-year').getContext('2d');
-    function drawChart(data) {
+    function drawChart(revenue, chi) {
         //document.getElementById('#chart').innerHTML = ''
         //document.getElementById('#chart').innerHTML = `<canvas id="chart-year" width="600" height="400"></canvas>`
         let month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         const myChart = new Chart(ctx, {
-            type: 'bar',
+            type: 'line',
             data: {
                 labels: month,
                 datasets: [{
-                    label: 'revenue',
-                    data: data,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
+                    label: 'Revenue',
+                    data: revenue,
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Expenditure ',
+                    data: chi,
+                    backgroundColor: 'rgba(31, 0, 233, 0.582)',
+                    borderColor: 'rgba(31, 0, 233, 0.582)',
                     borderWidth: 1
                 }]
             },

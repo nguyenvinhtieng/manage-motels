@@ -40,6 +40,7 @@ function getDataMonth(year, month) {
     })
 }
 function renderChartYear(dataYear) {
+    console.log(dataYear)
     // let month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     // let main = document.querySelector('.revenue')
     // main.innerHTML = ''

@@ -180,18 +180,20 @@ class AdminController {
         let year = req.body.year;
         //let month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         let data = []
+        let data1 = []
         for (let i = 1; i <= 12; i++) {
             //let datamonth = {}
             const month = await Receipt.find({ $and: [{ month: i }, { year: year }] })
             let prm = 0;
+            let chi = 0
             month.forEach(m => {
                 prm += m.total;
+                chi += m.water + m.electric + m.service;
             })
-            //datamonth.month = month[i - 1];
-            //datamonth.re = prm;
             data.push(prm);
+            data1.push(chi)
         }
-        return res.json({ data: data })
+        return res.json({ thu: data, data1 })
     }
 
     async getRevenueMonth(req, res, next) {
@@ -199,11 +201,13 @@ class AdminController {
         let month = req.body.month;
         const receipts = await Receipt.find({ month, year })
         let total = 0
+        let chi = 0;
         receipts.forEach(m => {
             total += m.total
+            chi += m.water + m.electric + m.service
         })
 
-        return res.json({ data: total })
+        return res.json({ data: total, chi })
     }
     async renderRepair(req, res, next) {
         const requests = await Repair.find({}).lean()
