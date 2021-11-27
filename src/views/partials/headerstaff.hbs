@@ -1,4 +1,3 @@
-
 <div class="header">
     <div class="header__content">
         <div class="header__logo">
@@ -8,7 +7,7 @@
             <ul>
                 <li>
                     <a href="/staff/home">
-                        <i class="fas fa-tachometer-alt"></i>  Home
+                        <i class="fas fa-tachometer-alt"></i> Home
                     </a>
                 </li>
                 <li>
@@ -28,8 +27,8 @@
                 </li>
             </ul>
         </div>
-        
-         <div class="header__out change-pass-block">
+
+        <div class="header__out change-pass-block">
             <label for="modal-change-password" class="change-password"><i class="fas fa-lock"></i> Change password
             </label>
         </div>
@@ -37,4 +36,30 @@
             <a href="/login"> LogOut <i class="fas fa-power-off"></i></a>
         </div>
     </div>
+</div>
+
+<input type="checkbox" id="modal-change-password" hidden>
+<label for="modal-change-password" class="hidden-layer"></label>
+<div class="form-changepass">
+    <label for="modal-change-password" class="close">
+        <i class="fas fa-times"></i>
+    </label>
+    <h3>Change password</h3>
+    <form action="">
+        <div class="form-group">
+            <label for="old-pass">Current password</label>
+            <input type="password" id="old-password" autocomplete="off">
+        </div>
+        <div class="form-group">
+            <label for="new-pass">New password</label>
+            <input type="password" id="new-password" autocomplete="off">
+        </div>
+        <div class="form-group">
+            <label for="repeat-pass">Repeat password</label>
+            <input type="password" id="repeat-password" autocomplete="off">
+        </div>
+        <div class="form-group">
+            <button id="btn-change">Change</button>
+        </div>
+    </form>
 </div>
