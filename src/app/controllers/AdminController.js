@@ -183,7 +183,7 @@ class AdminController {
         let data1 = []
         for (let i = 1; i <= 12; i++) {
             //let datamonth = {}
-            const month = await Receipt.find({ $and: [{ month: i }, { year: year }] })
+            const month = await Receipt.find({ $and: [{ month: i }, { year: year }, { status: "paid" }] })
             let prm = 0;
             let chi = 0
             month.forEach(m => {
@@ -199,7 +199,7 @@ class AdminController {
     async getRevenueMonth(req, res, next) {
         let year = req.body.year;
         let month = req.body.month;
-        const receipts = await Receipt.find({ month, year })
+        const receipts = await Receipt.find({ month, year, status: "paid" })
         let total = 0
         let chi = 0;
         receipts.forEach(m => {
