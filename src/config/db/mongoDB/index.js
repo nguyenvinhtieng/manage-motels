@@ -14,7 +14,11 @@ async function connect() {
     }
 }
 
-module.exports = { connect };
+function close() {
+    return mongoose.disconnect();
+}
+
+module.exports = { connect, close };
 
 /*
 const { MongoClient } = require('mongodb');
