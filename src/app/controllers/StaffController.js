@@ -1,6 +1,5 @@
-const Room = require('../models/Room.js')
-const DeviceInRoom = require('../models/DeviceInRoom.js')
-const Customer = require('../models/Customer.js')
+const Account = require('../models/Account');
+const Staff = require('../models/Staff');
 const Job = require('../models/Job.js')
 const jwt = require('jsonwebtoken');
 
@@ -9,7 +8,14 @@ class StaffController {
     renderHome(req, res) {
         res.render('./staff/home')
     }
-
+    async renderMe(req, res, next) {
+        let token = req.cookies.token;
+        let decodedCookie = jwt.verify(token, TOKEN_KEY)
+        let idUser = decodedCookie._id;
+        let account = await Account.findOne({ _id: idUser })
+        let staff = await Staff.findOne({ username: account.username }).lean()
+        res.render('./staff/myinfor', { staff })
+    }
     async renderJob(req, res) {
         const jobs = await Job.find({ $and: [{ approved: "yes" }, { status: '' }, { staff: '' }] }).lean()
         res.render('./staff/job', { jobs })
