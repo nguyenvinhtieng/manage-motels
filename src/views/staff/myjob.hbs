@@ -1,9 +1,9 @@
-    {{> headerstaff}}
-       
+{{> headerstaff}}
+
 <div class="container-manager">
     <div class="header__manager">
         <h2>Jobs</h2>
-        
+
     </div>
     <div class="content__manager">
         <table>
@@ -17,26 +17,14 @@
             </thead>
             <tbody id="accounts">
                 {{#each jobs}}
-                    <tr>
-                        <td>{{this.room}}</td>
-                        <td>{{this.description}}</td>
-                        <td>{{this.startday}}</td>
-                        <td>{{this.endday}}</td>
-                        <td>{{this.price}}</td>
-                        {{#if this.status}}
-                            <td>
-                                finished
-                            </td>
-                        {{else}}
-                        <td data-id="{{this._id}}"> 
-                                <div for="modal-pick-task" class="operations">
-                                    <a href="/staff/finish-task/{{this._id}}" class="edit edit-device pick-task">
-                                        <i data-id="{{this._id}}" class="fas fa-check-circle"></i>
-                                    </a>
-                                </div>
-                            </td>
-                        {{/if}}
-                    </tr>
+                <tr>
+                    <td>{{this.room}}</td>
+                    <td>{{this.description}}</td>
+                    <td>{{this.startday}}</td>
+                    <td>{{this.endday}}</td>
+                    <td>{{this.price}}</td>
+                    {{{handleMyJobStaff this.status this._id}}}
+                </tr>
                 {{/each}}
             </tbody>
         </table>
