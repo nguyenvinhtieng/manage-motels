@@ -18,7 +18,7 @@ class StaffController {
     }
     async renderJob(req, res) {
         const jobs = await Job.find({ $and: [{ approved: "yes" }, { staff: '' }] }).lean()
-        console.log(jobs)
+        // console.log(jobs)
         res.render('./staff/job', { jobs })
     }
 
