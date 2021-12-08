@@ -128,7 +128,7 @@ class MeController {
         let idUser = decodedCookie._id;
         const acc = await Account.findOne({ _id: idUser })
         let room = acc.roomnumber;
-        let receipts = await Receipt.find({ roomnumber: room }).lean();
+        let receipts = await Receipt.find({ roomnumber: room }).sort({ createdAt: -1 }).lean();
         res.render('./me/receipt', { receipts })
     }
 
