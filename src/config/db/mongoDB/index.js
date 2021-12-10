@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 let url = 'mongodb+srv://vinhtieng:vinhtieng@cluster0.ugswm.mongodb.net/test'
-// /url = "mongodb://localhost:27017/esdc"
+// let url = "mongodb://localhost:27017/esdc"
 async function connect() {
     try {
         await mongoose.connect(url, {

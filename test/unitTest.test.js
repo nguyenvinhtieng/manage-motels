@@ -2,10 +2,9 @@ const expect = require('chai').expect
 const request = require('supertest');
 const app = require('../src/index')
 const conn = require('../src/config/db/mongoDB/index')
-
+before((done) => { conn.connect().then(() => done()).catch((error) => done(error)) })
+after((done) => { conn.close().then((done) => done()).catch((error) => done(error)) })
 describe('Test createRoom', () => {
-    before((done) => { conn.connect().then(() => done()).catch((error) => done(error)) })
-    after((done) => { conn.close().then((done) => done()).catch((error) => done(error)) })
     // TẠO ROOM KÈM THEO COOKIE CỦA ADMIN
     it("Create a new room", async (done) => {
         request(app)
@@ -36,8 +35,7 @@ describe('Test createRoom', () => {
 })
 
 describe('Test Get data room', () => {
-    before((done) => { conn.connect().then(() => done()).catch((error) => done(error)) })
-    after((done) => { conn.close().then((done) => done()).catch((error) => done(error)) })
+
     // LẤY THÔNG TIN CỦA TẤT CẢ CÁC PHÒNG
     it("get data rooms", async (done) => {
         request(app)
@@ -86,8 +84,7 @@ describe('Test Get data room', () => {
 })
 
 describe('Test Device In Room', () => {
-    before((done) => { conn.connect().then(() => done()).catch((error) => done(error)) })
-    after((done) => { conn.close().then((done) => done()).catch((error) => done(error)) })
+
     // LẤY THÔNG TIN CÁC THIẾT BỊ CÓ TRONG PHÒNG
     it("Get data devices in room", async (done) => {
         request(app)
@@ -106,8 +103,7 @@ describe('Test Device In Room', () => {
 })
 
 describe('Test create job', () => {
-    before((done) => { conn.connect().then(() => done()).catch((error) => done(error)) })
-    after((done) => { conn.close().then((done) => done()).catch((error) => done(error)) })
+
     // TẠO 1 JOB MỚI
     it("Create a new job", async (done) => {
         request(app)
@@ -126,8 +122,7 @@ describe('Test create job', () => {
 })
 
 describe('Test create receipt', () => {
-    before((done) => { conn.connect().then(() => done()).catch((error) => done(error)) })
-    after((done) => { conn.close().then((done) => done()).catch((error) => done(error)) })
+
     // TẠO 1 RECEIPT
     it("Create a new receipt", async (done) => {
         request(app)
@@ -146,8 +141,7 @@ describe('Test create receipt', () => {
 })
 
 describe('Test create notify', () => {
-    before((done) => { conn.connect().then(() => done()).catch((error) => done(error)) })
-    after((done) => { conn.close().then((done) => done()).catch((error) => done(error)) })
+
     // TẠO 1 THÔNG BÁO MỚI
     it("Create a new notify", async (done) => {
         request(app)
@@ -166,8 +160,7 @@ describe('Test create notify', () => {
 })
 
 describe('Test create notify', () => {
-    before((done) => { conn.connect().then(() => done()).catch((error) => done(error)) })
-    after((done) => { conn.close().then((done) => done()).catch((error) => done(error)) })
+
     // THÊM YÊU CẦU SỬA CHỮA VẬT CHẤT
     it("Create a new request repair", async (done) => {
         request(app)
@@ -186,8 +179,7 @@ describe('Test create notify', () => {
 })
 
 describe('Add customer data', () => {
-    before((done) => { conn.connect().then(() => done()).catch((error) => done(error)) })
-    after((done) => { conn.close().then((done) => done()).catch((error) => done(error)) })
+
     // THÊM THÔNG TIN KHÁCH HÀNG
     it("Add data customer", async (done) => {
         request(app)

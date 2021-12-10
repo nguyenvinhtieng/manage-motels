@@ -74,9 +74,9 @@
                     <div class="form-group">
                         <label for="name">Room</label>
                         <select name="roomnumber" id="room-number">
-                            <option value=''>-- Choose --</option>
+                            <option value='' data-price="0">-- Choose --</option>
                             {{#each rooms}}
-                            <option value="{{this.number}}">{{this.number}}</option>
+                            <option value="{{this.number}}" data-price="{{this.price}}">{{this.number}}</option>
                             {{/each}}
                         </select>
                     </div>
@@ -87,6 +87,10 @@
                     <div class="form-group">
                         <label for="water">Water</label>
                         <input type="number" min="0" name="water" id="water">
+                    </div>
+                    <div class="form-group">
+                        <label for="roomprice">Roomprice</label>
+                        <input type="number" min="0" name="roomprice" id="roomprice">
                     </div>
                     <div class="form-group">
                         <label for="month">Month</label>
@@ -206,9 +210,22 @@
                 showErrorToast('Month is not valid')
             } else if (document.querySelector('#year').value <= 2000 || document.querySelector('#year').value > 2030) {
                 showErrorToast('Year is not valid')
+            } else if (document.querySelector('#roomprice').value < 0) {
+                showErrorToast('Room price is not valid')
             } else {
                 form.submit();
             }
-            ///alert('abc')
+        }
+        document.getElementById('room-number').onchange = (e) => {
+            console.log(e.target.value);
+            $.ajax({
+                url: '/room/get-price-room',
+                type: 'POST',
+                data: { roomnumber: e.target.value },
+                success: function (data) {
+                    console.log(data)
+                    document.querySelector('#roomprice').value = data.price || 0
+                }
+            })
         }
     </script>

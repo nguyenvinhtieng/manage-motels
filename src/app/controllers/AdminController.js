@@ -139,11 +139,11 @@ class AdminController {
         let total = 0
         const data = req.body;
         //total = data.electric + data.water + data.service
-        total = Number(data.electric) + Number(data.water)
+        total = Number(data.electric) + Number(data.water) + Number(data.roomprice)
         const receipt = new Receipt(data)
-        const room = await Room.findOne({ number: data.roomnumber })
-        total += Number(room.price)
-        let roomprice = Number(room.price)
+        // const room = await Room.findOne({ number: data.roomnumber })
+        // total += Number(room.price)
+        // let roomprice = Number(room.price)
         let service = 0;
         let jobs = await Job.find({ $and: [{ room: data.roomnumber }, { status: 'finish' }] })
         jobs.forEach(j => {
@@ -156,7 +156,7 @@ class AdminController {
             roomnumber: data.roomnumber,
             electric: Number(data.electric),
             water: Number(data.water),
-            roomprice: room.price,
+            roomprice: data.roomprice,
             service: service,
             total: total,
             status: 'unpaid',
