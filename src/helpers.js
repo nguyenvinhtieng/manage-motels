@@ -88,5 +88,27 @@ module.exports = {
                     </a>
                 </div>
             </td>`
+  },
+  renderStatusJob: function (status, idJob) {
+    if (status == "finished") {
+      return `Finished`
+    } else {
+      return `<button type="button" class="btn btn-primary btn-sm btn-finish-job" data-id="${idJob}"
+      data-toggle="modal" data-target="#modal-finish-job">Finish</button>`
+    }
+  },
+  handleRepair: function (status, id, type) {
+    if (status == "wait") {
+      return `<button type="button" class="btn btn-success btn-accept btn-sm" data-id="${id}"  data-toggle="modal" data-target="#modal-accept">Accept</button>
+      <button type="button" class="btn btn-danger btn-reject btn-sm" data-toggle="modal" data-target="#modal-reject-request" data-id="${id}">Reject</button>`
+    } else if (status == "reject") {
+      return ``
+    } else if (status == "accept" && type == "room") {
+      return `<button type="button" class="btn btn-primary btn-finish-r btn-sm" data-id="${id}"  data-toggle="modal" data-target="#modal-finish-room">Finish</button>`
+    } else if (status == "accept" && type == "device") {
+      return `<button type="button" class="btn btn-primary btn-finish-d btn-sm" data-id="${id}"  data-toggle="modal" data-target="#modal-finish-device">Finish</button>`
+    } else {
+      return ``
+    }
   }
 }

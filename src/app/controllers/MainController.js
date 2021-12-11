@@ -58,7 +58,10 @@ class MainController {
                 Account.findOne({ _id: idUser })
                     .then(data => {
                         if (data) {
+                            req._id = idUser;
                             next()
+                        } else {
+                            res.redirect('/login');
                         }
                     })
             } else {

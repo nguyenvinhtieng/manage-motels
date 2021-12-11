@@ -2,13 +2,13 @@ const jwt = require('jsonwebtoken');
 const Account = require('../models/Account.js')
 const Device = require('../models/Device.js')
 const { multipleMongooseToObject } = require('../../utils/mongoose');
-const TOKEN_KEY = 'AmkshOnmshGndksmHg'
 const Room = require('../models/Room.js')
 const Job = require('../models/Job.js')
 const Staff = require('../models/Staff.js')
 const bcrypt = require("bcrypt");
 const Receipt = require('../models/Receipt.js')
 const DeviceInRoom = require('../models/DeviceInRoom.js')
+const Service = require('../models/Service.js')
 const Repair = require('../models/Repair.js')
 class AdminController {
     // GET '/admin/home'
@@ -46,7 +46,30 @@ class AdminController {
     renderRevenue(req, res, next) {
         res.render('./admin/revenue')
     }
-
+    async renderService(req, res, next) {
+        let services = await Service.find({}).lean()
+        res.render('./admin/service', { services })
+    }
+    async deleteService(req, res, next) {
+        let id = req.params.id
+        await Service.deleteOne({ _id: id })
+        res.redirect('/admin/service')
+    }
+    async getOneService(req, res) {
+        let id = req.params.id
+        let service = await Service.findOne({ _id: id })
+        return res.json({ success: true, service })
+    }
+    async updateService(req, res) {
+        let service = await Service.findOneAndUpdate({ _id: req.body._id }, req.body)
+        res.redirect('/admin/service')
+    }
+    async addService(req, res, next) {
+        let { name, description, price } = req.body
+        let service = new Service({ name, description, price })
+        await service.save()
+        res.redirect('/admin/service')
+    }
     async renderStaff(req, res, next) {
         let staffs = await Staff.find({}).lean()
         res.render('./admin/staff', { staffs })
@@ -87,8 +110,17 @@ class AdminController {
     }
     async renderJob(req, res, next) {
         let rooms = await Room.find({}).lean()
-        let jobs = await Job.find({ delete: { $ne: 'yes' } }).lean()
-        res.render('./admin/job', { rooms, jobs })
+        let tasks = await Job.find({ delete: { $ne: 'yes' } }).lean()
+        let services = await Service.find({}).lean()
+        res.render('./admin/job', { rooms, tasks, services })
+    }
+    async addJob(req, res) {
+        let { room, serviceid, date, note } = req.body
+        let serv = await Service.findById(serviceid)
+        let data = { room, name: serv.name, date, note, price: serv.price, status: "not yet" }
+        let job = new Job(data)
+        await job.save()
+        res.redirect('/admin/jobs')
     }
     async getDataStaff(req, res, next) {
         let id = req.body.id
@@ -112,10 +144,8 @@ class AdminController {
     }
 
     async deleteJob(req, res, next) {
-        let id = req.body.id;
-        let job = await Job.findOne({ _id: id })
-        job.delete = 'yes'
-        await job.save()
+        let id = req.params.id
+        await Job.findOneAndRemove({ _id: id })
         res.redirect('/admin/jobs')
     }
 
@@ -128,13 +158,44 @@ class AdminController {
         const receipts = await Receipt.find({}).sort({ createdAt: -1 }).lean()
         res.render('./admin/receipt', { rooms, receipts })
     }
+    async addReceipt(req, res) {
+        let { room, electric, water, roomprice, month, year } = req.body
+        let total = +electric + +water + +roomprice
+        let service = 0
+        let jobs = await Job.find({ $and: [{ room }, { status: "finished" }] })
+        jobs.forEach(job => {
+            if (job.date.split('-')[1] == month && job.date.split('-')[0] == year) {
+                total += +job.price
+                service += +job.price
+            }
 
+        })
+        let repairs = await Repair.find({ $and: [{ room }, { type: "device" }, { status: "finished" }] })
+        repairs.forEach(repair => {
+            if (repair.suitabletime.split('-')[0] == year && repair.suitabletime.split('-')[1] == month) {
+                total += +repair.price
+                service += +repair.price
+            }
+        })
+        let data = { roomnumber: room, electric, water, roomprice, service, total, status: "unpaid", month, year }
+        let receipt = new Receipt(data)
+        await receipt.save()
+        res.redirect('/admin/receipt')
+    }
     async renderReceiptRoom(req, res, next) {
         let r = req.params.roomnumber
         const receipts = await Receipt.find({ roomnumber: r }).lean()
         res.render('./admin/roomReceipt', { receipts, r })
     }
-
+    async getReceipt(req, res) {
+        let { month, year, roomnumber } = req.body
+        let query = {}
+        if (month) query.month = month
+        if (year) query.year = year
+        if (roomnumber) query.roomnumber = roomnumber
+        let receipts = await Receipt.find(query)
+        return res.json({ success: true, receipts })
+    }
     async createReceiptRoom(req, res, next) {
         let total = 0
         const data = req.body;
@@ -170,9 +231,8 @@ class AdminController {
     }
 
     async updateReceipt(req, res) {
-        let receipt = await Receipt.findOne({ _id: req.body.id })
-        receipt.status = req.body.status
-        await receipt.save();
+        let { id, status } = req.params
+        await Receipt.findOneAndUpdate({ _id: id }, { status: status })
         res.redirect(`/admin/receipt`)
     }
 
@@ -212,6 +272,27 @@ class AdminController {
     async renderRepair(req, res, next) {
         const requests = await Repair.find({}).lean()
         res.render('./admin/repair', { requests })
+    }
+
+    async rejectRequest(req, res) {
+        let id = req.params.id
+        await Repair.findOneAndUpdate({ _id: id }, { status: "reject" })
+        res.redirect('/admin/repair')
+    }
+    async acceptRequest(req, res) {
+        let id = req.params.id
+        await Repair.findOneAndUpdate({ _id: id }, { status: "accept" })
+        res.redirect('/admin/repair')
+    }
+    async finishRequestRoom(req, res) {
+        let id = req.params.id
+        await Repair.findOneAndUpdate({ _id: id }, { status: "finished" })
+        res.redirect('/admin/repair')
+    }
+    async finishRequestDevice(req, res) {
+        let { id, price } = req.body
+        await Repair.findOneAndUpdate({ _id: id }, { status: "finished", price })
+        res.redirect('/admin/repair')
     }
 
     async updateRepair(req, res, next) {

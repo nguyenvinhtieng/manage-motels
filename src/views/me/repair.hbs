@@ -1,113 +1,80 @@
-    {{> headercustomer}}
-<div class="container-manager">
-    <div class="header__manager">
-        <h2>Request repair devices</h2>
-        <label for="modal__add-customer" class="add">
-            <i class="fas fa-plus"></i> Add
-        </label>
-    </div>
-<style>
-        .container{
-            margin: 0 80px;
-        }
-        .red{
-            color: #EA5456
-        }
-        .mt40{
-            margin-top: 40px;;
-        }
-        .mb40{
-            margin-bottom: 40px;
-        }
-        li{
-            padding: 8px 0;
-        }
-        .modal__add-customer{
-            width: 500px;
-            margin: 0 auto;
-        }
-        textarea{
-            padding: 16px;
-            margin: 8px 0;
-        }
-    </style>
-    <h2 class="mt40"></h2>
+{{> headercustomer}}
+
+<div class="container mt-5">
+    Request repair
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-create-request">
+        Add new
+    </button>
     <div class="container">
-       <ul>
-           {{#each requests}}
-            <li>
-               <div>{{this.content}}</div>
-               {{{statusrequestcus this.status}}}
-               <hr>
-           </li>
-           {{/each}}
-           
-       </ul>
-    </div>
+        <table class="table table-striped mt-2">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">content</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Suitable Time</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Price (VND)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each requests}}
+                <tr>
+                    <th scope="row">{{@index}}</th>
+                    <td>{{this.content}}</td>
+                    <td>{{this.type}}</td>
+                    <td>{{this.suitabletime}}</td>
+                    <td>{{this.status}}</td>
+                    <td>{{this.price}} VND</td>
+                </tr>
+                {{/each}}
 
-
-
-<!-- Add modal -->
-<input type="checkbox" id="modal__add-customer" hidden>
-<label for="modal__add-customer" class="layer-hidden">
-</label>
-<div class="modal__add-customer">
-    <label for="modal__add-customer" class="close-modal">
-        <i class="fas fa-times"></i>
-    </label>
-    <div class="form_add-customer">
-        <h2>Add Request</h2>
-        <form action="/me/request-repair" method="post" id="add-request" >
-            <div class="left">
-                <div class="form-group">
-                    <label for="dayofbirtd">Description request</label>
-                    <textarea class="form-control" rows="15" name="content" id="content"></textarea>
-                </div>
-            </div>
-            <div >
-                <button class="btn-primary btn-add-customer">CREATE</button> 
-            </div>
-        </form>
+            </tbody>
+        </table>
     </div>
 </div>
-
-<style>
-    
-    .form_add-customer form{
-        display: block;
-    }
-    .left{
-        width: 100%;
-    }
-</style>
-
-    {{!-- view modal --}}
-    <div class="modal-view-receipt">
-        View Receipt
+<!-- Modal -->
+<form action="" method="post">
+    <div class="modal fade" id="modal-create-request" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add new request</h5>
+                    <div type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="">Content</label>
+                        <textarea name="content" id="" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Type</label>
+                        <select name="type" id="" required>
+                            <option value="room">Room</option>
+                            <option value="device">Device</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Suitable time</label>
+                        <input type="datetime-local" name="suitabletime" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div type="button" class="btn btn-secondary" data-dismiss="modal">Close</div>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <style>
-        .modal-view-receipt{
-            display: none;
-            position: fixed;
-            top: 50px;
-            bottom: 50px;
-            left: 50px;
-            right: 50px;
-            background-color: #fff;
-            padding: 24px;
-            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-        }
-    </style>
+</form>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
 <script>
-    document.querySelectorAll('.header__items ul li')[5].classList.add('active-item')
-    let formAdd = document.querySelector('#add-request')
-    formAdd.onsubmit = (e)=>{
-        e.preventDefault();
-        if(document.querySelector('#content').value.length < 20){
-            console.log(document.querySelector('#content').value.length)
-            showErrorToast('Descripton should more than 20 characters')
-        } else{
-            formAdd.submit()
-        }
-    }
+
 </script>

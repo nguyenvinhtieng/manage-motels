@@ -19,12 +19,14 @@ router.get('/notification/:id', MainController.isLogin, MeController.renderDetai
 router.get('/room', MainController.isLogin, MeController.renderRoom);
 
 router.get('/jobs', MainController.isLogin, MeController.renderJob);
-
 router.post('/jobs', MainController.isLogin, MeController.createJob);
+router.get('/delete-job/:id', MainController.isLogin, MeController.cancelJob);
+
 router.get('/repair', MainController.isLogin, MeController.renderRepair);
-router.post('/request-repair', MainController.isLogin, MeController.createRequestRepair);
+router.post('/repair', MainController.isLogin, MeController.addNewRequest);
 
 router.get('/receipt', MainController.isLogin, MeController.renderReceipt);
+router.post('/get-receipt', MainController.isLogin, MeController.getReceipt);
 
 
 

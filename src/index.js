@@ -14,7 +14,6 @@ db.connect();
 const init = require('./initAdmin')
 init.initAccount()
 
-// put and patch methods
 app.use(methodOverride('_method'));
 // cookies
 app.use(cookieParser())

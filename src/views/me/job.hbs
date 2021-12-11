@@ -1,125 +1,156 @@
-    {{> headercustomer}}
-    
-<div class="container-manager">
-    <div class="header__manager">
-        <h2>Manage Jobs</h2>
-        <label for="modal-create-job" class="add">
-            <i class="fas fa-plus"></i> Add
-        </label>
-    </div>
-    <div class="content__manager">
-        <table>
-            <thead>
-                <th>Room</th>
-                <th>Description</th>
-                <th>Start day</th>
-                <th>End day</th>
-                <th>Price</th>
-                <th>Status</th>
-                <th>Approved</th>
-            </thead>
-            <tbody id="accounts">
-                {{#each jobs}}
-                    <tr>
-                        <td>{{this.room}}</td>
-                        <td>{{this.description}}</td>
-                        <td>{{this.startday}}</td>
-                        <td>{{this.endday}}</td>
-                        <td>{{this.price}}</td>
-                        <td>{{this.status}}</td>
-                        <td>
-                        {{#if this.delete}}
-                            <div class="around around-red">reject </div>
-                        {{else if this.approved}}
-                            <div class="around around-blue">approved </div>
-                        {{else}}
-                            <div class="around around-green">wait... </div>
-                        {{/if}}
-                        </td>
-                    </tr>
-                {{/each}}
-            </tbody>
-        </table>
+{{> headercustomer}}
+<div class="container mt-5">
+    Manage Tasks <button type="button" class="btn btn-primary" data-toggle="modal"
+        data-target="#modal-create-task">Add</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-view-service">Service price
+        list </button>
+    <table class="table table-light mt-2">
+        <thead>
+            <tr>
+                <th scope="col">Room</th>
+                <th scope="col">Name</th>
+                <th scope="col">Note</th>
+                <th scope="col">Date</th>
+                <th scope="col">Price (VND)</th>
+                <th scope="col">Status</th>
+                <th scope="col">Staff</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each jobs}}
+            <tr>
+                <th scope="row">{{this.room}}</th>
+                <td>{{this.name}}</td>
+                <td>{{this.note}}</td>
+                <td>{{this.date}}</td>
+                <td>{{this.price}} VND</td>
+                <td>{{this.status}} </td>
+                <td>
+                    {{#if this.staff}}
+                    {{this.staff}}
+                    {{else}}
+                    <button type="button" class="btn btn-danger btn-sm btn-cancel-job" data-id="{{this._id}}"
+                        data-toggle="modal" data-target="#modal-delete-job">Cancel</button>
+                    {{/if}}
+                </td>
+
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+<div class="modal fade" id="modal-delete-job" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Task</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this task
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a href="#" class="btn btn-danger btn-delete">Delete</a>
+            </div>
+        </div>
     </div>
 </div>
-
-<form action="/me/jobs" method="post" id="form-create-job">
-<input type="checkbox" id="modal-create-job" hidden>
-<label for="modal-create-job" class="layer-hidden-create-job"></label>
-<div class="modal-create-job">
-    <label for="modal-create-job" class="close-modal-create-job">&times</label>
-    <div class="modal-create-job-header">
-        <b>  Create Job</b>    
+<!-- Modal -->
+<form action="" method="post">
+    <div class="modal fade" id="modal-create-task" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add new task</h5>
+                    <div type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="">Task</label>
+                        <select name="serviceid" id="name" required>
+                            {{#each services}}
+                            <option value="{{this._id}}">{{this.name}} ({{this.price}} VND)</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Date</label>
+                        <input type="date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Note</label>
+                        <input type="text" placeholder="Note" name="note">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div type="button" class="btn btn-secondary" data-dismiss="modal">Close</div>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="modal-create-job-content">
-        <div class="form-group">
-             <label for="">Description</label>
-            <input type="text" name="description" id="description">
-        </div>
-        <div class="form-group">
-             <label for="">Start day</label>
-            <input type="date" name="startday" id="startday">
-        </div>
-        <div class="form-group">
-             <label for="">End day</label>
-            <input type="date" name="endday" id="endday">
-        </div>
-        <div class="form-group">
-             <label for="">Price</label>
-            <input type="number" min='0' name="price" id="price">
-        </div>
+</form>
 
-        <div class="form-group">
-            <button type="submit">Add</button>
+{{!-- VIEW SERVICES --}}
+<div class="modal fade" id="modal-view-service" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Price list (VND)</h5>
+                <div type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Price (VND)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each services}}
+                        <tr>
+                            <th scope="row">{{@index}}</th>
+                            <td>{{this.name}}</td>
+                            <td>{{this.description}}</td>
+                            <td>{{this.price}} (VND)</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <div type="button" class="btn btn-secondary" data-dismiss="modal">Close</div>
+            </div>
         </div>
     </div>
 </div>
 </form>
 
-<div class="layer-close-modal-delete-job"></div>
-<form action="/admin/deletejob" method="post">
-    <div class="modal-confirm-delete">
-        <input type="text" id="id-job" name="id" hidden>
-        <h3>Are you sure want to delete this job?</h3>
-        <span class="btn-gray btn-cancel-dlt-job">Cancel</span>
-        <button type="submit" class="btn-red">Delete</button>
-    </divutton>
-</form>
-
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
 <script>
-    document.querySelectorAll('.header__items ul li')[6].classList.add('active-item')
-    let jobsDelete = document.querySelectorAll('.btn-delete-job')
-    jobsDelete.forEach(j=>{
-        j.onclick = (e)=>{
-            document.querySelector('#id-job').value = e.target.getAttribute('data-id')
-            document.querySelector('.modal-confirm-delete').style.display = 'block'
-            document.querySelector('.layer-close-modal-delete-job').style.display = 'block'
+    let btndeletes = document.querySelectorAll('.btn-cancel-job')
+    let btnDelete = document.querySelector('.btn-delete')
+    btndeletes.forEach(item => {
+        item.onclick = (e) => {
+            let id = item.getAttribute('data-id')
+            btnDelete.href = `/me/delete-job/${id}`
         }
     })
-    document.querySelector('.layer-close-modal-delete-job').onclick =()=>{
-        document.querySelector('.modal-confirm-delete').style.display = 'none'
-            document.querySelector('.layer-close-modal-delete-job').style.display = 'none'
-    }
-    document.querySelector('.btn-cancel-dlt-job').onclick = ()=>{
-        document.querySelector('.modal-confirm-delete').style.display = 'none'
-        document.querySelector('.layer-close-modal-delete-job').style.display = 'none'
-    }
-    let formAddJob = document.querySelector('#form-create-job')
-    formAddJob.onsubmit = (e)=>{
-        e.preventDefault();
-        let today = new Date();
-        let toYear = today.getFullYear()
-        let std = new Date(document.getElementById('startday').value)
-        let ed = new Date(document.getElementById('endday').value)
-
-        if(document.querySelector('#description').value == ""){
-            showErrorToast('Description cannot be empty');
-        } else if(document.querySelector('#price').value == ""){ 
-            showErrorToast('Price can not be empty');
-        } else if(ed < std || ed < today){
-            showErrorToast('Invalid start day or end day');
-        } else{
-            formAddJob.submit()
-        }
-    }
 </script>

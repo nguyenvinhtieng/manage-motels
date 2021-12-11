@@ -2,7 +2,7 @@ const Account = require('../models/Account');
 const Staff = require('../models/Staff');
 const Job = require('../models/Job.js')
 const jwt = require('jsonwebtoken');
-
+const Service = require('../models/Service')
 const TOKEN_KEY = 'AmkshOnmshGndksmHg'
 class StaffController {
     renderHome(req, res) {
@@ -17,35 +17,28 @@ class StaffController {
         res.render('./staff/myinfor', { staff })
     }
     async renderJob(req, res) {
-        const jobs = await Job.find({ $and: [{ approved: "yes" }, { staff: '' }] }).lean()
-        // console.log(jobs)
-        res.render('./staff/job', { jobs })
+        const jobs = await Job.find({ status: 'not yet' }).lean()
+        const services = await Service.find({}).lean()
+        res.render('./staff/job', { jobs, services })
     }
 
     async renderMyJob(req, res) {
-        let token = req.cookies.token;
-        let decodedCookie = jwt.verify(token, TOKEN_KEY)
-        let idUser = decodedCookie._id;
-        const jobs = await Job.find({ staff: idUser }).lean()
+        let idUser = req._id
+        let acc = await Account.findOne({ _id: idUser })
+        const jobs = await Job.find({ staff: acc.username }).lean()
         res.render('./staff/myjob', { jobs })
     }
     async pickTask(req, res) {
-        let token = req.cookies.token;
-        let decodedCookie = jwt.verify(token, TOKEN_KEY)
-        let idUser = decodedCookie._id;
-        //let staff = await Staff.findOne({ _id: idUser })
-        let id = req.body.id;
-        let job = await Job.findOne({ _id: id })
-        job.staff = idUser
-        await job.save()
+        let id = req.params.id
+        let idUser = req._id
+        let acc = await Account.findOne({ _id: idUser })
+        await Job.findByIdAndUpdate({ _id: id }, { staff: acc.username, status: "received" })
         res.redirect('/staff/my-job')
     }
     async finishTask(req, res) {
         let id = req.params.id;
-        let job = await Job.findOne({ _id: id })
-        job.status = "finish"
-        await job.save()
-        res.redirect('/staff/jobs')
+        await Job.findOneAndUpdate({ _id: id }, { status: "finished" })
+        res.redirect('/staff/my-job')
     }
 
     async renderSalary(req, res) {

@@ -4,7 +4,10 @@ const Schema = mongoose.Schema;
 const Repair = new Schema({
     room: { type: String },
     content: { type: String },
-    status: { type: String }
+    suitabletime: { type: String },
+    status: { type: String },
+    type: { type: String },
+    price: { type: Number, default: 0 },
 });
 
 

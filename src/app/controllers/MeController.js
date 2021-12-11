@@ -10,7 +10,7 @@ const Notification = require('../models/Notification.js')
 const Job = require('../models/Job')
 const Receipt = require('../models/Receipt.js')
 const Repair = require('../models/Repair.js')
-
+const Service = require('../models/Service.js')
 class MeController {
     renderHome(req, res, next) {
         res.render('me/home')
@@ -55,17 +55,12 @@ class MeController {
     }
 
     async renderJob(req, res, next) {
-
-        let token = req.cookies.token;
-        let decodedCookie = jwt.verify(token, TOKEN_KEY)
-        let idUser = decodedCookie._id;
+        let idUser = req._id
         const acc = await Account.findOne({ _id: idUser });
-        if (!acc) {
-            res.redirect('./login')
-        }
         const roomnumber = acc.roomnumber;
         const jobs = await Job.find({ room: roomnumber }).lean();
-        res.render('./me/job', { jobs })
+        const services = await Service.find({}).lean()
+        res.render('./me/job', { jobs, services })
     }
 
     getDeviceInRoom(req, res, next) {
@@ -109,16 +104,19 @@ class MeController {
     }
 
     async createJob(req, res, next) {
-        let data = req.body;
-        let token = req.cookies.token;
-        let decodedCookie = jwt.verify(token, TOKEN_KEY)
-        let idUser = decodedCookie._id;
-        const acc = await Account.findOne({ _id: idUser })
-        let room = acc.roomnumber;
-        data.room = room;
-        data.status = 'not yet'
+        let { serviceid, date, note } = req.body
+        let _id = req._id
+        let acc = await Account.findById(_id)
+        let serv = await Service.findById(serviceid)
+        let data = { room: acc.roomnumber, name: serv.name, date, note, price: serv.price, status: "not yet" }
         let job = new Job(data)
-        await job.save();
+        await job.save()
+        res.redirect('/me/jobs')
+    }
+
+    async cancelJob(req, res) {
+        let id = req.params.id
+        await Job.findOneAndRemove({ _id: id })
         res.redirect('/me/jobs')
     }
 
@@ -133,14 +131,21 @@ class MeController {
     }
 
     async renderRepair(req, res, next) {
-        let token = req.cookies.token;
-        let decodedCookie = jwt.verify(token, TOKEN_KEY)
-        let idUser = decodedCookie._id;
+        let idUser = req._id
         const acc = await Account.findOne({ _id: idUser })
         let room = acc.roomnumber;
         const requests = await Repair.find({ room: room }).lean()
-
         res.render('./me/repair', { requests })
+    }
+
+    async addNewRequest(req, res) {
+        let _id = req._id
+        let { content, type, suitabletime } = req.body
+        let acc = await Account.findOne({ _id })
+        let data = { content, type, suitabletime, room: acc.roomnumber, status: "wait" }
+        let repair = new Repair(data)
+        await repair.save()
+        res.redirect('/me/repair')
     }
 
     async createRequestRepair(req, res, next) {
@@ -154,6 +159,17 @@ class MeController {
         const repair = new Repair(data)
         repair.save()
         res.redirect('/me/repair')
+    }
+    async getReceipt(req, res) {
+        let { month, year } = req.body
+        let query = {}
+        query.year = year
+        let _id = req._id
+        let acc = await Account.findOne({ _id })
+        query.roomnumber = acc.roomnumber
+        if (month) query.month = month
+        let receipts = await Receipt.find({ $and: [query, { status: { $ne: "cancel" } }] }).lean()
+        return res.json({ status: true, receipts: receipts })
     }
 }
 
