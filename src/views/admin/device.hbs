@@ -1,4 +1,4 @@
-    {{> header}}
+{{> header}}
 
 <div class="container-manager">
     <div class="header__manager">
@@ -31,18 +31,18 @@
                         </div>
                     </td>
                     <td>{{this.name}}</td>
-                    <td>{{this.price}}$</td>
-                    <td>{{this.indemnify}}$</td>
+                    <td>{{this.price}} VND</td>
+                    <td>{{this.indemnify}} VND</td>
                     <td>{{this.description}}</td>
                 </tr>
                 {{/each}}
                 {{else}}
-                    
+
                 {{/if}}
             </tbody>
-            
+
         </table>
-        
+
     </div>
 </div>
 
@@ -63,11 +63,11 @@
                 <input type="text" id="name">
             </div>
             <div class="form-group">
-                <label for="">Price ($)</label>
+                <label for="">Price (VND)</label>
                 <input type="number" min="0" id="price">
             </div>
             <div class="form-group">
-                <label for="">Indemnify ($)</label>
+                <label for="">Indemnify (VND)</label>
                 <input type="number" min="0" id="indemnify">
             </div>
             <div class="form-group">
@@ -97,11 +97,11 @@
                 <input type="text" id="name-edit">
             </div>
             <div class="form-group">
-                <label for="price-edit">Price ($)</label>
+                <label for="price-edit">Price (VND)</label>
                 <input type="number" min="0" id="price-edit">
             </div>
             <div class="form-group">
-                <label for="indemnify-edit">Indemnify ($)</label>
+                <label for="indemnify-edit">Indemnify (VND)</label>
                 <input type="text" id="indemnify-edit">
             </div>
             <div class="form-group">

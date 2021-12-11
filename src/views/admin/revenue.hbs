@@ -84,7 +84,7 @@
         chi.forEach(function (m) {
             totalChi += m;
         })
-        document.querySelector('.revenue').innerHTML = "Revenue " + year + ": $" + total + "<br> Expenditure " + year + ": $" + totalChi;
+        document.querySelector('.revenue').innerHTML = "Revenue " + year + ": " + total + "(VND)<br> Expenditure " + year + ": " + totalChi + "(VND)";
         drawChart(revenue, chi)
     }
 

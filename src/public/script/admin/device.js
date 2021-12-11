@@ -4,22 +4,22 @@ loadEventEdit()
 loadEventDelete()
 let itemClicked;
 // Create device
-if(document.getElementById('btn-add-device')){
+if (document.getElementById('btn-add-device')) {
     let btnAdd = document.getElementById('btn-add-device');
-    btnAdd.onclick = function(e){
+    btnAdd.onclick = function (e) {
         e.preventDefault();
         let name = $('#name').val();
         let price = $('#price').val();
         let indemnify = $('#indemnify').val();
         let description = $('#description').val();
-        if(validateDevice(name, price, indemnify, description)){
+        if (validateDevice(name, price, indemnify, description)) {
             $.ajax({
                 url: '/device/add',
                 type: 'POST',
                 data: {
                     name, price, indemnify, description
                 },
-                success: function(data){
+                success: function (data) {
                     toast({
                         title: 'Succcessfull',
                         message: 'Create device successfully',
@@ -30,51 +30,52 @@ if(document.getElementById('btn-add-device')){
                     hiddenModal();
                 }
             })
+        }
+    }
+
+    function validateDevice(name, price, indemnify, description) {
+        if (name === '') {
+            toast({
+                title: 'Warrning',
+                message: 'Name of device is required',
+                type: 'error',
+                duration: 3000,
+
+            })
+            return false;
+        }
+        if (price == '' || price < 0) {
+            toast({
+                title: 'Warrning',
+                message: 'Price is not valid',
+                type: 'error',
+                duration: 3000,
+            })
+            return false;
+        }
+        if (indemnify == '' || indemnify < 0) {
+            toast({
+                title: 'Warrning',
+                message: 'Indemnify is not valid',
+                type: 'error',
+                duration: 3000,
+            })
+            return false;
+        }
+        if (description === '') {
+            toast({
+                title: 'Warrning',
+                message: 'Description can not be empty',
+                type: 'error',
+                duration: 3000,
+            })
+            return false;
+        }
+        return true
     }
 }
 
-function validateDevice(name, price, indemnify, description) {
-    if(name === ''){
-        toast({
-            title: 'Warrning',
-            message: 'Name of device is required',
-            type: 'error',
-            duration: 3000,
-
-        })
-        return false;
-    }
-    if(price == '' || price < 0){
-        toast({
-            title: 'Warrning',
-            message: 'Price is not valid',
-            type: 'error',
-            duration: 3000,
-        })
-        return false;
-    }
-    if(indemnify == '' || indemnify < 0){
-        toast({
-            title: 'Warrning',
-            message: 'Indemnify is not valid',
-            type: 'error',
-            duration: 3000,
-        })
-        return false;
-    }
-    if(description === ''){
-        toast({
-            title: 'Warrning',
-            message: 'Description can not be empty',
-            type: 'error',
-            duration: 3000,
-        })
-        return false;
-    }
-    return true
-}}
-
-function addDataDevice(data){
+function addDataDevice(data) {
     let tbodyData = document.getElementById('devices');
     let tr = document.createElement('tr');
     tr.innerHTML = `
@@ -89,11 +90,11 @@ function addDataDevice(data){
                     </div>
                 </td>
                 <td>${data.name}</td>
-                <td>${data.price}$</td>
-                <td>${data.indemnify}$</td>
+                <td>${data.price}VND</td>
+                <td>${data.indemnify}VND</td>
                 <td>${data.description}</td>
             `
-        tbodyData.appendChild(tr)
+    tbodyData.appendChild(tr)
     resestDataAddModal()
     loadEventEdit()
     loadEventDelete()
@@ -106,7 +107,7 @@ function resestDataAddModal() {
     document.getElementById('description').value = '';
 }
 
-function hiddenModal(){
+function hiddenModal() {
     let checkBoxModal = document.getElementById('modal__add-device');
     checkBoxModal.checked = false;
 }
@@ -115,11 +116,11 @@ function hiddenModal(){
 ********************
 */
 
-function loadEventEdit(){
-    if(document.querySelector('.edit-device')){
+function loadEventEdit() {
+    if (document.querySelector('.edit-device')) {
         let itemsEdit = document.querySelectorAll('.edit-device')
-        itemsEdit.forEach(function(item){
-            item.onclick = function(e){
+        itemsEdit.forEach(function (item) {
+            item.onclick = function (e) {
                 itemClicked = item;
                 modalEdit(true)
                 let id = item.getAttribute('data-id');
@@ -129,8 +130,8 @@ function loadEventEdit(){
                     data: {
                         id
                     },
-                    success: function(data){
-                        if(data){
+                    success: function (data) {
+                        if (data) {
                             renderDataToModalEdit(data)
                         } else {
                             toast({
@@ -147,34 +148,34 @@ function loadEventEdit(){
     }
 }
 
-function modalEdit(status){
+function modalEdit(status) {
     let modalEdit = document.querySelector('.modal__edit-device')
     let hiddenModal = document.querySelector('#hidden-modal');
-    if(status){
+    if (status) {
         modalEdit.style.display = 'block'
         hiddenModal.style.display = "block"
-    } else {        
+    } else {
         modalEdit.style.display = 'none'
         hiddenModal.style.display = "none"
     }
 }
 
-if(document.querySelector('.close-edit-modal')){
+if (document.querySelector('.close-edit-modal')) {
     let closeModal = document.querySelector('.close-edit-modal')
-    closeModal.onclick = function(){
+    closeModal.onclick = function () {
         modalEdit(false);
     }
 }
 
-if(document.querySelector('#hidden-modal')){
+if (document.querySelector('#hidden-modal')) {
     let hiddenModal = document.querySelector('#hidden-modal');
-    hiddenModal.onclick = function(){
+    hiddenModal.onclick = function () {
         modalEdit(false);
         modalDelete(false);
     }
 }
 
-function renderDataToModalEdit(data){
+function renderDataToModalEdit(data) {
     document.getElementById('id-edit').value = data._id;
     document.getElementById('name-edit').value = data.name;
     document.getElementById('price-edit').value = data.price;
@@ -184,31 +185,31 @@ function renderDataToModalEdit(data){
     loadEventSave()
 }
 
-function loadEventSave(){
+function loadEventSave() {
     let btnSave = document.getElementById('btn-save')
-    btnSave.onclick = function(e){
+    btnSave.onclick = function (e) {
         e.preventDefault();
         let id = document.getElementById('id-edit').value;
         let name = document.getElementById('name-edit').value;
         let price = document.getElementById('price-edit').value;
         let indemnify = document.getElementById('indemnify-edit').value;
         let description = document.getElementById('description-edit').value;
-        if(validateDevice(name, price, indemnify, description)){
+        if (validateDevice(name, price, indemnify, description)) {
             updateDevice(id, name, price, indemnify, description);
             modalEdit(false);
         }
     }
 }
 
-function updateDevice(id, name, price, indemnify, description){
+function updateDevice(id, name, price, indemnify, description) {
     $.ajax({
         url: '/device/update',
         type: 'PUT',
         data: {
             id, name, price, indemnify, description
         },
-        success: function(data){
-            if(data.status){
+        success: function (data) {
+            if (data.status) {
                 toast({
                     title: 'Successfull',
                     message: 'Device updated',
@@ -216,7 +217,7 @@ function updateDevice(id, name, price, indemnify, description){
                     duration: 3000
                 })
                 updateFillDevice(id, name, price, indemnify, description);
-            } else{
+            } else {
                 toast({
                     title: 'Error',
                     message: 'Please do not edit this page',
@@ -228,7 +229,7 @@ function updateDevice(id, name, price, indemnify, description){
     })
 }
 
-function updateFillDevice(id, name, price, indemnify, description){
+function updateFillDevice(id, name, price, indemnify, description) {
     let trElement = itemClicked.parentNode.parentNode.parentNode;
     trElement.innerHTML = `
                         <td>
@@ -242,8 +243,8 @@ function updateFillDevice(id, name, price, indemnify, description){
                         </div>
                     </td>
                     <td>${name}</td>
-                    <td>${price}$</td>
-                    <td>${indemnify}$</td>
+                    <td>${price} VND</td>
+                    <td>${indemnify} VND</td>
                     <td>${description}</td>
     `
     loadEventEdit();
@@ -252,12 +253,12 @@ function updateFillDevice(id, name, price, indemnify, description){
 
 /**                      Delete
 ********************************
-*/ 
+*/
 
-function loadEventDelete(){
+function loadEventDelete() {
     let itemsDelete = document.querySelectorAll('.delete-device');
-    itemsDelete.forEach(item =>{
-        item.onclick = (e)=>{
+    itemsDelete.forEach(item => {
+        item.onclick = (e) => {
             itemClicked = item
             let id = item.getAttribute('data-id')
             let name = item.getAttribute('data-name')
@@ -267,40 +268,40 @@ function loadEventDelete(){
     })
 }
 
-if(document.querySelector('.close-delete-modal')){
+if (document.querySelector('.close-delete-modal')) {
     let btnClose = document.querySelector('.close-delete-modal')
-    btnClose.onclick = (e)=>{
+    btnClose.onclick = (e) => {
         modalDelete(false)
     }
 }
 
-if(document.querySelector('.cancel-delete-modal')){
+if (document.querySelector('.cancel-delete-modal')) {
     let btnCancelDeleteModal = document.querySelector('.cancel-delete-modal');
-    btnCancelDeleteModal.onclick = (e)=>{
+    btnCancelDeleteModal.onclick = (e) => {
         modalDelete(false)
     }
 }
-function setDataModalDelete(id, name){
+function setDataModalDelete(id, name) {
     let message = document.querySelector('.delete-device-message')
     let idInput = document.getElementById('id-delete-device');
     idInput.value = id;
-    message.innerText = 'Are you sure want to delete this device ('+name+')!'
+    message.innerText = 'Are you sure want to delete this device (' + name + ')!'
 }
-function modalDelete(status){
+function modalDelete(status) {
     let modalDelete = document.querySelector('.modal__confirm-delete')
     let hiddenModal = document.querySelector('#hidden-modal');
-    if(status){
+    if (status) {
         modalDelete.style.display = 'block'
         hiddenModal.style.display = "block"
-    } else {        
+    } else {
         modalDelete.style.display = 'none'
         hiddenModal.style.display = "none"
     }
 }
 
-if(document.getElementById('btn-delete')){
+if (document.getElementById('btn-delete')) {
     let btnDelete = document.getElementById('btn-delete');
-    btnDelete.onclick = (e)=>{
+    btnDelete.onclick = (e) => {
         let id = document.getElementById('id-delete-device').value;
         $.ajax({
             url: '/device/delete',
@@ -308,8 +309,8 @@ if(document.getElementById('btn-delete')){
             data: {
                 id
             },
-            success: function(data){
-                if(data.status){
+            success: function (data) {
+                if (data.status) {
                     toast({
                         title: 'Delete Device',
                         message: data.message,
@@ -331,7 +332,7 @@ if(document.getElementById('btn-delete')){
     }
 }
 
-function deleteViewItem(){
+function deleteViewItem() {
     let parent = document.getElementById('devices')
     let itemLi = itemClicked.parentNode.parentNode.parentNode
     parent.removeChild(itemLi)
