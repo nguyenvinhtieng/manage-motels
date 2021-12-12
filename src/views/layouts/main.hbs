@@ -1,5 +1,5 @@
-
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,18 +7,22 @@
     <title>Motels</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
-<body>    
+
+<body>
     <div id="toast"></div>
     {{!-- My script event for toast --}}
     <script src="/script/toast.js"></script>
-    
+
     <!-- JQUERY IMPORT -->
     <script src="/assets/jquery/jquery.min.js"></script>
 
     {{{ body}}}
-
+    {{#if flash}}
+    {{{handleFlashMessage flash}}}
+    {{/if}}
     <!-- ICON IMPORT  -->
     <script src="/assets/icons/fontawesome.min.js"></script>
     {{!-- My script --}}
 </body>
+
 </html>

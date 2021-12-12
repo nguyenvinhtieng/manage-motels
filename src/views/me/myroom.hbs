@@ -1,41 +1,51 @@
-    {{> headercustomer}}
-<div class="container-manager">
-    <div class="header__manager">
-        <h2>Information of my room</h2>
-    </div>
-    <div class="content__manager">
-        <u>
-        About My room</u>
-        <ul>
-            <li>Number: {{data.number}}</li>
-            <li>Renter: {{data.renter}}</li>
-            <li>Number people: {{data.numberpeople}}</li>
-            <li>Maximum: {{data.maximum}}</li>
-            <li>Area: {{data.area}}</li>
-            <li>Price: <span id="price-room">{{data.price}}</span> </li>
-            <li>Description: {{data.description}}</li>
-        </ul>
-        <br><u>
-        List of devices</u>
-        <table>
-            <tr>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Indemnify</th>
-                <th>description</th>
-            </tr>
-            <tbody id="devices">
-
-            </tbody>
-        </table>
-        <br>
-        <b>
-
-        <div class="total">
-            Total: 20213151 
+{{> headercustomer}}
+<div class="container mt-3">
+    <div class="my-room">
+        <div class="card bg-light mb-3">
+            <div class="card-header">My room data</div>
+            <div class="card-body">
+                <p class="card-text">Room number: {{room.number}}</p>
+                <p class="card-text">Representative tenant : {{room.renter}}</p>
+                <p class="card-text">Maximum: {{room.maximum}}</p>
+                <p class="card-text">Number people: {{room.numberpeople}}</p>
+                <p class="card-text">Area: {{room.area}}</p>
+                <p class="card-text">Description: {{room.description}}</p>
+                <p class="card-text font-weight-bold">Price: {{room.price}} VND</p>
+            </div>
         </div>
-        </b>
+    </div>
+    <div class="devices">
+        <div class="card bg-light mb-3">
+            <div class="card-header">List device</div>
+            <div class="card-body">
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">N.o</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Indemnify</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each devices}}
+                        <tr>
+                            <th scope="row">{{@index}}</th>
+                            <td>{{this.name}}</td>
+                            <td>{{this.description}}</td>
+                            <td>{{this.price}} (VND)</td>
+                            <td>{{this.indemnify}} (VND)</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
-
-<script src='/script/me/room.js'></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>

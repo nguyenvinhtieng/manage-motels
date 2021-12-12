@@ -1,138 +1,177 @@
 {{> header}}
-
-<div class="container-manager">
-    <div class="header__manager">
-        <h2>Manage Devices</h2>
-        <label for="modal__add-device" id="add-device" class="add">
-            <i class="fas fa-plus"></i> Add
-        </label>
+<div class="container mt-2">
+    <div class="heading">Manager devices list
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add-device">
+            Add
+        </button>
     </div>
-    <div class="content__manager">
-        <table>
-            <thead>
-                <th></th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Indemnify</th>
-                <th>Description</th>
-            </thead>
-            <tbody id="devices">
-                {{#if data}}
-                {{#each data}}
+    <div class="devices mt-2">
+        <table class="table">
+            <thead class="thead-light">
                 <tr>
-                    <td>
-                        <div class="operations">
-                            <div data-id="{{this._id}}" class="edit edit-device">
-                                <i class="fas fa-pen"></i>
-                            </div>
-                            <div data-id="{{this._id}}" data-name="{{this.name}}" class="delete delete-device">
-                                <i class="fas fa-trash-alt"></i>
-                            </div>
-                        </div>
-                    </td>
-                    <td>{{this.name}}</td>
-                    <td>{{this.price}} VND</td>
-                    <td>{{this.indemnify}} VND</td>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Indemnify</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">#</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each devices}}
+                <tr>
+                    <th scope="row">{{this.name}}</th>
+                    <td>{{this.price}} (VND)</td>
+                    <td>{{this.indemnify}} (VND)</td>
                     <td>{{this.description}}</td>
+                    <td>
+                        <button type="button" data-id="{{this._id}}" data-name="{{this.name}}"
+                            data-price="{{this.price}}" data-indemnify="{{this.indemnify}}"
+                            data-description="{{this.description}}" class="btn btn-primary btn-sm edit"
+                            data-toggle="modal" data-target="#modal-edit-device"><i class="fas fa-edit"></i></button>
+                        <button type="button" data-id="{{this._id}}" class="btn btn-danger btn-sm delete"
+                            data-toggle="modal" data-target="#modal-delete-device"><i class="fas fa-trash"></i></button>
+                    </td>
                 </tr>
                 {{/each}}
-                {{else}}
-
-                {{/if}}
             </tbody>
-
         </table>
-
     </div>
 </div>
 
 
-<!-- Add modal -->
-<input type="checkbox" id="modal__add-device" hidden>
-<label for="modal__add-device" class="layer-hidden">
-</label>
-<div class="modal__add-device">
-    <label for="modal__add-device" class="close-modal">
-        <i class="fas fa-times"></i>
-    </label>
-    <div class="form_add-device">
-        <form action="">
-            <h3>Add Device <span>(Please fill out the form below)</span></h3>
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" id="name">
+<!-- Modal -->
+<form action="" method="post">
+    <div class="modal fade" id="modal-add-device" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add new Device</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="">Name</label>
+                        <input type="text" placeholder="Name" class="form-control" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Price</label>
+                        <input type="number" min="0" placeholder="Price" class="form-control" required name="price">
+                    </div>
+                    <div class="form-group">
+                        <label for=""> Indemnify</label>
+                        <input type="number" min="0" placeholder="Indemnify" class="form-control" name="indemnify"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Description</label>
+                        <input type="text" placeholder="Description" class="form-control" name="description">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="">Price (VND)</label>
-                <input type="number" min="0" id="price">
-            </div>
-            <div class="form-group">
-                <label for="">Indemnify (VND)</label>
-                <input type="number" min="0" id="indemnify">
-            </div>
-            <div class="form-group">
-                <label for="">Description</label>
-                <input type="text" id="description">
-            </div>
-            <div class="form-group group-btn">
-                <button id="btn-add-device">Add</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-
-<div id="hidden-modal" class="layer-hidden"> </div>
-<!-- Edit Modal -->
-<div class="modal__edit-device">
-    <div class="close-modal close-edit-modal">
-        <i class="fas fa-times"></i>
-    </div>
-    <div class="form_edit-device">
-        <form action="">
-            <h3>Edit Device </h3>
-            <input type="text" id="id-edit" hidden>
-            <div class="form-group">
-                <label for="name-edit">Name</label>
-                <input type="text" id="name-edit">
-            </div>
-            <div class="form-group">
-                <label for="price-edit">Price (VND)</label>
-                <input type="number" min="0" id="price-edit">
-            </div>
-            <div class="form-group">
-                <label for="indemnify-edit">Indemnify (VND)</label>
-                <input type="text" id="indemnify-edit">
-            </div>
-            <div class="form-group">
-                <label for="description-edit">Description</label>
-                <input type="text" id="description-edit">
-            </div>
-            <div class="form-group group-btn">
-                <button id="btn-save">Save</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Confirm delete modal -->
-<div class="modal__confirm-delete">
-    <div class="close-modal close-delete-modal">
-        <i class="fas fa-times"></i>
-    </div>
-    <div class="form-delete">
-        <h3>Warning!</h3>
-        <input type="text" id='id-delete-device' hidden>
-        <div class="text-modal delete-device-message">
-            Are you sure want to delete this device
         </div>
-        <div class="form-group group-btn">
-            <button id="btn-delete" class="btn-danger">Delete</button>
-            <button class="btn-nomal cancel-delete-modal">Cancel</button>
+    </div>
+</form>
+
+<div class="modal fade" id="modal-delete-device" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Device</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this item?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary " data-dismiss="modal">Close</button>
+                <a href="#" class="btn btn-danger btn-delete">Delete</a>
+            </div>
         </div>
     </div>
 </div>
 
+<form action="/admin/update-device" method="post">
+    <div class="modal fade" id="modal-edit-device" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Device</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" name="id" id="id-edit" required>
+                    <div class="form-group">
+                        <label for="">Name</label>
+                        <input type="text" placeholder="Name" class="form-control" name="name" id="name-edit" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Price</label>
+                        <input type="number" min="0" placeholder="Price" class="form-control" required name="price"
+                            id="price-edit">
+                    </div>
+                    <div class="form-group">
+                        <label for=""> Indemnify</label>
+                        <input type="number" min="0" placeholder="Indemnify" class="form-control" name="indemnify"
+                            id="indemnify-edit" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Description</label>
+                        <input type="text" placeholder="Description" class="form-control" name="description"
+                            id="description-edit">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+<script>
+    let deletes = document.querySelectorAll('.delete')
+    let btnDelete = document.querySelector('.btn-delete')
+    deletes.forEach(item => {
+        item.onclick = (e) => {
+            let id = item.getAttribute('data-id');
+            btnDelete.href = `/admin/delete-device/${id}`
+        }
+    })
 
-
-<script src="/script/admin/device.js"></script>
+    let edits = document.querySelectorAll('.edit')
+    let idEditBox = document.querySelector('#id-edit')
+    let nameEditBox = document.querySelector('#name-edit')
+    let priceEditBox = document.querySelector('#price-edit')
+    let indemnifyEditBox = document.querySelector('#indemnify-edit')
+    let descriptionEditBox = document.querySelector('#description-edit')
+    edits.forEach(item => {
+        item.onclick = (e) => {
+            let id = item.getAttribute('data-id')
+            let name = item.getAttribute('data-name')
+            let price = item.getAttribute('data-price')
+            let indemnify = item.getAttribute('data-indemnify')
+            let description = item.getAttribute('data-description')
+            idEditBox.value = id
+            nameEditBox.value = name
+            priceEditBox.value = +price
+            indemnifyEditBox.value = +indemnify
+            descriptionEditBox.value = description
+        }
+    })
+</script>

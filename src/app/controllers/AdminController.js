@@ -10,6 +10,7 @@ const Receipt = require('../models/Receipt.js')
 const DeviceInRoom = require('../models/DeviceInRoom.js')
 const Service = require('../models/Service.js')
 const Repair = require('../models/Repair.js')
+const Notification = require('../models/Notification')
 class AdminController {
     // GET '/admin/home'
     renderHome(req, res, next) {
@@ -22,21 +23,99 @@ class AdminController {
     }
 
     // GET '/admin/devices
-    renderDevice(req, res, next) {
-        Device.find()
-            .then(data => {
-                res.render('./admin/device', {
-                    data: multipleMongooseToObject(data)
-                })
-            })
-            .catch(err => {
-                console.log(err)
-            })
+    async renderDevice(req, res, next) {
+        let devices = await Device.find({}).lean();
+        res.render('./admin/device', { devices })
+    }
+    async addDevice(req, res) {
+        try {
+            let { name, price, indemnify, description } = req.body
+            let data = { name, price, indemnify, description }
+            let device = new Device(data)
+            await device.save()
+            req.session.flash = { title: "Success", message: "Device was created!", type: "success" }
+            res.redirect('/admin/devices')
+        } catch {
+            req.session.flash = { title: "Error", message: "Device create failure!", type: "error" }
+            res.redirect('/admin/devices')
+        }
+    }
+    async updateDevice(req, res) {
+        try {
+            let { id } = req.body
+            await Device.findOneAndUpdate({ _id: id }, req.body)
+            req.session.flash = { title: "Success", message: "Device was updated!", type: "success" }
+            res.redirect('/admin/devices')
+        } catch {
+            req.session.flash = { title: "Error", message: "Update device failure!", type: "error" }
+            res.redirect('/admin/devices')
+        }
+    }
+    async deleteDevice(req, res) {
+        try {
+            let id = req.params.id
+            await Device.findByIdAndDelete(id)
+            req.session.flash = { title: "Success", message: "Device was deleted!", type: "success" }
+            res.redirect('/admin/devices')
+        }
+        catch {
+            req.session.flash = { title: "Error", message: "Delete device failure!", type: "error" }
+            res.redirect('/admin/devices')
+        }
+    }
+    // GET '/admin/account
+    async renderAccount(req, res, next) {
+        let accounts = await Account.find({ role: 'guest' }).select('-password').lean()
+        let rooms = await Room.find({}).lean()
+        res.render('./admin/account', { accounts, rooms })
+    }
+    async addAccount(req, res) {
+        try {
+            let { room, username, email } = req.body
+            let acc = await Account.findOne({ $or: [{ room: room }, { username: username }] })
+            if (acc?.room == room) {
+                req.session.flash = { title: "Error", message: "This room already has an account", type: "error" }
+                res.redirect('/admin/accounts')
+            } else if (acc?.username == username) {
+                req.session.flash = { title: "Error", message: "Username was already exists!", type: "error" }
+                res.redirect('/admin/accounts')
+            }
+            else {
+                const salt = await bcrypt.genSalt(10);
+                let newpassword = await bcrypt.hash("123456789", salt);
+                let data = { room, username, email, role: "guest", password: newpassword }
+                let account = new Account(data);
+                await account.save();
+                req.session.flash = { title: "Success", message: "Account was created!", type: "success" }
+                res.redirect('/admin/accounts')
+            }
+        } catch {
+            req.session.flash = { title: "Error", message: "Create account failure!", type: "error" }
+            res.redirect('/admin/accounts')
+        }
     }
 
-    // GET '/admin/account
-    renderAccount(req, res, next) {
-        res.render('./admin/account')
+    async updateAccount(req, res) {
+        try {
+            let { username, email, room } = req.body
+            let acc = await Account.findOne({ $and: [{ room }, { username: { $ne: username } }] })
+            if (acc?.room == room) {
+                req.session.flash = { title: "Error", message: "Room number not valid", type: "error" }
+                res.redirect('/admin/accounts')
+            } else {
+                await Account.findOneAndUpdate({ username }, req.body)
+                req.session.flash = { title: "Success", message: "Account was updated!", type: "success" }
+                res.redirect('/admin/accounts')
+            }
+        } catch {
+            req.session.flash = { title: "Error", message: "Update account failure", type: "error" }
+            res.redirect('/admin/accounts')
+        }
+    }
+    async deleteAccount(req, res) {
+        let id = req.params.id;
+        await Account.findOneAndRemove({ _id: id })
+        res.redirect('/admin/accounts')
     }
 
     renderCustomers(req, res, next) {
@@ -51,9 +130,16 @@ class AdminController {
         res.render('./admin/service', { services })
     }
     async deleteService(req, res, next) {
-        let id = req.params.id
-        await Service.deleteOne({ _id: id })
-        res.redirect('/admin/service')
+        try {
+            let id = req.params.id
+            await Service.deleteOne({ _id: id })
+            req.session.flash = { title: "Success", message: "Service deleted!", type: "success" }
+            res.redirect('/admin/service')
+        } catch {
+            req.session.flash = { title: "Error", message: "Service delete failure", type: "error" }
+            res.redirect('/admin/service')
+        }
+
     }
     async getOneService(req, res) {
         let id = req.params.id
@@ -61,14 +147,27 @@ class AdminController {
         return res.json({ success: true, service })
     }
     async updateService(req, res) {
-        let service = await Service.findOneAndUpdate({ _id: req.body._id }, req.body)
-        res.redirect('/admin/service')
+        try {
+            await Service.findOneAndUpdate({ _id: req.body._id }, req.body)
+            req.session.flash = { title: "Success", message: "Service Updated!", type: "success" }
+            res.redirect('/admin/service')
+        } catch {
+            req.session.flash = { title: "Error", message: "Service update failure!", type: "erroe" }
+            res.redirect('/admin/service')
+        }
     }
     async addService(req, res, next) {
-        let { name, description, price } = req.body
-        let service = new Service({ name, description, price })
-        await service.save()
-        res.redirect('/admin/service')
+        try {
+            let { name, description, price } = req.body
+            let service = new Service({ name, description, price })
+            await service.save()
+            req.session.flash = { title: "Success", message: "Add service successfully", type: "success" }
+            res.redirect('/admin/service')
+        } catch {
+            req.session.flash = { title: "Error", message: "Add service Failure", type: "error" }
+            res.redirect('/admin/service')
+        }
+
     }
     async renderStaff(req, res, next) {
         let staffs = await Staff.find({}).lean()
@@ -115,12 +214,18 @@ class AdminController {
         res.render('./admin/job', { rooms, tasks, services })
     }
     async addJob(req, res) {
-        let { room, serviceid, date, note } = req.body
-        let serv = await Service.findById(serviceid)
-        let data = { room, name: serv.name, date, note, price: serv.price, status: "not yet" }
-        let job = new Job(data)
-        await job.save()
-        res.redirect('/admin/jobs')
+        try {
+            let { room, serviceid, date, note } = req.body
+            let serv = await Service.findById(serviceid)
+            let data = { room, name: serv.name, date, note, price: serv.price, status: "not yet" }
+            let job = new Job(data)
+            await job.save()
+            req.session.flash = { title: "Success", message: "Job was created!", type: "success" }
+            res.redirect('/admin/jobs')
+        } catch {
+            req.session.flash = { title: "Error", message: "Job was create failure!", type: "error" }
+            res.redirect('/admin/jobs')
+        }
     }
     async getDataStaff(req, res, next) {
         let id = req.body.id
@@ -140,47 +245,84 @@ class AdminController {
         let job = await Job.findOne({ _id: id })
         job.approved = 'yes'
         await job.save()
+        req.session.flash = { title: "Success", message: "Job was Accept!", type: "success" }
         res.redirect('/admin/jobs')
     }
 
     async deleteJob(req, res, next) {
-        let id = req.params.id
-        await Job.findOneAndRemove({ _id: id })
-        res.redirect('/admin/jobs')
+        try {
+            let id = req.params.id
+            await Job.findOneAndRemove({ _id: id })
+            req.session.flash = { title: "Success", message: "Job was Cancel!", type: "success" }
+            res.redirect('/admin/jobs')
+        } catch {
+            req.session.flash = { title: "Success", message: "Cancel job failure", type: "error" }
+            res.redirect('/admin/jobs')
+        }
     }
 
-    renderNotifications(req, res, next) {
-        res.render('./admin/notification')
+    async renderNotifications(req, res, next) {
+        let notifications = await Notification.find({}).lean()
+        res.render('./admin/notification', { notifications })
     }
-
+    async addNotification(req, res) {
+        try {
+            let { title, content } = req.body
+            let data = { title: title, content: content }
+            let notifi = new Notification(data)
+            await notifi.save()
+            req.session.flash = { title: "Success", message: "Notification was created!", type: "success" }
+            res.redirect('/admin/notifications')
+        } catch {
+            req.session.flash = { title: "Error", message: "Notification was create failure!", type: "error" }
+            res.redirect('/admin/notifications')
+        }
+    }
+    async deleteNotify(req, res) {
+        try {
+            let id = req.params.id
+            await Notification.findByIdAndRemove(id)
+            req.session.flash = { title: "Success", message: "Notification was deleted!", type: "success" }
+            res.redirect('/admin/notifications')
+        } catch {
+            req.session.flash = { title: "Error", message: "Notification delete failure!", type: "errors" }
+            res.redirect('/admin/notifications')
+        }
+    }
     async renderReceipt(req, res, next) {
         const rooms = await Room.find({}).lean()
         const receipts = await Receipt.find({}).sort({ createdAt: -1 }).lean()
         res.render('./admin/receipt', { rooms, receipts })
     }
     async addReceipt(req, res) {
-        let { room, electric, water, roomprice, month, year } = req.body
-        let total = +electric + +water + +roomprice
-        let service = 0
-        let jobs = await Job.find({ $and: [{ room }, { status: "finished" }] })
-        jobs.forEach(job => {
-            if (job.date.split('-')[1] == month && job.date.split('-')[0] == year) {
-                total += +job.price
-                service += +job.price
-            }
+        try {
+            let { room, electric, water, roomprice, month, year } = req.body
+            let total = +electric + +water + +roomprice
+            let service = 0
+            let jobs = await Job.find({ $and: [{ room }, { status: "finished" }] })
+            jobs.forEach(job => {
+                if (job.date.split('-')[1] == month && job.date.split('-')[0] == year) {
+                    total += +job.price
+                    service += +job.price
+                }
 
-        })
-        let repairs = await Repair.find({ $and: [{ room }, { type: "device" }, { status: "finished" }] })
-        repairs.forEach(repair => {
-            if (repair.suitabletime.split('-')[0] == year && repair.suitabletime.split('-')[1] == month) {
-                total += +repair.price
-                service += +repair.price
-            }
-        })
-        let data = { roomnumber: room, electric, water, roomprice, service, total, status: "unpaid", month, year }
-        let receipt = new Receipt(data)
-        await receipt.save()
-        res.redirect('/admin/receipt')
+            })
+            let repairs = await Repair.find({ $and: [{ room }, { type: "device" }, { status: "finished" }] })
+            repairs.forEach(repair => {
+                if (repair.suitabletime.split('-')[0] == year && repair.suitabletime.split('-')[1] == month) {
+                    total += +repair.price
+                    service += +repair.price
+                }
+            })
+            let data = { roomnumber: room, electric, water, roomprice, service, total, status: "unpaid", month, year }
+            let receipt = new Receipt(data)
+            await receipt.save()
+            req.session.flash = { title: "Success", message: "Receipt created!", type: "success" }
+            res.redirect('/admin/receipt')
+        } catch {
+            req.session.flash = { title: "Error", message: "Receipt create failure!", type: "error" }
+            res.redirect('/admin/receipt')
+        }
     }
     async renderReceiptRoom(req, res, next) {
         let r = req.params.roomnumber
@@ -275,24 +417,48 @@ class AdminController {
     }
 
     async rejectRequest(req, res) {
-        let id = req.params.id
-        await Repair.findOneAndUpdate({ _id: id }, { status: "reject" })
-        res.redirect('/admin/repair')
+        try {
+            let id = req.params.id
+            await Repair.findOneAndUpdate({ _id: id }, { status: "reject" })
+            req.session.flash = { title: "Success", message: "Request was rejected", type: "success" }
+            res.redirect('/admin/repair')
+        } catch {
+            req.session.flash = { title: "Error", message: "Reject request failure", type: "error" }
+            res.redirect('/admin/repair')
+        }
     }
     async acceptRequest(req, res) {
-        let id = req.params.id
-        await Repair.findOneAndUpdate({ _id: id }, { status: "accept" })
-        res.redirect('/admin/repair')
+        try {
+            let id = req.params.id
+            await Repair.findOneAndUpdate({ _id: id }, { status: "accept" })
+            req.session.flash = { title: "Success", message: "Request was Accept", type: "success" }
+            res.redirect('/admin/repair')
+        } catch {
+            req.session.flash = { title: "Error", message: "Accept request failure", type: "error" }
+            res.redirect('/admin/repair')
+        }
     }
     async finishRequestRoom(req, res) {
-        let id = req.params.id
-        await Repair.findOneAndUpdate({ _id: id }, { status: "finished" })
-        res.redirect('/admin/repair')
+        try {
+            let id = req.params.id
+            await Repair.findOneAndUpdate({ _id: id }, { status: "finished" })
+            req.session.flash = { title: "Success", message: "Request was finished!", type: "success" }
+            res.redirect('/admin/repair')
+        } catch {
+            req.session.flash = { title: "Error", message: "Has error!", type: "error" }
+            res.redirect('/admin/repair')
+        }
     }
     async finishRequestDevice(req, res) {
-        let { id, price } = req.body
-        await Repair.findOneAndUpdate({ _id: id }, { status: "finished", price })
-        res.redirect('/admin/repair')
+        try {
+            let { id, price } = req.body
+            await Repair.findOneAndUpdate({ _id: id }, { status: "finished", price })
+            req.session.flash = { title: "Success", message: "Request was finished!", type: "success" }
+            res.redirect('/admin/repair')
+        } catch {
+            req.session.flash = { title: "Error", message: "Has error!", type: "error" }
+            res.redirect('/admin/repair')
+        }
     }
 
     async updateRepair(req, res, next) {

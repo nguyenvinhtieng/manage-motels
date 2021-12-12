@@ -1,16 +1,23 @@
 {{> headerstaff}}
-<div class="container-manager">
-    <div class="header__manager">
-        <h2>My information</h2>
+<div class="container mt-2">
+    <div class="card bg-light mb-3">
+        <div class="card-header">My information</div>
+        <div class="card-body">
+            <ul>
+                <li>Username: {{staff.username}}</li>
+                <li>Name: {{staff.name}}</li>
+                <li>Identity number: {{staff.identity}}</li>
+                <li>Sex: {{staff.sex}}</li>
+                <li>Phone number: {{staff.phone}}</li>
+                <li>Date Of Birth: {{staff.dateofbirth}}</li>
+                <li>Email: {{staff.email}}</li>
+            </ul>
+        </div>
     </div>
-    <ul>
-        <li>Username: {{staff.username}}</li>
-        <li>Name: {{staff.name}}</li>
-        <li>Identity number:{{staff.identity}}</li>
-        <li>Sex:{{staff.sex}}</li>
-        <li>Phone number: {{staff.phone}}</li>
-        <li>Date Of Birth: {{staff.dateofbirth}}</li>
-        <li>Email: {{staff.email}}</li>
-    </ul>
 </div>
-</div>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>

@@ -3,6 +3,7 @@ const router = express.Router()
 
 const MeController = require('../app/controllers/MeController');
 const MainController = require('../app/controllers/MainController')
+const flash = require('../app/lib/flashMessage')
 
 router.get('/home', MainController.isLogin, MeController.renderHome);
 
@@ -18,11 +19,11 @@ router.get('/notification/:id', MainController.isLogin, MeController.renderDetai
 
 router.get('/room', MainController.isLogin, MeController.renderRoom);
 
-router.get('/jobs', MainController.isLogin, MeController.renderJob);
+router.get('/jobs', flash, MainController.isLogin, MeController.renderJob);
 router.post('/jobs', MainController.isLogin, MeController.createJob);
 router.get('/delete-job/:id', MainController.isLogin, MeController.cancelJob);
 
-router.get('/repair', MainController.isLogin, MeController.renderRepair);
+router.get('/repair', flash, MainController.isLogin, MeController.renderRepair);
 router.post('/repair', MainController.isLogin, MeController.addNewRequest);
 
 router.get('/receipt', MainController.isLogin, MeController.renderReceipt);

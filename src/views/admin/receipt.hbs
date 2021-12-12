@@ -72,26 +72,7 @@
     </div>
 </form>
 
-<div class="modal fade" id="modal-delete-job" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Delete Task</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to delete this task
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <a href="#" class="btn btn-danger btn-delete">Delete</a>
-            </div>
-        </div>
-    </div>
-</div>
+
 {{#each rooms}}
 <input type="hidden" id="{{this.number}}" value="{{this.price}}"></input>
 {{/each}}
@@ -127,7 +108,7 @@
             main.innerHTML += `
             <table class="table">
                 <thead class="thead-light">
-                    <button class="btn btn-primary">${receipt.roomnumber} ${receipt.month} / ${receipt.year} </button>
+                    <button class="btn btn-primary">${receipt.roomnumber} : ${receipt.month} / ${receipt.year} </button>
                     ${receipt.status == "paid" ? (`Payment at : ${receipt.updatedAt}`) : ""} 
                     ${receipt.status == "cancel" ? (`<button class="btn btn-danger mx-4"> Cancel</button>`) : ""} 
                     ${receipt.status == "unpaid" ? (`
@@ -184,4 +165,13 @@
             window.location.href = `/admin/update-receipt/${id}/${status}`
         }
     })
+
+    let selectRoom = document.querySelector('#room')
+    let roomPrice = document.querySelector('#roomprice')
+    console.log(roomPrice)
+    selectRoom.onchange = (e) => {
+        let roomId = e.target.value
+        if (roomId) roomPrice.value = +document.querySelector(`#${roomId}`).value
+        else roomPrice.value = 0
+    }
 </script>

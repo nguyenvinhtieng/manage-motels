@@ -1,55 +1,135 @@
-    {{> header}}
-    <div class="container-notification">
-        <div class="head">
-            <h3>List of notifications </h3><label for="modal-create-notification"class="create">Create <i class="fas fa-plus-circle"></i></label>
-        </div>
-        <input type="checkbox" id="modal-create-notification" hidden>
-        <label for="modal-create-notification" class="hidden-layer"></label>
-        <div class="modal-create-notification">
-            <label for="modal-create-notification" class="close">
-                <i class="fas fa-times"></i>
-            </label>
-            <h2>Create new notification</h2>
-            
-            <form action="">
-                <div class="form-group">
-                    <label for="title">Title</label>
-                    <input type="text" id='title'>
-                </div>
-                <div class="form-group">
-                    <label for="text">Content</label>
-                    <textarea name="" id="text"></textarea>
-                </div>
-                <div class="form-group">
-                    <button class="btn-create">Create</button>
-                </div>
-            </form>
-        </div> 
-        <div class="content-notification">
-            <ul id="list-item" class="">
-                
-            </ul>
-        </div>
-        
+{{> header}}
+<div class="container mt-2">
+    <div class="heading">Manager notifications
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add-notification">
+            Add
+        </button>
     </div>
+    <div class="notifications mt-2 ">
+        {{#each notifications}}
+        <div class="card mb-3">
+            <div class="card-header text-white bg-primary">{{this.title}}</div>
+            <div class="card-body p-0 my-2 px-4">
+                <p class="card-text  text-truncate">{{this.content}}
+                </p>
+                <button class="btn btn-primary btn-sm detail" data-id="{{this._id}}" data-title="{{this.title}}"
+                    data-content="{{this.content}}" data-time="{{this.createdAt}}" data-toggle="modal"
+                    data-target="#modal-detail-notification">Details</button>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>
+</div>
+<!-- Button trigger modal -->
 
-<div class="hidden-layer layer-close"></div>
-<div class="modal__confirm-delete">
-    <div class="close-modal close-delete-modal">
-        <i class="fas fa-times"></i>
-    </div>
-    <div class="form-delete">
-        <h3>Warning!</h3>
-        <input type="text" id='id-delete-notification' hidden>
-        <div class="text-modal delete-notification-message">
-            Are you sure want to delete this notification
+
+<!-- Modal -->
+<form action="" method="post">
+    <div class="modal fade" id="modal-add-notification" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add new notification</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="">Title</label>
+                        <textarea name="title" class="form-control" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Content</label>
+                        <textarea name="content" class="form-control" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
         </div>
-        <div class="form-group group-btn">
-            <button id="btn-delete" class="btn-danger">Delete</button>
-            <button class="btn-nomal cancel-delete-modal">Cancel</button>
+    </div>
+</form>
+
+<div class="modal fade " id="modal-detail-notification" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title  text-truncate" id="title-notify">
+                    Notification
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body modal-dialog-scrollable">
+                <div class="text-sm font-weight-light" id="time-detail">
+
+                </div>
+                <p class="" id='content-notify'>Lorem ipsum dolor sit amet, con</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-warning delete" data-toggle="modal"
+                    data-target="#modal-delete-notification">Delete</button>
+            </div>
         </div>
     </div>
 </div>
-    <script src="/script/admin/notification.js"></script>
 
-    
+<div class="modal fade " id="modal-delete-notification" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title ">
+                    Delete notification
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body modal-dialog-scrollable">
+                Are you sure you want to delete this notification?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a href="#" type="submit" class="btn btn-danger btn-delete">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+<script>
+    let titleDetail = document.querySelector('#title-notify')
+    let contentDetail = document.querySelector('#content-notify')
+    let timeDetail = document.querySelector('#time-detail')
+    let details = document.querySelectorAll('.detail')
+    let detete = document.querySelector('.delete')
+    details.forEach(item => {
+        item.onclick = (e) => {
+            let id = item.getAttribute('data-id')
+            let title = item.getAttribute('data-title')
+            let content = item.getAttribute('data-content')
+            let time = item.getAttribute('data-time')
+            titleDetail.innerText = title
+            contentDetail.innerText = content
+            timeDetail.innerText = time
+            detete.setAttribute('data-id', id)
+        }
+    })
+    let btnDelete = document.querySelector('.btn-delete')
+    detete.onclick = (e) => {
+        let id = detete.getAttribute('data-id')
+        btnDelete.href = `/admin/delete-notify/${id}`
+    }
+</script>

@@ -29,46 +29,55 @@ class StaffController {
         res.render('./staff/myjob', { jobs })
     }
     async pickTask(req, res) {
-        let id = req.params.id
-        let idUser = req._id
-        let acc = await Account.findOne({ _id: idUser })
-        await Job.findByIdAndUpdate({ _id: id }, { staff: acc.username, status: "received" })
-        res.redirect('/staff/my-job')
+        try {
+            let id = req.params.id
+            let idUser = req._id
+            let acc = await Account.findOne({ _id: idUser })
+            await Job.findByIdAndUpdate({ _id: id }, { staff: acc.username, status: "received" })
+            req.session.flash = { title: "Success", message: "Job was picked!", type: "success" }
+            res.redirect('/staff/my-job')
+        } catch {
+            req.session.flash = { title: "Error", message: "Pick job failure!", type: "error" }
+            res.redirect('/staff/my-job')
+        }
     }
     async finishTask(req, res) {
-        let id = req.params.id;
-        await Job.findOneAndUpdate({ _id: id }, { status: "finished" })
-        res.redirect('/staff/my-job')
+        try {
+            let id = req.params.id;
+            await Job.findOneAndUpdate({ _id: id }, { status: "finished" })
+            req.session.flash = { title: "Success", message: "Job was marked as finished", type: "success" }
+            res.redirect('/staff/my-job')
+        } catch {
+            req.session.flash = { title: "Error", message: "has error", type: "error" }
+            res.redirect('/staff/my-job')
+        }
     }
 
     async renderSalary(req, res) {
         res.render('./staff/salary')
     }
     async getSalaryYear(req, res) {
-        let year = req.body.year
-        let token = req.cookies.token;
-        let decodedCookie = jwt.verify(token, TOKEN_KEY)
-        let idUser = decodedCookie._id;
-        let jobs = await Job.find({ $and: [{ staff: idUser }, { status: 'finish' }] })
+        let { year } = req.body
+        let idUser = req._id;
+        let acc = await Account.findById(idUser).select("-password")
+        let jobs = await Job.find({ $and: [{ staff: acc.username }, { status: 'finished' }] })
         let total = 0
         jobs.forEach(job => {
-            if (job.endday.split('-')[0] == year) {
-                total += job.price
+            if (job.date.split('-')[0] == year) {
+                total += +job.price
             }
         })
         return res.json({ data: total })
     }
     async getSalaryMonth(req, res) {
-        let year = req.body.year
-        let month = req.body.month
-        let token = req.cookies.token;
-        let decodedCookie = jwt.verify(token, TOKEN_KEY)
-        let idUser = decodedCookie._id;
-        let jobs = await Job.find({ $and: [{ staff: idUser }, { status: 'finish' }] })
+        let { month, year } = req.body
+        let idUser = req._id
+        let acc = await Account.findById(idUser).select("-password")
+        let jobs = await Job.find({ $and: [{ staff: acc.username }, { status: 'finished' }] })
         let total = 0
         jobs.forEach(job => {
-            if (job.endday.split('-')[0] == year && job.endday.split('-')[1] == month) {
-                total += job.price
+            if (job.date.split('-')[0] == year && job.date.split('-')[1] == month) {
+                total += +job.price
             }
         })
         return res.json({ data: total })

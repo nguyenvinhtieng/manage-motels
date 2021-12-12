@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Notification = new Schema({
-    title: {type: String},
-    text: {type: String},
-    reciever: {type: Number}
-},{
+    title: { type: String },
+    content: { type: String },
+    reciever: { type: Number }
+}, {
     timestamps: true
 });
 

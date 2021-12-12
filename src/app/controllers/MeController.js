@@ -31,27 +31,19 @@ class MeController {
             })
     }
 
-    renderRoom(req, res, next) {
-        let token = req.cookies.token;
-        let decodedCookie = jwt.verify(token, TOKEN_KEY)
-        let idUser = decodedCookie._id;
-        Account.findOne({ _id: idUser })
-            .then(account => {
-                Room.findOne({ _id: account.roomid })
-                    .then(data => {
-                        res.render('me/myroom', {
-                            data: {
-                                number: data.number,
-                                maximum: data.maximum,
-                                renter: data.renter,
-                                numberpeople: data.numberpeople,
-                                area: data.area,
-                                price: data.price,
-                                description: data.description
-                            }
-                        })
-                    })
-            })
+    async renderRoom(req, res, next) {
+        let id = req._id
+        let acc = await Account.findById(id).select("-password")
+        let room = await Room.findOne({ number: acc.room }).lean()
+        let deviceInRoom = await DeviceInRoom.find({ idroom: room._id }).lean()
+        let idDeviceList = []
+        deviceInRoom.forEach(device => idDeviceList.push(device.iddevice))
+        let devices = []
+        idDeviceList.forEach(async id => {
+            let device = await Device.findById(id).lean()
+            devices.push(device)
+        })
+        res.render('./me/myroom', { room, devices })
     }
 
     async renderJob(req, res, next) {
@@ -83,14 +75,9 @@ class MeController {
             })
     }
 
-    renderNotifications(req, res, next) {
-        Notification.find().sort('-createdAt')
-            .then(data => {
-                res.render('./me/notification', { data: multipleMongooseToObject(data) })
-            })
-            .catch(err => {
-                res.redirect('/login')
-            })
+    async renderNotifications(req, res, next) {
+        let notifications = await Notification.find({}).sort({ createdAt: -1 }).lean()
+        res.render('./me/notification', { notifications })
     }
 
     renderDetailNotification(req, res, next) {
@@ -104,20 +91,32 @@ class MeController {
     }
 
     async createJob(req, res, next) {
-        let { serviceid, date, note } = req.body
-        let _id = req._id
-        let acc = await Account.findById(_id)
-        let serv = await Service.findById(serviceid)
-        let data = { room: acc.roomnumber, name: serv.name, date, note, price: serv.price, status: "not yet" }
-        let job = new Job(data)
-        await job.save()
-        res.redirect('/me/jobs')
+        try {
+            let { serviceid, date, note } = req.body
+            let _id = req._id
+            let acc = await Account.findById(_id)
+            let serv = await Service.findById(serviceid)
+            let data = { room: acc.roomnumber, name: serv.name, date, note, price: serv.price, status: "not yet" }
+            let job = new Job(data)
+            await job.save()
+            req.session.flash = { title: "Success", message: "Job was saved!", type: "success" }
+            res.redirect('/me/jobs')
+        } catch {
+            req.session.flash = { title: "Error", message: "Create job failure", type: "error" }
+            res.redirect('/me/jobs')
+        }
     }
 
     async cancelJob(req, res) {
-        let id = req.params.id
-        await Job.findOneAndRemove({ _id: id })
-        res.redirect('/me/jobs')
+        try {
+            let id = req.params.id
+            await Job.findOneAndRemove({ _id: id })
+            req.session.flash = { title: "Success", message: "Job was cancel!", type: "success" }
+            res.redirect('/me/jobs')
+        } catch {
+            req.session.flash = { title: "Success", message: "Cancel job failure!", type: "success" }
+            res.redirect('/me/jobs')
+        }
     }
 
     async renderReceipt(req, res, next) {
@@ -139,13 +138,19 @@ class MeController {
     }
 
     async addNewRequest(req, res) {
-        let _id = req._id
-        let { content, type, suitabletime } = req.body
-        let acc = await Account.findOne({ _id })
-        let data = { content, type, suitabletime, room: acc.roomnumber, status: "wait" }
-        let repair = new Repair(data)
-        await repair.save()
-        res.redirect('/me/repair')
+        try {
+            let _id = req._id
+            let { content, type, suitabletime } = req.body
+            let acc = await Account.findOne({ _id })
+            let data = { content, type, suitabletime, room: acc.roomnumber, status: "wait" }
+            let repair = new Repair(data)
+            await repair.save()
+            req.session.flash = { title: "Success", message: "Request was saved!", type: "success" }
+            res.redirect('/me/repair')
+        } catch {
+            req.session.flash = { title: "Error", message: "Request was create failure!", type: "error" }
+            res.redirect('/me/repair')
+        }
     }
 
     async createRequestRepair(req, res, next) {
@@ -163,10 +168,11 @@ class MeController {
     async getReceipt(req, res) {
         let { month, year } = req.body
         let query = {}
-        query.year = year
+        if (month) query.month = month
+        if (year) query.year = year
         let _id = req._id
         let acc = await Account.findOne({ _id })
-        query.roomnumber = acc.roomnumber
+        query.roomnumber = acc.room
         if (month) query.month = month
         let receipts = await Receipt.find({ $and: [query, { status: { $ne: "cancel" } }] }).lean()
         return res.json({ status: true, receipts: receipts })

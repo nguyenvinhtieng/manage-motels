@@ -110,5 +110,15 @@ module.exports = {
     } else {
       return ``
     }
+  },
+  handleFlashMessage: function (flash) {
+    return `<script>
+        toast({
+            title: '${flash.title}',
+            message: '${flash.message}',
+            type: '${flash.type}',
+            duration: 3000
+        })
+    </script>`
   }
 }

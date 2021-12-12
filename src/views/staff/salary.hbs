@@ -1,70 +1,88 @@
-    {{> headerstaff}}
+{{> headerstaff}}
+<div class="container mt-2">
+    <h1>View Salary</h1>
+    <form class="d-flex w-f">
+        <input class="mx-2" type="number" placeholder="Year" id="year" />
+        <select class="mx-2" id="month">
+            <option value="">----</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+        </select>
+        <button class="btn btn-primary" id="btn-view">View</button>
+    </form>
+    <div class="mt-2" id="salary">
 
-    <div style="margin: 40px 100px">
-        <h1>View Salary</h1>
-        <form>
-            <input type="number" placeholder="Year" id="year"/>
-            <select id="month">
-                <option value="">----</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-            </select>
-            <button id="btn-view">View</button>
-        </form>
-        <div id="salary">
-
-        </div>
     </div>
-    <script>
-        let btnView = document.querySelector('#btn-view')
-        btnView.onclick = (e)=>{
-            e.preventDefault();
-            let year = document.getElementById('year').value;
-            if(year == '' || year < 2000){
-                showErrorToast('Year are not valid')
-            } else{
-                let month = document.getElementById('month').value;
-                if(month == '' || month == 0){
-                    getSalaryYear(year);
-                } else{
-                    getSalaryMonth(year, month);
-                }
+</div>
+</div>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+<script>
+    let btnView = document.querySelector('#btn-view')
+    btnView.onclick = (e) => {
+        e.preventDefault();
+        let year = document.getElementById('year').value;
+        if (year == '' || year < 2000) {
+            showErrorToast('Year are not valid')
+        } else {
+            let month = document.getElementById('month').value;
+            if (month == '' || month == 0) {
+                getSalaryYear(year);
+            } else {
+                getSalaryMonth(year, month);
             }
         }
-        function getSalaryYear(year){
-            $.ajax({
-                url: '/staff/get-salary-year',
-                type: 'POST',
-                data: {year},
-                success: function(data){
-                    renderDataYear(data.data, year)
-                }
-            })
-        }
-        function getSalaryMonth(year, month){
-            $.ajax({
-                url: '/staff/get-salary-month',
-                type: 'POST',
-                data: {year, month},
-                success: function(data){
-                    renderDataMonth(data.data, year, month)
-                }
-            })
-        }
-        function renderDataYear(data, year){
-            document.getElementById('salary').innerHTML = `Salary for year ${year} : ${data}`
-        }
-        function renderDataMonth(data, year, month){
-            document.getElementById('salary').innerHTML = `Salary for ${month} /${year} : ${data}`
-        }
-    </script>
+    }
+    function getSalaryYear(year) {
+        $.ajax({
+            url: '/staff/get-salary-year',
+            type: 'POST',
+            data: { year },
+            success: function (data) {
+                renderDataYear(data.data, year)
+            }
+        })
+    }
+    function getSalaryMonth(year, month) {
+        $.ajax({
+            url: '/staff/get-salary-month',
+            type: 'POST',
+            data: { year, month },
+            success: function (data) {
+                renderDataMonth(data.data, year, month)
+            }
+        })
+    }
+    function renderDataYear(data, year) {
+        document.getElementById('salary').innerHTML = `
+        <div class="card bg-light mb-3" >
+            <div class="card-header">Salary for year ${year}</div>
+            <div class="card-body">
+                <p class="card-text">Your total salary is:  ${data} (VND)</p>
+            </div>
+        </div>`
+    }
+    function renderDataMonth(data, year, month) {
+        document.getElementById('salary').innerHTML = `
+        <div class="card bg-light mb-3" >
+            <div class="card-header">Salary for ${month} / ${year}</div>
+            <div class="card-body">
+                <p class="card-text">Your total salary is: ${data} (VND)</p>
+            </div>
+        </div>`
+    }
+</script>

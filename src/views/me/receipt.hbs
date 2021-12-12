@@ -3,8 +3,8 @@
 <div class="container mt-5">
     Receipt
     <form action="" id="form-view-receipt">
-        <div class="form-group">
-            <select class="form-control" name="month" id="month">
+        <div class="form-group d-flex">
+            <select class="form-control mx-2" name="month" id="month">
                 <option value="">--</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -19,8 +19,8 @@
                 <option value="11">11</option>
                 <option value="12">12</option>
             </select>
-            <input type="text" placeholder="Year" id="year">
-            <button class="btn btn-primary">View</button>
+            <input type="text" placeholder="Year" class="mx-2" id="year">
+            <button class="btn btn-primary mx-3">View</button>
         </div>
     </form>
     <div class="container">
@@ -43,15 +43,13 @@
         e.preventDefault();
         let month = document.querySelector('#month').value
         let year = document.querySelector('#year').value
-
-        if (year < 1000 || year > 2040) {
-            showErrorToast('Year not valid')
-            return
-        }
+        let obj = {}
+        if (month) obj.month = month
+        if (year) obj.year = year
         $.ajax({
             url: "/me/get-receipt",
             type: 'POST',
-            data: { year: year, month: month },
+            data: obj,
             success: function (response) {
                 console.log(response.receipts)
                 renderReceipts(response.receipts)
