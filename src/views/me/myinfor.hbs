@@ -1,25 +1,34 @@
-    {{> headercustomer}}
-<div class="container-manager">
-    <div class="header__manager">
-        <h2>Information of members in my room</h2>
-    </div>
-    <div class="content__manager">
-        <table>
+{{> headercustomer}}
+<div class="wrapper">
+    <div class="container mt-3">
+        <div class="heading">Member in my rooms</div>
+        <table class="table table-striped">
             <thead>
-                <th>Name</th>
-                <th>Sex</th>
-                <th>Identity card </th>
-                <th>Room</th>
-                <th>Phone number</th>
-                <th>Start day</th>
-                <th>Leave day</th>
-                <th>Note</th>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Identity</th>
+                    <th scope="col">Date of Birth</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Job</th>
+                    <th scope="col">Sex</th>
+                    <th scope="col">Note</th>
+                </tr>
             </thead>
-            <tbody id="customers">
+            <tbody>
+                {{#each customers}}
+                <tr>
+                    <td scope="col">{{this.name}}</td>
+                    <td scope="col">{{this.identity}}</td>
+                    <td scope="col">{{this.dateofbirth}}</td>
+                    <td scope="col">{{this.phone}}</td>
+                    <td scope="col">{{this.email}}</td>
+                    <td scope="col">{{this.job}}</td>
+                    <td scope="col">{{this.sex}}</td>
+                    <td scope="col">{{this.note}}</td>
+                </tr>
+                {{/each}}
             </tbody>
         </table>
     </div>
 </div>
-
-
-<script src="/script/me/myinfor.js"></script>

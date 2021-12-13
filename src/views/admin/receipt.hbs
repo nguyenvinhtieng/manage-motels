@@ -1,86 +1,84 @@
 {{> header}}
-<div class="container mt-5">
-    Manage Receipt <button type="button" class="btn btn-primary" data-toggle="modal"
-        data-target="#modal-create-task">Add</button>
-    <form action="" id="form-view-receipt">
-        <div class="form-group d-flex g-1">
-            <input type="number" id="month" placeholder="Month" min="1" max="12" class="mx-2">
-            <input type="number" id="year" placeholder="Year" min="2000" max="2040" class="mx-2">
-            <select name="roomnumber" id="roomnumber" class="mx-2">
-                <option value="">--</option>
-                {{#each rooms}}
-                <option value="{{this.number}}">{{this.number}}</option>
-                {{/each}}
-            </select>
-            <button class="btn btn-primary" class="mx-2">View</button>
+<div class="wrapper">
+    <div class="container mt-5">
+        Manage Receipt <button type="button" class="btn btn-primary" data-toggle="modal"
+            data-target="#modal-create-task">Add</button>
+        <form action="" id="form-view-receipt">
+            <div class="form-group d-flex g-1">
+                <input type="number" id="month" placeholder="Month" min="1" max="12" class="mx-2">
+                <input type="number" id="year" placeholder="Year" min="2000" max="2040" class="mx-2">
+                <select name="roomnumber" id="roomnumber" class="mx-2">
+                    <option value="">--</option>
+                    {{#each rooms}}
+                    <option value="{{this.number}}">{{this.number}}</option>
+                    {{/each}}
+                </select>
+                <button class="btn btn-primary" class="mx-2">View</button>
+            </div>
+        </form>
+        <div id="receipts">
+
         </div>
-    </form>
-    <div id="receipts">
-
     </div>
-</div>
 
-<!-- Modal -->
-<form action="" method="post">
-    <div class="modal fade" id="modal-create-task" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add new receipt</h5>
-                    <div type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+    <!-- Modal -->
+    <form action="" method="post">
+        <div class="modal fade" id="modal-create-task" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add new receipt</h5>
+                        <div type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </div>
                     </div>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="">Room</label>
-                        <select name="room" id="room" required>
-                            <option value="">--</option>
-                            {{#each rooms}}
-                            <option value="{{this.number}}">{{this.number}}</option>
-                            {{/each}}
-                        </select>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="">Room</label>
+                            <select name="room" id="room" required>
+                                <option value="">--</option>
+                                {{#each rooms}}
+                                <option value="{{this.number}}">{{this.number}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Electric (VND)</label>
+                            <input type="number" name="electric" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Water (VND)</label>
+                            <input type="number" name="water" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Room price (VND)</label>
+                            <input type="number" name="roomprice" min="0" id="roomprice" value="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Month</label>
+                            <input type="number" name="month" min="1" max="12" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Year</label>
+                            <input type="number" name="year" min="2000" max="2040" required>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="">Electric (VND)</label>
-                        <input type="number" name="electric" min="0" required>
+                    <div class="modal-footer">
+                        <div type="button" class="btn btn-secondary" data-dismiss="modal">Close</div>
+                        <button type="submit" class="btn btn-primary">Create</button>
                     </div>
-                    <div class="form-group">
-                        <label for="">Water (VND)</label>
-                        <input type="number" name="water" min="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="">Room price (VND)</label>
-                        <input type="number" name="roomprice" min="0" id="roomprice" value="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="">Month</label>
-                        <input type="number" name="month" min="1" max="12" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="">Year</label>
-                        <input type="number" name="year" min="2000" max="2040" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div type="button" class="btn btn-secondary" data-dismiss="modal">Close</div>
-                    <button type="submit" class="btn btn-primary">Create</button>
                 </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
+</div>
 
 
 {{#each rooms}}
 <input type="hidden" id="{{this.number}}" value="{{this.price}}"></input>
 {{/each}}
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-    crossorigin="anonymous"></script>
+
 <script>
     let formViewReceipt = document.getElementById("form-view-receipt")
     formViewReceipt.onsubmit = (e) => {

@@ -8,6 +8,27 @@ class MainController {
     renderLogin(req, res, next) {
         res.render('login')
     }
+    async changepass(req, res, next) {
+        let idUser = req._id
+        let acc = await Account.findOne({ _id: idUser })
+        let { currentpassword, newpassword, confirmpassword } = req.body
+        if (newpassword !== confirmpassword) {
+            req.session.flash = { title: "Error", message: "Confirm password not match", type: "error" }
+            res.redirect('back');
+        } else {
+            const validPassword = await bcrypt.compare(req.body.currentpassword, acc.password);
+            if (!validPassword) {
+                req.session.flash = { title: "Error", message: "Current password not correct!", type: "error" }
+                res.redirect('back');
+            } else {
+                const salt = await bcrypt.genSalt(10);
+                let pass = await bcrypt.hash(newpassword, salt);
+                await Account.findOneAndUpdate({ _id: idUser }, { password: pass })
+                req.session.flash = { title: "Success", message: "Password updated!", type: "success" }
+                res.redirect('back');
+            }
+        }
+    }
     pageNotFound(req, res, next) {
         res.send('Page not found, please check yout url or <a href="/login"> click here</a> to login')
     }
@@ -22,17 +43,17 @@ class MainController {
                 }, TOKEN_KEY);
                 if (user.role === 'staff') {
                     let staff = await Staff.findOne({ username: req.body.username })
-                    if (staff.status !== '') {
+                    if (staff.status === 'working') {
                         return res.json({
                             role: user.role,
                             token,
-                            isActive: false
+                            isActive: true
                         })
                     } else {
                         return res.json({
                             role: user.role,
                             token,
-                            isActive: true
+                            isActive: false
                         })
                     }
                 }

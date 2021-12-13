@@ -15,8 +15,11 @@ class MeController {
     renderHome(req, res, next) {
         res.render('me/home')
     }
-    renderMyInfor(req, res, next) {
-        res.render('me/myinfor')
+    async renderMyInfor(req, res, next) {
+        let idUser = req._id
+        let acc = await Account.findById(idUser).select("-password")
+        let customers = await Customer.find({ $and: [{ roomnumber: acc.room }, { status: { $ne: "leave" } }] }).lean()
+        res.render('me/myinfor', { customers })
     }
     getDataMyRoom(req, res, next) {
         let token = req.cookies.token;

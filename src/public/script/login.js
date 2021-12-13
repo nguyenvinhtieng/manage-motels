@@ -96,7 +96,6 @@ function login(username, password) {
                     } else {
                         showErrorToast("Account not active")
                     }
-
                 }
             } else {
                 let usernameBlock = document.getElementById('username')

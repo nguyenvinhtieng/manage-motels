@@ -1,374 +1,321 @@
 {{> header}}
-<div class="container-manager">
-    <div class="header__manager">
-        <h2>Manage Staffs</h2>
-        <label for="modal__add-customer" class="add">
-            <i class="fas fa-plus"></i> Add
-        </label>
+<div class="wrapper">
+    <div class="container mt-4">
+        <div class="heading">Manage Staff <button type="button" class="btn btn-primary" data-toggle="modal"
+                data-target="#modal-add-staff">Add</button></div>
+        <div class="staffs mt-4">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Username</th>
+                        <th scope="col">Full name</th>
+                        <th scope="col">Identity</th>
+                        <th scope="col">Sex</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Date of Birth</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Status</th>
+                        <th>#</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each staffs}}
+                    <tr>
+                        <th scope="row">{{this.username}}</th>
+                        <td>{{this.name}}</td>
+                        <td>{{this.identity}}</td>
+                        <td>{{this.sex}}</td>
+                        <td>{{this.phone}}</td>
+                        <td>{{this.dateofbirth}}</td>
+                        <td>{{this.email}}</td>
+                        <td>{{this.status}}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm edit" data-id="{{this._id}}" data-name="{{this.name}}"
+                                data-username="{{this.username}}" data-identity="{{this.identity}}"
+                                data-phone="{{this.phone}}" data-sex="{{this.sex}}"
+                                data-dateofbirth="{{this.dateofbirth}}" data-email="{{this.email}}"
+                                data-status="{{this.status}}" data-toggle="modal" data-target="#modal-edit-staff"><i
+                                    class="fas fa-edit"></i></button>
+                            <button class="btn btn-success btn-sm view" data-id="{{this._id}}" data-name="{{this.name}}"
+                                data-identity="{{this.identity}}" data-phone="{{this.phone}}"
+                                data-username="{{this.username}}" data-dateofbirth="{{this.dateofbirth}}"
+                                data-email="{{this.email}}" data-sex="{{this.sex}}" data-status="{{this.status}}"
+                                data-toggle="modal" data-target="#modal-view-staff"><i class="fas fa-eye"></i></button>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div class="content__manager">
-        <table>
-            <thead>
-                <th></th>
-                <th>username</th>
-                <th>Name</th>
-                <th>Identity card </th>
-                <th>Phone number</th>
-                <th>Day of birth</th>
-                <th>email</th>
-                <th>Status</th>
-            </thead>
-            <tbody id="customers">
-                {{#each staffs}}
-                <tr>
-                    <td>
-                        <div class="operations">
-                            <div data-id="{{this._id}}" class="edit view-device view-staff">
-                                <i class="fas fa-eye" data-id="{{this._id}}"></i>
+    <form action="" method="post">
+        <div class="modal fade" id="modal-add-staff" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add new staff</h5>
+                        <div type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex">
+                            <div class="form-group mx-2">
+                                <label for="">Username</label>
+                                <input type="text" placeholder="Username" class="form-control" name="username" required>
                             </div>
-                            <div data-id="{{this._id}}" class="edit edit-device edit-staff">
-                                <i class="fas fa-pen" data-id="{{this._id}}"></i>
+                            <div class="form-group mx-2">
+                                <label for="">Full name</label>
+                                <input type="text" placeholder="Full name" name="name" required>
                             </div>
                         </div>
-                    </td>
-                    <td>{{this.username}}</td>
-                    <td>{{this.name}}</td>
-                    <td>{{this.identity}}</td>
-                    <td>{{this.phone}}</td>
-                    <td>{{this.dateofbirth}}</td>
-                    <td>{{this.email}}</td>
-                    <td>
-                        {{#if this.status}}
-                        <div class="around around-red">not working </div>
-                        {{else}}
-                        <div class="around around-blue">working </div>
-                        {{/if}}
-                    </td>
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
-    </div>
-</div>
-
-
-
-<!-- Add modal -->
-<input type="checkbox" id="modal__add-customer" hidden>
-<label for="modal__add-customer" class="layer-hidden">
-</label>
-<div class="modal__add-customer">
-    <label for="modal__add-customer" class="close-modal">
-        <i class="fas fa-times"></i>
-    </label>
-    <div class="form_add-customer">
-        <h2>Add Staff</h2>
-        <form action="" method="post" id="form-add-staff">
-            <div class="left">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" name="username" id="username">
-                </div>
-                <div class="form-group">
-                    <label for="fullname">Full name</label>
-                    <input type="text" name="name" id="fullname">
-                </div>
-                <div class="form-group">
-                    <label for="identity">Identity card number</label>
-                    <input type="text" name="identity" id="identity">
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone number</label>
-                    <input type="text" id="phone" name="phone">
-                </div>
-                <div class="form-group">
-                    <label for="dayofbirtd">Day of birth</label>
-                    <input type="date" id="dayofbirtd" name="dateofbirth">
-                </div>
-                <div class="form-group">
-                    <label for="sex">Sex</label>
-                    <select name="sex" id="sex">
-                        <option value="">-- Choose --</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="text" name="email" id="email">
+                        <div class="d-flex">
+                            <div class="form-group mx-2">
+                                <label for="">Identity card number</label>
+                                <input type="text" placeholder="Identity" class="form-control" name="identity" required>
+                            </div>
+                            <div class="form-group mx-2">
+                                <label for="">Sex</label>
+                                <select name="sex" required>
+                                    <option value="female">female</option>
+                                    <option value="male">male</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="form-group mx-2">
+                                <label for="">Phone number</label>
+                                <input type="text" placeholder="Phone number" class="form-control" name="phone"
+                                    required>
+                            </div>
+                            <div class="form-group mx-2">
+                                <label for="">Date of birth</label>
+                                <input type="date" name="dateofbirth" required>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="form-group mx-2">
+                                <label for="">Email</label>
+                                <input type="text" name="email" placeholder="email">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div type="button" class="btn btn-secondary" data-dismiss="modal">Close</div>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
                 </div>
             </div>
+        </div>
+    </form>
 
-            <div>
-                <button class="btn-primary btn-add-customer">CREATE</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<style>
-    .form_add-customer form {
-        display: block;
-    }
-
-    .left {
-        width: 100%;
-    }
-</style>
-
-{{!-- edit modal --}}
-
-<div class="layer-hidden hidden-modal-edit"> </div>
-<div class="modal__edit-customer">
-    <div class="close-modal close-edit-modal">
-        <i class="fas fa-times"></i>
-    </div>
-    <div class="form_add-customer">
-        <h2>Edit Staff</h2>
-        <form action="/admin/update-staff" method="post" id="edit-form">
-            <div class="left">
-                <input type="text" id="id-edit" name="_id" hidden>
-                <input type="text" id="username-edit" name="username" hidden>
-                <div class="form-group">
-                    <label for="name-edit">Full name</label>
-                    <input type="text" id="name-edit" name="name">
+    {{!-- VIEW --}}
+    <div class="modal fade" id="modal-view-staff" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Staff data</h5>
+                    <div type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="identity-edit">Identity card number</label>
-                    <input type="text" id="identity-edit" name="identity">
+                <div class="modal-body">
+                    <div class="d-flex">
+                        <div class="form-group mx-2">
+                            <label for="">Username</label>
+                            <input type="text" placeholder="Username" id="username-view" class="form-control"
+                                name="username" disabled>
+                        </div>
+                        <div class="form-group mx-2">
+                            <label for="">Full name</label>
+                            <input type="text" placeholder="Full name" id="name-view" name="name" disabled>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="form-group mx-2">
+                            <label for="">Identity card number</label>
+                            <input type="text" placeholder="Identity" id="identity-view" name="identity"
+                                class="form-control" name="identity" disabled>
+                        </div>
+                        <div class="form-group mx-2">
+                            <label for="">Sex</label>
+                            <input type="text" class="form-control" disabled id="sex-view">
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="form-group mx-2">
+                            <label for="">Phone number</label>
+                            <input type="text" placeholder="Phone number" id="phone-view" class="form-control"
+                                name="phone" disabled>
+                        </div>
+                        <div class="form-group mx-2">
+                            <label for="">Date of birth</label>
+                            <input type="date" name="dateofbirth" id="dateofbirth-view" disabled>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="form-group mx-2">
+                            <label for="">Email</label>
+                            <input type="text" name="email" id="email-view" placeholder="email" disabled>
+                        </div>
+                        <div class="form-group mx-2">
+                            <label for="">Status</label>
+                            <input type="text" name="email" id="status-view" placeholder="status" disabled>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="phone-edit">Phone number</label>
-                    <input type="text" id="phone-edit" name='phone'>
-                </div>
-                <div class="form-group">
-                    <label for="dateofbirtd-edit">Day of birth</label>
-                    <input type="date" id="dateofbirtd-edit" name="dateofbirth">
-                </div>
-                <div class="form-group">
-                    <label for="sex-edit">Sex</label>
-                    <select name="sex" id="sex-edit">
-                        <option class="first-item-sex"></option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="email-edit">Email</label>
-                    <input type="text" id="email-edit" name="email">
-                </div>
-                <div class="form-group">
-                    <label for="status-edit">Status</label>
-                    <select name="status" id="status-edit">
-                        <option class="first-item-status"></option>
-                        <option value="">Working</option>
-                        <option value="not working">Not Working</option>
-                    </select>
+                <div class="modal-footer">
+                    <div type="button" class="btn btn-secondary" data-dismiss="modal">Close</div>
                 </div>
             </div>
-            <div></div>
-            <div>
-                <button type="submit" class="btn-primary btn-save">SAVE</button>
+        </div>
+    </div>
+
+    {{!-- EDIT --}}
+    <form action="/admin/update-staff" method="post">
+        <div class="modal fade" id="modal-edit-staff" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit staff information</h5>
+                        <div type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex">
+                            <div class="form-group mx-2">
+                                <label for="">Username</label>
+                                <input type="text" placeholder="Username" id="username-edit" class="form-control"
+                                    name="username" disabled>
+                                <input type="hidden" placeholder="Username" id="username-edit-v2" class="form-control"
+                                    name="username">
+                            </div>
+                            <div class="form-group mx-2">
+                                <label for="">Full name</label>
+                                <input type="text" placeholder="Full name" id="name-edit" name="name" required>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="form-group mx-2">
+                                <label for="">Identity card number</label>
+                                <input type="text" placeholder="Identity" id="identity-edit" name="identity"
+                                    class="form-control" name="identity" required>
+                            </div>
+                            <div class="form-group mx-2">
+                                <label for="">Sex</label>
+                                <select name="sex" class="form-control" required>
+                                    <option value="" id="sex-edit"></option>
+                                    <option value="female">female</option>
+                                    <option value="male">male</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="form-group mx-2">
+                                <label for="">Phone number</label>
+                                <input type="text" placeholder="Phone number" id="phone-edit" class="form-control"
+                                    name="phone" required>
+                            </div>
+                            <div class="form-group mx-2">
+                                <label for="">Date of birth</label>
+                                <input type="date" name="dateofbirth" id="dateofbirth-edit" required>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="form-group mx-2">
+                                <label for="">Email</label>
+                                <input type="text" name="email" id="email-edit" placeholder="email" required>
+                            </div>
+                            <div class="form-group mx-2">
+                                <label for="">Status</label>
+                                <select name="status" required>
+                                    <option value="" id="status-edit"></option>
+                                    <option value="working">working</option>
+                                    <option value="notworking">not working</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div type="button" class="btn btn-secondary" data-dismiss="modal">Close</div>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
             </div>
-        </form>
-    </div>
-</div>
-
-{{!-- view --}}
-
-<div class="layer-hidden hidden-modal-edit"></div>
-<div class="modal__view-customer">
-    <div class="close-modal close-view-modal">
-        <i class="fas fa-times"></i>
-    </div>
-    <div class="form_add-customer">
-        <h2>View Staff</h2>
-        <form action="/admin/update-staff" method="post" id="edit-form">
-            <div class="left">
-                <input type="text" id="id-view" name="_id" hidden>
-                <input type="text" id="username-view" name="username" hidden>
-                <div class="form-group">
-                    <label for="name-view">Full name</label>
-                    <input type="text" id="name-view" name="name">
-                </div>
-                <div class="form-group">
-                    <label for="identity-view">Identity card number</label>
-                    <input type="text" id="identity-view" name="identity">
-                </div>
-                <div class="form-group">
-                    <label for="phone-view">Phone number</label>
-                    <input type="text" id="phone-view" name='phone'>
-                </div>
-                <div class="form-group">
-                    <label for="dateofbirtd-view">Day of birth</label>
-                    <input type="text" id="dateofbirtd-view" name="dateofbirth">
-                </div>
-                <div class="form-group">
-                    <label for="sex-view">Sex</label>
-                    <input type="text" id="sex-view" name="dateofbirth">
-
-                </div>
-                <div class="form-group">
-                    <label for="email-view">Email</label>
-                    <input type="text" id="email-view" name="email">
-                </div>
-                <div class="form-group">
-                    <label for="status-view">Status</label>
-
-                    <input type="text" id="status-view" name="dateofbirth">
-                </div>
-            </div>
-            <div></div>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
 
 
 <script>
-    document.querySelectorAll('.header__items ul li')[7].classList.add('active-item')
-    let btnEditStaff = document.querySelectorAll('.edit-staff')
-
-    let views = document.querySelectorAll('.view-device')
+    let usernameViewBox = document.getElementById('username-view')
+    let nameViewBox = document.getElementById('name-view')
+    let phoneViewBox = document.getElementById('phone-view')
+    let identityViewBox = document.getElementById('identity-view')
+    let sexViewBox = document.getElementById('sex-view')
+    let dateofbirthViewBox = document.getElementById('dateofbirth-view')
+    let emailViewBox = document.getElementById("email-view")
+    let statusViewBox = document.getElementById('status-view')
+    let views = document.querySelectorAll('.view')
     views.forEach(item => {
         item.onclick = (e) => {
-            let id = item.getAttribute('data-id');
-            statusModalView(true);
-            getDataView(id)
+            let id = item.getAttribute('data-id')
+            let name = item.getAttribute('data-name')
+            let username = item.getAttribute('data-username')
+            let identity = item.getAttribute('data-identity')
+            let sex = item.getAttribute('data-sex')
+            let phone = item.getAttribute('data-phone')
+            let dateofbirth = item.getAttribute('data-dateofbirth')
+            let email = item.getAttribute('data-email')
+            let status = item.getAttribute('data-status')
+            usernameViewBox.value = username
+            nameViewBox.value = name
+            identityViewBox.value = identity
+            sexViewBox.value = sex
+            phoneViewBox.value = phone
+            dateofbirthViewBox.value = dateofbirth
+            emailViewBox.value = email
+            statusViewBox.value = status
         }
     })
-    function statusModalView(status) {
-        if (status) {
-            document.querySelector('.modal__view-customer').style.display = 'block'
-        } else {
-            document.querySelector('.modal__view-customer').style.display = 'none'
-        }
-    }
-    btnEditStaff.forEach(function (staff) {
-        staff.onclick = (e) => {
-            let id = e.target.getAttribute('data-id');
-            getDataStaff(id)
-            statusModalEdit(true)
+
+
+    let usernameEditBox = document.getElementById('username-edit')
+    let usernameEditBoxV2 = document.getElementById('username-edit-v2')
+    let nameEditBox = document.getElementById('name-edit')
+    let phoneEditBox = document.getElementById('phone-edit')
+    let identityEditBox = document.getElementById('identity-edit')
+    let sexEditBox = document.getElementById('sex-edit')
+    let dateofbirthEditBox = document.getElementById('dateofbirth-edit')
+    let emailEditBox = document.getElementById("email-edit")
+    let statusEditBox = document.getElementById('status-edit')
+    let edits = document.querySelectorAll('.edit')
+    edits.forEach(item => {
+        item.onclick = (e) => {
+            let id = item.getAttribute('data-id')
+            let name = item.getAttribute('data-name')
+            let username = item.getAttribute('data-username')
+            let identity = item.getAttribute('data-identity')
+            let sex = item.getAttribute('data-sex')
+            let phone = item.getAttribute('data-phone')
+            let dateofbirth = item.getAttribute('data-dateofbirth')
+            let email = item.getAttribute('data-email')
+            let status = item.getAttribute('data-status')
+            usernameEditBox.value = username
+            usernameEditBoxV2.value = username
+            nameEditBox.value = name
+            identityEditBox.value = identity
+            sexEditBox.value = sex
+            sexEditBox.innerHTML = sex
+            phoneEditBox.value = phone
+            dateofbirthEditBox.value = dateofbirth
+            emailEditBox.value = email
+            statusEditBox.value = status
+            statusEditBox.innerHTML = status
         }
     })
-    function getDataView(id) {
-        $.ajax({
-            url: '/admin/getDataStaff',
-            type: 'POST',
-            data: { id },
-            success: (response) => {
-                if (response.success) {
-                    renderStaffView(response.staff)
-                }
-            }
-        })
-    }
-    function getDataStaff(id) {
-        $.ajax({
-            url: '/admin/getDataStaff',
-            type: 'POST',
-            data: { id },
-            success: (response) => {
-                if (response.success) {
-                    renderDataStaff(response.staff)
-                }
-            }
-        })
-    }
-    function renderStaffView(data) {
-        document.querySelector('#username-view').value = data.username;
-        document.querySelector('#id-view').value = data._id;
-        document.querySelector('#name-view').value = data.name;
-        document.querySelector('#identity-view').value = data.identity;
-        document.querySelector('#phone-view').value = data.phone;
-        document.querySelector('#dateofbirtd-view').value = data.dateofbirth
-        document.querySelector('#email-view').value = data.email;
-        document.querySelector('#sex-view').value = data.sex;
-        if (data.status == "not working") {
-            document.querySelector('#status-view').value = "not working";
-        } else {
-            document.querySelector('#status-view').value = "Working";
-
-        }
-    }
-    document.querySelector('.close-view-modal').onclick = (e) => {
-        statusModalView(false)
-    }
-    function renderDataStaff(data) {
-        document.querySelector('#username-view').value = data.username;
-        document.querySelector('#id-edit').value = data._id;
-        document.querySelector('#name-edit').value = data.name;
-        document.querySelector('#identity-edit').value = data.identity;
-        document.querySelector('#phone-edit').value = data.phone;
-        const date = new Date(data.dateofbirth)
-        document.querySelector('#dateofbirtd-edit').value = date.toISOString().substring(0, 10);;
-        document.querySelector('.first-item-sex').value = data.sex;
-        document.querySelector('#email-edit').value = data.email;
-        document.querySelector('.first-item-sex').innerHTML = data.sex;
-        if (!data.status) {
-            document.querySelector('.first-item-status').innerHTML = 'working';
-        } else {
-            document.querySelector('.first-item-status').innerHTML = 'not working';
-            document.querySelector('.first-item-status').value = 'not working';
-        }
-    }
-    function statusModalEdit(status) {
-        if (status) {
-            document.querySelector('.modal__edit-customer').style.display = 'block'
-        } else {
-            document.querySelector('.modal__edit-customer').style.display = 'none'
-        }
-    }
-    document.querySelector('.close-edit-modal').onclick = (e) => {
-        statusModalEdit(false)
-        statusModalView(false)
-    }
-
-    let formAdd = document.querySelector('#form-add-staff')
-    formAdd.onsubmit = function (e) {
-        e.preventDefault();
-        dateofbirth = document.querySelector('#dayofbirtd').value;
-        var today = new Date();
-        let toYear = today.getFullYear()
-        let dob = new Date(dateofbirth)
-        if (document.querySelector('#username').value.trim() == '') {
-            showErrorToast('Username can not be empty')
-        } else if (document.querySelector('#fullname').value.trim() == '') {
-            showErrorToast('Full name can not be empty')
-        } else if (document.querySelector('#identity').value.trim() == '') {
-            showErrorToast('Identity card number can not be empty')
-        } else if (document.querySelector('#phone').value.trim() == '') {
-            showErrorToast('Phone number can not be empty')
-        } else if (dateofbirth == '' || dob > today) {
-            showErrorToast('Date of birth not valid')
-        } else if (document.querySelector('#sex').value.trim() == '') {
-            showErrorToast('Sex can not be empty')
-        } else if (document.querySelector('#email').value.trim() == '') {
-            showErrorToast('Email can not be empty')
-        } else {
-            formAdd.submit()
-        }
-    }
-
-    let formEdit = document.querySelector('#edit-form')
-    formEdit.onsubmit = (e) => {
-        e.preventDefault()
-        let dateofbirth = document.querySelector('#dateofbirtd-edit').value;
-        let today = new Date();
-        let toYear = today.getFullYear()
-        let dob = new Date(dateofbirth)
-        if (document.querySelector('#name-edit').value.trim() == '') {
-            showErrorToast('Full name can not be empty')
-        } else if (document.querySelector('#identity-edit').value.trim() == '') {
-            showErrorToast('Identity card number can not be empty')
-        } else if (document.querySelector('#phone-edit').value.trim() == '') {
-            showErrorToast('Phone number can not be empty')
-        } else if (dateofbirth == '' || dob > today) {
-            showErrorToast('Date of birth not valid')
-        } else if (document.querySelector('#email-edit').value.trim() == '') {
-            showErrorToast('Email can not be empty')
-        } else {
-            formEdit.submit()
-        }
-
-    }
 </script>

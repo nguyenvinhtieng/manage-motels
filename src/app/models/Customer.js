@@ -10,10 +10,11 @@ const Customer = new Schema({
     phone: { type: String },
     email: { type: String },
     startday: { type: String },
-    leaveday: { type: String },
+    endday: { type: String },
     job: { type: String },
     sex: { type: String },
     note: { type: String },
+    status: { type: String }
 });
 
 

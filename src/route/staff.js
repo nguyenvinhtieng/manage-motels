@@ -13,7 +13,7 @@ router.get('/pick-task/:id', MainController.isLogin, StaffController.pickTask);
 router.get('/my-job', flash, MainController.isLogin, StaffController.renderMyJob);
 router.get('/finish-task/:id', MainController.isLogin, StaffController.finishTask);
 
-router.get('/salary', MainController.isLogin, StaffController.renderSalary);
+router.get('/salary', flash, MainController.isLogin, StaffController.renderSalary);
 router.post('/get-salary-year', MainController.isLogin, StaffController.getSalaryYear);
 router.post('/get-salary-month', MainController.isLogin, StaffController.getSalaryMonth);
 

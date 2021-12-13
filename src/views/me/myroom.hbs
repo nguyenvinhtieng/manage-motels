@@ -1,51 +1,48 @@
 {{> headercustomer}}
-<div class="container mt-3">
-    <div class="my-room">
-        <div class="card bg-light mb-3">
-            <div class="card-header">My room data</div>
-            <div class="card-body">
-                <p class="card-text">Room number: {{room.number}}</p>
-                <p class="card-text">Representative tenant : {{room.renter}}</p>
-                <p class="card-text">Maximum: {{room.maximum}}</p>
-                <p class="card-text">Number people: {{room.numberpeople}}</p>
-                <p class="card-text">Area: {{room.area}}</p>
-                <p class="card-text">Description: {{room.description}}</p>
-                <p class="card-text font-weight-bold">Price: {{room.price}} VND</p>
+<div class="wrapper">
+    <div class="container mt-3">
+        <div class="my-room">
+            <div class="card bg-light mb-3">
+                <div class="card-header">My room data</div>
+                <div class="card-body">
+                    <p class="card-text">Room number: {{room.number}}</p>
+                    <p class="card-text">Representative tenant : {{room.renter}}</p>
+                    <p class="card-text">Maximum: {{room.maximum}}</p>
+                    <p class="card-text">Number people: {{room.numberpeople}}</p>
+                    <p class="card-text">Area: {{room.area}}</p>
+                    <p class="card-text">Description: {{room.description}}</p>
+                    <p class="card-text font-weight-bold">Price: {{room.price}} VND</p>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="devices">
-        <div class="card bg-light mb-3">
-            <div class="card-header">List device</div>
-            <div class="card-body">
-                <table class="table">
-                    <thead class="thead-light">
-                        <tr>
-                            <th scope="col">N.o</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Indemnify</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each devices}}
-                        <tr>
-                            <th scope="row">{{@index}}</th>
-                            <td>{{this.name}}</td>
-                            <td>{{this.description}}</td>
-                            <td>{{this.price}} (VND)</td>
-                            <td>{{this.indemnify}} (VND)</td>
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
+        <div class="devices">
+            <div class="card bg-light mb-3">
+                <div class="card-header">List device</div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">N.o</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Indemnify</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each devices}}
+                            <tr>
+                                <th scope="row">{{@index}}</th>
+                                <td>{{this.name}}</td>
+                                <td>{{this.description}}</td>
+                                <td>{{this.price}} (VND)</td>
+                                <td>{{this.indemnify}} (VND)</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-    crossorigin="anonymous"></script>

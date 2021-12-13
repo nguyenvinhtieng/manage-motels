@@ -1,117 +1,64 @@
-<div class="header">
-    <div class="header__content">
-        <div class="header__logo">
-            <i class="fas fa-hotel"></i>
-        </div>
-        <div class="header__items">
-            <ul>
-                <li>
-                    <a href="/admin/home">
-                        {{!-- <i class="fas fa-tachometer-alt"></i> --}}
-                        Home
-                    </a>
-                </li>
-                <li class="">
-                    <a href="/admin/rooms">
-                        {{!-- <i class="fas fa-laptop-house"></i> --}}
-                        Rooms
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/devices">
-                        {{!-- <i class="fas fa-laptop-code"></i> --}}
-                        Devices
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/accounts">
-                        {{!-- <i class="fas fa-user-friends"></i> --}}
-                        Accounts
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/customers">
-                        {{!-- <i class="fas fa-users-cog"></i> --}}
-                        Customers
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/notifications">
-                        {{!-- <i class="fas fa-bell"></i> --}}
-                        Notification
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/jobs">
-                        {{!-- <i class="fas fa-briefcase"></i> --}}
-                        Job
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/staff">
-                        {{!-- <i class="fas fa-user-astronaut"></i> --}}
-                        Staff
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/receipt">
-                        {{!-- <i class="fas fa-receipt"></i> --}}
-                        Receipt
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/repair">
-                        {{!-- <i class="fas fa-tools"></i> --}}
-                        Repair
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/revenue">
-                        {{!-- <i class="fas fa-coins"></i> --}}
-                        Revenue
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/service">
-                        {{!-- <i class="fas fa-coins"></i> --}}
-                        Services
-                    </a>
-                </li>
+<header class="header">
+    <div class="nav__content bd-grid">
+        <div class="nav__menu">
+            <ul class="nav__list">
+                <li class="nav__item"><a href="/admin/home" class="nav__link">Home</a></li>
+                <li class="nav__item"><a href="/admin/rooms" class="nav__link">Rooms</a></li>
+                <li class="nav__item"><a href="/admin/accounts" class="nav__link">Accounts</a></li>
+                <li class="nav__item"><a href="/admin/devices" class="nav__link">Deices</a></li>
+                <li class="nav__item"><a href="/admin/customers" class="nav__link">Customers</a></li>
+                <li class="nav__item"><a href="/admin/notifications" class="nav__link">Notifications</a></li>
+                <li class="nav__item"><a href="/admin/jobs" class="nav__link">Jobs</a></li>
+                <li class="nav__item"><a href="/admin/staff" class="nav__link">Staff</a></li>
+                <li class="nav__item"><a href="/admin/receipt" class="nav__link">Receipt</a></li>
+                <li class="nav__item"><a href="/admin/repair" class="nav__link">Repair</a></li>
+                <li class="nav__item"><a href="/admin/revenue" class="nav__link">Revenue</a></li>
+                <li class="nav__item"><a href="/admin/service" class="nav__link">Services</a></li>
             </ul>
         </div>
-        <div class="header__out change-pass-block">
-            <label for="modal-change-password" class="change-password"><i class="fas fa-lock"></i>
-            </label>
+        <div class="nav__social">
+            <a href="#" class="nav__social-icon" data-toggle="modal" data-target="#modal-change-pass">
+                <ion-icon name="lock-closed"></ion-icon>
+            </a>
+            <a href="/login" class="nav__social-icon">
+                <ion-icon name="log-out"></ion-icon>
+            </a>
         </div>
-        <div class="header__out">
-            <a href="/login"> LogOut <i class="fas fa-power-off"></i></a>
-        </div>
-
     </div>
-</div>
-
-<input type="checkbox" id="modal-change-password" hidden>
-<label for="modal-change-password" class="hidden-layer"></label>
-<div class="form-changepass">
-    <label for="modal-change-password" class="close">
-        <i class="fas fa-times"></i>
-    </label>
-    <h3>Change password</h3>
-    <form action="">
-        <div class="form-group">
-            <label for="old-pass">Current password</label>
-            <input type="password" id="old-password" autocomplete="off">
+</header>
+<form action="/change-pass" method="post">
+    <div class="modal fade" id="modal-change-pass" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Change Password account</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="">Current Password</label>
+                        <input required type="password" placeholder="Current password" class="form-control"
+                            name="currentpassword">
+                    </div>
+                    <div class="form-group">
+                        <label for="">New Password</label>
+                        <input required type="password" placeholder="New password" class="form-control"
+                            name="newpassword">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Confirm Password</label>
+                        <input required type="password" placeholder="Confirm password" class="form-control"
+                            name="confirmpassword">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="new-pass">New password</label>
-            <input type="password" id="new-password" autocomplete="off">
-        </div>
-        <div class="form-group">
-            <label for="repeat-pass">Repeat password</label>
-            <input type="password" id="repeat-password" autocomplete="off">
-        </div>
-        <div class="form-group">
-            <button id="btn-change">Change</button>
-        </div>
-    </form>
-</div>
+    </div>
+</form>

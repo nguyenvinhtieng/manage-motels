@@ -1,38 +1,41 @@
 {{> header}}
-<div class="container mt-4">
-    <div class="p">
-        Manager account
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-account">
-            ADD
-        </button>
+<div class="wrapper">
+    <div class="container mt-4">
+        <div class="p">
+            Manager account
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-account">
+                ADD
+            </button>
+        </div>
+        <table class="table mt-3">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Room</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">#</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each accounts}}
+                <tr>
+                    <th scope="row">{{this.room}}</th>
+                    <td>{{this.username}}</td>
+                    <td>{{this.email}}</td>
+                    <td>
+                        <button type="button" data-id="{{this._id}}" data-room="{{this.room}}"
+                            data-username="{{this.username}}" data-email="{{this.email}}"
+                            class="btn btn-primary btn-sm edit" data-toggle="modal" data-target="#modal-edit-account"><i
+                                class="fas fa-edit"></i></button>
+                        <button type="button" data-id="{{this._id}}" class="btn btn-danger btn-sm delete"
+                            data-toggle="modal" data-target="#modal-delete-account"><i
+                                class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
     </div>
-    <table class="table mt-3">
-        <thead class="thead-light">
-            <tr>
-                <th scope="col">Room</th>
-                <th scope="col">Username</th>
-                <th scope="col">Email</th>
-                <th scope="col">#</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each accounts}}
-            <tr>
-                <th scope="row">{{this.room}}</th>
-                <td>{{this.username}}</td>
-                <td>{{this.email}}</td>
-                <td>
-                    <button type="button" data-id="{{this._id}}" data-room="{{this.room}}"
-                        data-username="{{this.username}}" data-email="{{this.email}}"
-                        class="btn btn-primary btn-sm edit" data-toggle="modal" data-target="#modal-edit-account"><i
-                            class="fas fa-edit"></i></button>
-                    <button type="button" data-id="{{this._id}}" class="btn btn-danger btn-sm delete"
-                        data-toggle="modal" data-target="#modal-delete-account"><i class="fas fa-trash"></i></button>
-                </td>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
 </div>
 <form action="" method="post">
     <div class="modal fade" id="add-account" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -132,11 +135,6 @@
     </div>
 </form>
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-    crossorigin="anonymous"></script>
 <script>
     let deletes = document.querySelectorAll('.delete')
     let btnDelete = document.querySelector('.btn-delete')

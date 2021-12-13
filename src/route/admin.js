@@ -5,8 +5,12 @@ const MainController = require('../app/controllers/MainController');
 const AdminController = require('../app/controllers/AdminController');
 const flash = require('../app/lib/flashMessage')
 
-router.get('/home', MainController.isLogin, MainController.isAdmin, AdminController.renderHome);
-router.get('/rooms', MainController.isLogin, MainController.isAdmin, AdminController.renderRoom);
+router.get('/home', flash, MainController.isLogin, MainController.isAdmin, AdminController.renderHome);
+// room
+router.get('/rooms', flash, MainController.isLogin, MainController.isAdmin, AdminController.renderRoom);
+router.get('/delete-room/:id', MainController.isLogin, MainController.isAdmin, AdminController.deleteRoom);
+router.post('/rooms', MainController.isLogin, MainController.isAdmin, AdminController.addRoom);
+router.post('/update-room', MainController.isLogin, MainController.isAdmin, AdminController.updateRoom);
 
 // device
 router.get('/devices', flash, MainController.isLogin, MainController.isAdmin, AdminController.renderDevice);
@@ -20,7 +24,11 @@ router.post('/accounts', MainController.isLogin, MainController.isAdmin, AdminCo
 router.post('/update-account', MainController.isLogin, MainController.isAdmin, AdminController.updateAccount);
 router.get('/delete-account/:id', MainController.isLogin, MainController.isAdmin, AdminController.deleteAccount);
 
-router.get('/customers', MainController.isLogin, MainController.isAdmin, AdminController.renderCustomers);
+router.get('/customers', flash, MainController.isLogin, MainController.isAdmin, AdminController.renderCustomers);
+router.post('/customers', MainController.isLogin, MainController.isAdmin, AdminController.addCustomer);
+router.post('/update-customer', MainController.isLogin, MainController.isAdmin, AdminController.updateCustomer);
+
+
 router.get('/revenue', MainController.isLogin, MainController.isAdmin, AdminController.renderRevenue);
 
 // service
@@ -31,9 +39,9 @@ router.get('/delete-service/:id', MainController.isLogin, MainController.isAdmin
 router.post('/service', MainController.isLogin, MainController.isAdmin, AdminController.addService);
 
 //staff
-router.get('/staff', MainController.isLogin, MainController.isAdmin, AdminController.renderStaff);
+router.get('/staff', flash, MainController.isLogin, MainController.isAdmin, AdminController.renderStaff);
 router.post('/getDataStaff', MainController.isLogin, MainController.isAdmin, AdminController.getDataStaff);
-router.post('/staff', MainController.isLogin, MainController.isAdmin, AdminController.checkUsername, AdminController.addStaff);
+router.post('/staff', MainController.isLogin, MainController.isAdmin, AdminController.addStaff);
 router.post('/update-staff', MainController.isLogin, MainController.isAdmin, AdminController.updateStaff);
 
 // job

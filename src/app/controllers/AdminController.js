@@ -1,7 +1,5 @@
-const jwt = require('jsonwebtoken');
 const Account = require('../models/Account.js')
 const Device = require('../models/Device.js')
-const { multipleMongooseToObject } = require('../../utils/mongoose');
 const Room = require('../models/Room.js')
 const Job = require('../models/Job.js')
 const Staff = require('../models/Staff.js')
@@ -11,6 +9,7 @@ const DeviceInRoom = require('../models/DeviceInRoom.js')
 const Service = require('../models/Service.js')
 const Repair = require('../models/Repair.js')
 const Notification = require('../models/Notification')
+const Customer = require('../models/Customer.js')
 class AdminController {
     // GET '/admin/home'
     renderHome(req, res, next) {
@@ -18,10 +17,71 @@ class AdminController {
     }
 
     // GET '/admin/room
-    renderRoom(req, res, next) {
-        res.render('./admin/room')
+    async renderRoom(req, res, next) {
+        let rooms = await Room.find({}).lean()
+        let devices = await Device.find({}).lean()
+        let deviceinroom = await DeviceInRoom.find({}).lean()
+        res.render('./admin/room', { rooms, devices, deviceinroom })
+    }
+    async addRoom(req, res) {
+        let { number, maximum, area, price, description } = req.body
+        let r = await Room.findOne({ number })
+        if (r) {
+            req.session.flash = { title: "Error", message: "Room number already exists", type: "error" }
+            res.redirect('/admin/rooms')
+        } else {
+            let data = { number, maximum, area, price, description, renter: "", status: "empty", numberpeople: 0 }
+            let room = new Room(data)
+            await room.save()
+            req.session.flash = { title: "Success", message: "Room was created!", type: "success" }
+            res.redirect('/admin/rooms')
+        }
+    }
+    async updateRoom(req, res) {
+        let { id, number, maximum, area, price, description, devices } = req.body
+        let oldRoom = await Room.findOne({ _id: id })
+        let r = await Room.findOne({ $and: [{ number }, { _id: { $ne: id } }] })
+        if (maximum < oldRoom.numberpeople) {
+            req.session.flash = { title: "Error", message: "Maximum people not valid", type: "error" }
+            res.redirect('/admin/rooms')
+        } else if (r) {
+            req.session.flash = { title: "Error", message: "Room number not valid", type: "error" }
+            res.redirect('/admin/rooms')
+        } else {
+            await DeviceInRoom.deleteMany({ idroom: id })
+            if (devices) {
+                devices.forEach(async deviceId => {
+                    let data = { idroom: id, iddevice: deviceId }
+                    let deviceinroom = new DeviceInRoom(data)
+                    await deviceinroom.save()
+                })
+            }
+            await Room.findOneAndUpdate({ _id: id }, req.body)
+            req.session.flash = { title: "Success", message: "Room was updated!", type: "success" }
+            res.redirect('/admin/rooms')
+        }
+
     }
 
+
+    async deleteRoom(req, res) {
+        try {
+            let id = req.params.id
+            let room = await Room.findById(id)
+            if (room.numberpeople > 0) {
+                req.session.flash = { title: "Error", message: "Room can not be deleted(Has people in this room)", type: "error" }
+                res.redirect('/admin/rooms')
+            } else {
+                await Room.findOneAndRemove({ _id: id })
+                req.session.flash = { title: "Success", message: "Room was deleted", type: "success" }
+                res.redirect('/admin/rooms')
+            }
+        } catch (error) {
+            console.log(error)
+            req.session.flash = { title: "Error", message: "Has error", type: "error" }
+            res.redirect('/admin/rooms')
+        }
+    }
     // GET '/admin/devices
     async renderDevice(req, res, next) {
         let devices = await Device.find({}).lean();
@@ -54,9 +114,15 @@ class AdminController {
     async deleteDevice(req, res) {
         try {
             let id = req.params.id
-            await Device.findByIdAndDelete(id)
-            req.session.flash = { title: "Success", message: "Device was deleted!", type: "success" }
-            res.redirect('/admin/devices')
+            let deviceinroom = await DeviceInRoom.find({ iddevice: id })
+            if (deviceinroom.length > 0) {
+                req.session.flash = { title: "Error", message: "Can not delete device because has room using this device", type: "error" }
+                res.redirect('/admin/devices')
+            } else {
+                await Device.findByIdAndDelete(id)
+                req.session.flash = { title: "Success", message: "Device was deleted!", type: "success" }
+                res.redirect('/admin/devices')
+            }
         }
         catch {
             req.session.flash = { title: "Error", message: "Delete device failure!", type: "error" }
@@ -118,10 +184,110 @@ class AdminController {
         res.redirect('/admin/accounts')
     }
 
-    renderCustomers(req, res, next) {
-        res.render('./admin/customer')
+    async renderCustomers(req, res, next) {
+        let rooms = await Room.find({}).lean()
+        let customers = await Customer.find({}).lean()
+        res.render('./admin/customer', { rooms, customers })
+    }
+    async addCustomer(req, res, next) {
+        try {
+            let { name, identity, phone, dateofbirth, sex, job, email, note, roomnumber, startday } = req.body
+            let room = await Room.findOne({ number: roomnumber }).lean()
+            if (room.maximum == room.numberpeople) {
+                req.session.flash = { title: "Error", message: "Room is full", type: "error" }
+                res.redirect('/admin/customers')
+            } else {
+                let data = { name, identity, phone, dateofbirth, sex, job, email, note, roomnumber, startday, endday: "", status: "still in " }
+                let customer = new Customer(data)
+                await customer.save()
+                let num = room.numberpeople + 1
+                let obj = { status: "Being hired", numberpeople: num, renter: room.renter || name }
+                await Room.findOneAndUpdate({ number: room.number }, obj)
+                req.session.flash = { title: "Success", message: "Customer was add", type: "success" }
+                res.redirect('/admin/customers')
+            }
+        } catch {
+            req.session.flash = { title: "Error", message: "Has error", type: "error" }
+            res.redirect('/admin/customers')
+        }
     }
 
+    async updateCustomer(req, res) {
+        try {
+            let { id, name, identity, phone, dateofbirth, sex, job, email, note, roomnumber, startday, endday } = req.body
+            let customer = await Customer.findById(id)
+            let oldRoom = await Room.findOne({ number: customer.roomnumber })
+            let newRoom = await Room.findOne({ number: roomnumber }).lean()
+            if (roomnumber !== customer.roomnumber && !endday) {
+                if (newRoom.maximum == newRoom.numberpeople) {
+                    req.sesstion.flash = { title: 'Error', message: 'Room is full!', type: 'error' }
+                    res.redirect('/admin/customers')
+                } else {
+                    if (!customer.endday) {
+                        let obj = {
+                            numberpeople: oldRoom.numberpeople - 1,
+                            renter: (oldRoom.numberpeople == 1) ? "" : oldRoom.renter,
+                            status: (oldRoom.numberpeople == 1) ? "empty" : "Being hired"
+                        }
+                        await Room.findOneAndUpdate({ _id: oldRoom._id }, obj)
+                    }
+                    let obj2 = {
+                        numberpeople: newRoom.numberpeople + 1,
+                        renter: newRoom.renter || name,
+                        status: "Being hired"
+                    }
+                    await Room.findOneAndUpdate({ _id: newRoom._id }, obj2)
+                    let data = { name, identity, phone, dateofbirth, sex, job, email, note, roomnumber, startday, endday, status: "still in" }
+                    await Customer.findOneAndUpdate({ _id: id }, data)
+                    req.session.flash = { title: "Success", message: "Customer was updated!", type: "success" }
+                    res.redirect('/admin/customers')
+                }
+            } else if ((roomnumber !== customer.roomnumber && endday) ||
+                (roomnumber == customer.roomnumber && endday)) {
+                if (!customer.endday) {
+                    let obj = {
+                        numberpeople: oldRoom.numberpeople - 1,
+                        renter: (oldRoom.numberpeople == 1) ? "" : oldRoom.renter,
+                        status: (oldRoom.numberpeople == 1) ? "empty" : "Being hired"
+                    }
+                    await Room.findOneAndUpdate({ _id: oldRoom._id }, obj)
+                }
+                let data = { name, identity, phone, dateofbirth, sex, job, email, note, roomnumber, startday, endday, status: "leave" }
+                await Customer.findOneAndUpdate({ _id: id }, data)
+                req.session.flash = { title: "Success", message: "Customer was updated!", type: "success" }
+                res.redirect('/admin/customers')
+            } else if (roomnumber == customer.roomnumber && !endday) {
+                if (customer.endday) {
+                    if (newRoom.maximum == newRoom.numberpeople) {
+                        req.session.flash = { title: "Error", message: "Room is full", type: "error" }
+                        res.redirect('/admin/customers')
+                    } else {
+                        let obj = {
+                            numberpeople: newRoom.numberpeople + 1,
+                            renter: newRoom.renter || name,
+                            status: "Being hired"
+                        }
+                        await Room.findOneAndUpdate({ _id: newRoom._id }, obj)
+                        let data = { name, identity, phone, dateofbirth, sex, job, email, note, roomnumber, startday, endday, status: "still in" }
+                        await Customer.findOneAndUpdate({ _id: id }, data)
+                        req.session.flash = { title: "Success", message: "Customer was updated!", type: "success" }
+                        res.redirect('/admin/customers')
+                    }
+                } else {
+                    let data = { name, identity, phone, dateofbirth, sex, job, email, note, roomnumber, startday, endday }
+                    await Customer.findOneAndUpdate({ _id: id }, data)
+                    req.session.flash = { title: "Success", message: "Customer was updated!", type: "success" }
+                    res.redirect('/admin/customers')
+                }
+            } else {
+                req.session.flash = { title: "Error", message: "Update failure!", type: "error" }
+                res.redirect('/admin/customers')
+            }
+        } catch {
+            req.session.flash = { title: "Error", message: "Has error", type: "error" }
+            res.redirect('/admin/customers')
+        }
+    }
     renderRevenue(req, res, next) {
         res.render('./admin/revenue')
     }
@@ -173,39 +339,39 @@ class AdminController {
         let staffs = await Staff.find({}).lean()
         res.render('./admin/staff', { staffs })
     }
-    async checkUsername(req, res, next) {
-        let data = req.body;
-        let username = data.username
-        const acc = await Account.findOne({ username: username });
-        if (acc) {
-            res.redirect('/admin/staff')
-        } else {
-            next();
-        }
-    }
     async addStaff(req, res, next) {
-        let data = req.body;
-        let staff = new Staff(data);
-        await staff.save();
-        let newData = { username: data.username, password: '123456789', role: 'staff' }
-        const account = new Account(newData)
-        const salt = await bcrypt.genSalt(10);
-        account.password = await bcrypt.hash(account.password, salt);
-        await account.save();
-        res.redirect('/admin/staff')
+        try {
+            let { username, name, identity, sex, phone, dateofbirth, email } = req.body
+            let acc = await Account.findOne({ username })
+            if (acc) {
+                req.session.flash = { title: "Error", message: "Username was exists!", type: "error" }
+                res.redirect('/admin/staff')
+            } else {
+                const salt = await bcrypt.genSalt(10);
+                let password = await bcrypt.hash("123456789", salt);
+                let data = { username, password, name, identity, sex, phone, dateofbirth, email, role: "staff", status: "working" }
+                const account = new Account(data)
+                const staff = new Staff(data)
+                await account.save()
+                await staff.save()
+                req.session.flash = { title: "Success", message: "Staff was successfully created!", type: "success" }
+                res.redirect('/admin/staff')
+            }
+        } catch {
+            eq.session.flash = { title: "Error", message: "Has error", type: "error" }
+            res.redirect('/admin/staff')
+        }
     }
 
     async updateStaff(req, res) {
-        const staff = await Staff.findOne({ _id: req.body._id })
-        staff.name = req.body.name;
-        staff.identity = req.body.identity;
-        staff.sex = req.body.sex;
-        staff.phone = req.body.phone;
-        staff.dateofbirth = req.body.dateofbirth;
-        staff.email = req.body.email;
-        staff.status = req.body.status;
-        await staff.save();
-        res.redirect('/admin/staff')
+        try {
+            await Staff.findOneAndUpdate({ username: req.body.username }, req.body)
+            req.session.flash = { title: "Success", message: "Staff updated!", type: "success" }
+            res.redirect('/admin/staff')
+        } catch {
+            req.session.flash = { title: "Error", message: "Has error", type: "error" }
+            res.redirect('/admin/staff')
+        }
     }
     async renderJob(req, res, next) {
         let rooms = await Room.find({}).lean()

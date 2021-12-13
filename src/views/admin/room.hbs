@@ -1,130 +1,225 @@
 {{> header}}
-<div class="container-manager">
-    <div class="header__manager">
-        <h2>Manage Rooms</h2>
-        <label for="modal__add-room" class="add">
-            <i class="fas fa-plus"></i> Add
-        </label>
-    </div>
-    <div class="content__manager">
-        <table>
-            <thead>
-                <th></th>
-                <th>Number</th>
-                <th>Renter</th>
-                <th>Maximum</th>
-                <th>Number People</th>
-                <th>Area</th>
-                <th>Price</th>
-                <th>Description</th>
-                <th>Status</th>
-            </thead>
-            <tbody id="rooms">
-            </tbody>
-        </table>
-    </div>
-</div>
+<div class="wrapper">
+    <div class="container-fluid mt-3 mx-5">
+        <div class="heading">Manage rooms
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add-room">
+                Add
+            </button>
+        </div>
+        <div id="rooms" class="mt-2">
 
-<!-- Modal add room -->
-<input type="checkbox" id="modal__add-room" hidden>
-<label for="modal__add-room" class="layer-hidden">
-</label>
-<div class="modal__add-room">
-    <label for="modal__add-room" class="close-modal">
-        <i class="fas fa-times"></i>
-    </label>
-    <div class="form_add-room">
-        <form action="">
-            <h3>Add Room <span>(Please fill out the form below)</span></h3>
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" id="name">
-            </div>
-            <div class="form-group">
-                <label for="maximum">Maximum People</label>
-                <input type="number" min="1" max="" id="maximum">
-            </div>
-            <div class="form-group">
-                <label for="area">Area</label>
-                <input type="number" min="0" max="" id="area">
-            </div>
-            <div class="form-group">
-                <label for="price">Price (VND)</label>
-                <input type="number" min="0" id="price">
-            </div>
-            <div class="form-group">
-                <label for="description">Description</label>
-                <input type="text" id="description">
-            </div>
-            <div class="form-group group-btn">
-                <button id="btn-create-room">Create</button>
-            </div>
-        </form>
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Number</th>
+                        <th scope="col">Renter</th>
+                        <th scope="col">Maximum</th>
+                        <th scope="col">Number people</th>
+                        <th scope="col">Area</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">#</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each rooms}}
+                    <tr>
+                        <th scope="row">{{this.number}}</th>
+                        <td>{{this.renter}}</td>
+                        <td>{{this.maximum}}</td>
+                        <td>{{this.numberpeople}}</td>
+                        <td>{{this.area}} m2</td>
+                        <td>{{this.price}} (VND)</td>
+                        <td>{{this.description}} </td>
+                        <td>{{this.status}} </td>
+                        <td>
+                            <button type="button" class="btn btn-danger delete" data-id="{{this._id}}" toggle="modal"
+                                data-target="#modal-delete-room">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <button type="button" class="btn btn-success edit" data-number="{{this.number}}"
+                                data-id="{{this._id}}" data-maximum="{{this.maximum}}" data-area="{{this.area}}"
+                                data-price="{{this.price}}" data-description="{{this.description}}" data-toggle="modal"
+                                data-target="#modal-edit-room">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 
-
-<div id="hidden-layer" class="layer-hidden"></div>
-<!-- Modal edit room -->
-<div class="modal__edit-room">
-    <div class="close-modal close-edit-room-modal">
-        <i class="fas fa-times"></i>
-    </div>
-    <div class="form_edit-room">
-        <form action="">
-            <h3>Edit Room</h3>
-            <input type="text" id="id-edit" hidden>
-            <div class="form-group">
-                <label for="name-edit">Name</label>
-                <input type="text" id="name-edit">
-            </div>
-            <div class="form-group">
-                <label for="maximum-edit">Maximum People</label>
-                <input type="number" min="1" max="" id="maximum-edit">
-            </div>
-            <div class="form-group">
-                <label for="area-edit">Area</label>
-                <input type="number" min="0" max="" id="area-edit">
-            </div>
-            <div class="form-group">
-                <label for="price-edit">Price (VND)</label>
-                <input type="number" min="0" id="price-edit">
-            </div>
-            <div class="form-group">
-                <label>Device</label>
-                <div class="list-device-choose">
-
+    {{#each deviceinroom}}
+    <input type="hidden" class="room-{{this.idroom}}" value="{{this.iddevice}}">
+    {{/each}}
+    <!-- Button trigger modal -->
+    <!-- Modal -->
+    <form action="" method="post">
+        <div class="modal fade" id="modal-add-room" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">Add new room</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="">Room number</label>
+                            <input type="text" class="form-control" name="number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Maximum people</label>
+                            <input type="number" min="1" class="form-control" name="maximum" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Area</label>
+                            <input type="number" min="1" class="form-control" name="area" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Price (VND)</label>
+                            <input type="number" min="1" class="form-control" name="price" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Description</label>
+                            <input type="text" class="form-control" name="description" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="description-edit">Description</label>
-                <input type="text" id="description-edit">
-            </div>
-            <div class="form-group group-btn">
-                <button id="btn-save">Save</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div id="hidden-edit-modal" class="layer-hidden"> </div>
-<!-- Confirm delete modal -->
-<div class="modal__confirm-delete">
-    <div class="close-modal close-modal-delete">
-        <i class="fas fa-times"></i>
-    </div>
-    <div class="form-delete">
-        <h3>Warning!</h3>
-        <input type="text" id="id-room-delete" hidden>
-        <div class="text-modal text-delete-modal">
-            Are you sure want to delete this Room
         </div>
-        <div class="form-group group-btn">
-            <button class="btn-danger btn-delete-room">Delete</button>
-            <button class="btn-nomal cancel-modal-delete">Cancel</button>
+    </form>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-delete-room" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete room</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this room?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a href="#" type="button" class="btn btn-danger btn-delete">Delete</a>
+                </div>
+            </div>
         </div>
     </div>
+
+    <form action="/admin/update-room" method="post">
+        <div class="modal fade" id="modal-edit-room" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">Update room data</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="">Room number</label>
+                            <input type="text" class="form-control" name="number" id="number-edit" required>
+                            <input type="hidden" class="form-control" name="id" id="id-edit" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Maximum people</label>
+                            <input type="number" min="1" class="form-control" name="maximum" id="maximum-edit" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Area</label>
+                            <input type="number" min="1" class="form-control" name="area" id="area-edit" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Price (VND)</label>
+                            <input type="number" min="1" class="form-control" name="price" id="price-edit" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Description</label>
+                            <input type="text" class="form-control" name="description" id="description-edit" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Devices</label>
+                            {{#each devices}}
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input deviceItem" value="{{this._id}}"
+                                    name="devices[]" id={{this._id}}>
+                                <label class="form-check-label" for="{{this._id}}">{{this.name}} ({{this.price}}
+                                    VND)</label>
+                            </div>
+                            {{/each}}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 
+<script>
+    let deletes = document.querySelectorAll('.delete')
+    let btnDelete = document.querySelector('.btn-delete')
+    deletes.forEach(item => {
+        item.onclick = (e) => {
+            let id = item.getAttribute('data-id')
+            btnDelete.href = `/admin/delete-room/${id}`
+        }
+    })
 
-<script src="/script/admin/room.js"></script>
+    let idEditBox = document.getElementById('id-edit')
+    let numberEditBox = document.getElementById('number-edit')
+    let maximumEditBox = document.getElementById('maximum-edit')
+    let areaEditBox = document.getElementById('area-edit')
+    let priceEditBox = document.getElementById('price-edit')
+    let descriptionEditBox = document.getElementById('description-edit')
+    let edits = document.querySelectorAll('.edit')
+    edits.forEach(item => {
+        item.onclick = (e) => {
+            let id = item.getAttribute('data-id')
+            let number = item.getAttribute('data-number')
+            let maximum = item.getAttribute('data-maximum')
+            let area = item.getAttribute('data-area')
+            let price = item.getAttribute('data-price')
+            let description = item.getAttribute('data-description')
+            idEditBox.value = id
+            numberEditBox.value = number
+            maximumEditBox.value = maximum
+            areaEditBox.value = area
+            priceEditBox.value = price
+            descriptionEditBox.value = description
+            let deviceList = []
+            let devices = document.querySelectorAll(`.room-${id}`)
+            devices.forEach(deviceId => {
+                deviceList.push(deviceId.value)
+            })
+            let deviceItem = document.querySelectorAll('.deviceItem')
+            deviceItem.forEach(item => {
+                let id = item.getAttribute('id')
+                if (deviceList.includes(id)) item.checked = true
+                else item.checked = false
+            })
+        }
+    })
+</script>

@@ -1,52 +1,43 @@
 {{> header}}
+<div class="wrapper">
+    <div class="container">
+        <h1>View revenue</h1>
+        <form>
+            <div class="form-group d-flex">
+                <input type="number" placeholder="Year" id="year" class="mx-2" />
+                <select id="month" class="mx-2">
+                    <option value="">----</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select>
+                <button id="btn-view" class="mx-2">View</button>
+            </div>
 
+        </form>
+        <div class="container d-flex">
+            <div class="revenue align-center mx-1">
 
-<div class="home-admin">
-    <h1>View revenue</h1>
-    <form>
-        <div class="form-group d-flex">
-            <input type="number" placeholder="Year" id="year" class="mx-2" />
-            <select id="month" class="mx-2">
-                <option value="">----</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-            </select>
-            <button id="btn-view" class="mx-2">View</button>
+            </div>
+            <div id="chart">
+            </div>
         </div>
 
-    </form>
-    <div class="container d-flex">
-        <div class="revenue align-center mx-1">
-
-        </div>
-        <div id="chart">
-        </div>
     </div>
-
 </div>
 
 <script src="/assets/chart/index.js"></script>
 
-
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-    crossorigin="anonymous"></script>
-
-
 <script>
-    document.querySelectorAll('.header__items ul li')[10].classList.add('active-item')
     let btnView = document.querySelector('#btn-view')
     btnView.onclick = (e) => {
         e.preventDefault();
