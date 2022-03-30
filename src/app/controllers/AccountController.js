@@ -1,4 +1,4 @@
-const nodemailer = require('nodemailer');
+//const nodemailer = require('nodemailer');
 const bcrypt = require("bcrypt");
 const Account = require('../models/Account.js')
 const Room = require('../models/Room.js')
@@ -180,7 +180,7 @@ class AccountController {
     }
 }
 
-
+/*
 async function sendMail(reciever, content) {
     console.log("run")
     try {
@@ -202,5 +202,5 @@ async function sendMail(reciever, content) {
         console.log("Has err : " + err)
     }
 }
-
+*/
 module.exports = new AccountController();
